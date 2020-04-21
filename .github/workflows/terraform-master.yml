@@ -7,9 +7,26 @@ env:
   tf_version: 'latest'
   tf_working_dir: '.'
 jobs:
-  terraform:
-    name: 'Terraform'
+  build:
+    name: 'Build'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+          release_branches: .*
+        id: bump_version
+      - uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -qq -r ${{ format('azure-datalake-{0}', steps.bump_version.outputs.new_tag) }}.zip .
+      - uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: dataroots-terraform-modules
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON_B64 }}
+          CLI: gsutil
+        with:
+          args: cp *.zip gs://dataroots-terraform-modules/
