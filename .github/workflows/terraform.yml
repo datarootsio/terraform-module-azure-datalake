@@ -33,4 +33,4 @@ jobs:
           APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON_B64 }}
           CLI: gsutil
         with:
-          args: cp *.zip gs://terraform-dataroots-modules/
+          args: cp *.zip gs://dataroots-terraform-modules/
