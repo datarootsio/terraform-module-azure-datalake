@@ -28,6 +28,7 @@ resource "random_password" "oidc_client_secret" {
 
 resource "azuread_service_principal" "oidc_principal" {
   application_id = azuread_application.aadapp.application_id
+  tags           = [var.data_lake_name]
 }
 
 resource "azuread_application_password" "aadapp-srv" {

@@ -12,3 +12,9 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
   name               = "fs${var.data_lake_name}"
   storage_account_id = azurerm_storage_account.dls.id
 }
+
+resource "azurerm_role_assignment" "oidcsa" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Owner"
+  principal_id         = azuread_service_principal.oidc_principal.object_id
+}
