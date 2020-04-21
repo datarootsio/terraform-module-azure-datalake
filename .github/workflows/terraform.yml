@@ -23,11 +23,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
-      - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: true
         id: bump_version
       - uses: montudor/action-zip@v0.1.0
         with:
