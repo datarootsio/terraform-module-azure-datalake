@@ -17,3 +17,9 @@ variable "storage_replication" {
   description = "Type of replication for the storage accounts. See https://www.terraform.io/docs/providers/azurerm/r/storage_account.html#account_replication_type"
   type        = string
 }
+
+variable "data_warehouse_dtu" {
+  description = "Service objective (DTU) for the created data warehouse (e.g. DW100c)"
+  type        = string
+  default     = "DW100c"
+}

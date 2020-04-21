@@ -18,9 +18,11 @@ resource "azurerm_sql_server" "synapse_srv" {
 }
 
 resource "azurerm_sql_database" "synapse" {
-  name                = "dw${var.data_lake_name}"
-  location            = var.region
-  resource_group_name = azurerm_resource_group.rg.name
-  server_name         = azurerm_sql_server.synapse_srv.name
-  tags                = azurerm_resource_group.rg.tags
+  name                             = "dw${var.data_lake_name}"
+  location                         = var.region
+  resource_group_name              = azurerm_resource_group.rg.name
+  server_name                      = azurerm_sql_server.synapse_srv.name
+  tags                             = azurerm_resource_group.rg.tags
+  edition                          = "DataWarehouse"
+  requested_service_objective_name = var.data_warehouse_dtu
 }
