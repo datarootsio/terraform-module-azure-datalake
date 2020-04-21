@@ -17,16 +17,3 @@ resource "azurerm_role_assignment" "service_account_storage_account_owner" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Owner"
   principal_id         = azuread_service_principal.sp.object_id
-}
-
-resource "azurerm_role_assignment" "service_account_storage_account_blob_data_contributor" {
-  scope                = azurerm_storage_account.dls.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azuread_service_principal.sp.object_id
-}
-
-resource "azurerm_role_assignment" "current_user_storage_account_blob_data_contributor" {
-  scope                = azurerm_storage_account.dls.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
