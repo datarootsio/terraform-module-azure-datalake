@@ -26,7 +26,7 @@ resource "azurerm_role_assignment" "service_account_storage_account_blob_data_ow
 }
 
 resource "azurerm_role_assignment" "current_user_storage_account_blob_data_owner" {
-  scope                = data.azurerm_client_config.current.client_id
+  scope                = azurerm_storage_account.dls.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azuread_service_principal.sp.object_id
+  principal_id         = data.azurerm_client_config.current.client_id
 }
