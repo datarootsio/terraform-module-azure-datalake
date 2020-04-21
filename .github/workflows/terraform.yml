@@ -29,7 +29,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
-          release_branches: .*
         id: bump_version
       - uses: montudor/action-zip@v0.1.0
         with:
