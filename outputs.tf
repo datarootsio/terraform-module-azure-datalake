@@ -1,3 +1,3 @@
 output "name" {
-  value = var.name
+  value = var.data_lake_name
 }
