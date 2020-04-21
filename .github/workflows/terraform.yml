@@ -29,10 +29,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
+          relase_branches: .*
         id: bump_version
       - uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.bump_version.outputs.new_version) }}.zip .
+          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.bump_version.outputs.new_tag) }}.zip .
       - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: dataroots-terraform-modules
