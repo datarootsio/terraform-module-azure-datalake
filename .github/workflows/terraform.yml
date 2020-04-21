@@ -32,7 +32,7 @@ jobs:
         id: bump_version
       - uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq -r ${{ format('azure-datalake-${0}-beta', steps.bump_version.outputs.new_tag) }}.zip .
+          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.bump_version.outputs.new_version) }}.zip .
       - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: dataroots-terraform-modules
