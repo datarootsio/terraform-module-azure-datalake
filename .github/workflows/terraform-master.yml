@@ -13,25 +13,3 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
-      - run: 'echo "$GOOGLE_CLOUD_KEYFILE_JSON" > .gcp.json'
-        shell: bash
-        env:
-          GOOGLE_CLOUD_KEYFILE_JSON: ${{secrets.GOOGLE_CLOUD_KEYFILE_JSON}}
-      - name: 'Terraform Init'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: ${{ env.tf_version }}
-          tf_actions_subcommand: 'init'
-          args: '-var-file=default.tfvars'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOOGLE_APPLICATION_CREDENTIALS: '.gcp.json'
-      - name: 'Terraform Apply'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: ${{ env.tf_version }}
-          tf_actions_subcommand: 'apply'
-          args: '-var-file=default.tfvars'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOOGLE_APPLICATION_CREDENTIALS: '.gcp.json'

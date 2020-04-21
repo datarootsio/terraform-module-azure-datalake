@@ -35,7 +35,7 @@ jobs:
       - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: dataroots-terraform-modules
-          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON_B64 }}
           CLI: gsutil
         with:
           args: cp *.zip gs://terraform-dataroots-modules/
