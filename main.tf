@@ -32,7 +32,7 @@ resource "azuread_service_principal" "sp" {
 }
 
 resource "azuread_service_principal_password" "sppw" {
-  service_principal_id = azuread_application.aadapp.object_id
+  service_principal_id = azuread_service_principal.sp.id
   value                = random_password.aadapp_secret.result
   end_date             = var.service_principal_end_date
 }
