@@ -22,19 +22,19 @@ resource "azuread_application" "aadapp" {
   name = "app-${var.data_lake_name}"
 }
 
-resource "random_password" "oidc_client_secret" {
+resource "random_password" "aadapp_secret" {
   length = 32
 }
 
-resource "azuread_service_principal" "oidc_principal" {
+resource "azuread_service_principal" "sp" {
   application_id = azuread_application.aadapp.application_id
   tags           = [var.data_lake_name]
 }
 
-resource "azuread_application_password" "aadapp-srv" {
-  application_object_id = azuread_application.aadapp.object_id
-  value                 = random_password.oidc_client_secret.result
-  end_date              = var.service_principal_end_date
+resource "azuread_service_principal_password" "sppw" {
+  service_principal_id = azuread_service_principal.sp.id
+  value                = random_password.aadapp_secret.result
+  end_date             = var.service_principal_end_date
 }
 
 resource "azurerm_resource_group" "rg" {
