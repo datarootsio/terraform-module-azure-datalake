@@ -23,3 +23,8 @@ variable "data_warehouse_dtu" {
   type        = string
   default     = "DW100c"
 }
+
+variable "databricks_sku" {
+  description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
+  type        = string
+}
