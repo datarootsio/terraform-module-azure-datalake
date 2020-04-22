@@ -20,6 +20,20 @@ data "azurerm_client_config" "current" {
 
 resource "azuread_application" "aadapp" {
   name = "app-${var.data_lake_name}"
+  required_resource_access {
+    resource_app_id = "e406a681-f3d4-42a8-90b6-c2b029497af1"
+    resource_access {
+      id   = "03e0da56-190b-40ad-a80c-ea378c433f7f"
+      type = "Scope"
+    }
+  }
+  required_resource_access {
+    resource_app_id = "00000003-0000-0000-c000-000000000000"
+    resource_access {
+      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+      type = "Scope"
+    }
+  }
 }
 
 resource "random_password" "aadapp_secret" {
@@ -43,4 +57,10 @@ resource "azurerm_resource_group" "rg" {
   tags = {
     DataLake = var.data_lake_name
   }
+}
+
+resource "azurerm_role_assignment" "sprg" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Owner"
+  principal_id         = azuread_service_principal.sp.object_id
 }
