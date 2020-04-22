@@ -46,3 +46,13 @@ variable "data_lake_filesystems" {
   description = "A list of filesystems to create inside the storage account"
   default     = ["default"]
 }
+
+variable "sql_server_admin_username" {
+  type        = string
+  description = "Username of the administrator of the SQL server"
+}
+
+variable "sql_server_admin_password" {
+  type        = string
+  description = "Password of the administrator of the SQL server"
+}
