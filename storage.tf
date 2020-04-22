@@ -9,7 +9,8 @@ resource "azurerm_storage_account" "dls" {
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
-  name               = "fs${var.data_lake_name}"
+  count              = length(var.data_lake_filesystems)
+  name               = "fs${var.data_lake_name}${var.data_lake_filesystems[count.index]}"
   storage_account_id = azurerm_storage_account.dls.id
 }
 
