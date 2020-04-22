@@ -30,9 +30,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
         id: bump_version
+      - run: |
+          MAJOR=$(echo ${{ steps.bump_version.outputs.new_version }}) | cut -d. -f1
+          echo "::set-output name=major_version::v${MAJOR}"
+        shell: bash
+        id: get_major_version
       - uses: montudor/action-zip@v0.1.0
         with:
           args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.bump_version.outputs.new_tag) }}.zip .
+      - uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.get_major_version.outputs.major_version) }}.zip . -x "*.zip"
       - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: dataroots-terraform-modules
