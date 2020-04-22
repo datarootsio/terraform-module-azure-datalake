@@ -17,7 +17,7 @@ resource "azurerm_role_assignment" "spsa" {
 resource "azurerm_role_assignment" "current_user" {
   scope                = azurerm_storage_account.dls.id
   role_definition_name = "Storage Blob Data Owner"
-  principal_id         = data.azurerm_client_config.current.client_id
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
