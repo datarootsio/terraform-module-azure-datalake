@@ -17,3 +17,40 @@ resource "azurerm_sql_database" "synapse" {
   edition                          = "DataWarehouse"
   requested_service_objective_name = var.data_warehouse_dtu
 }
+
+resource "local_file" "sql_script" {
+  sensitive_content = templatefile("${path.module}/files/script.sql",
+    {
+      user           = "${azuread_service_principal.sp.application_id}@https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}/oauth2/token",
+      secret         = random_password.aadapp_secret.result,
+      account_name   = azurerm_storage_account.dls.name,
+      data_lake_name = var.data_lake_name,
+      containers     = var.data_lake_filesystems
+  })
+
+  filename = "/tmp/rendered_script.sql"
+}
+
+resource "local_file" "powershell_script" {
+  sensitive_content = templatefile("${path.module}/files/db_init.ps1",
+    {
+      server   = azurerm_sql_server.synapse_srv.name,
+      database = azurerm_sql_database.synapse.name,
+      user     = var.sql_server_admin_username,
+      password = var.sql_server_admin_password
+  })
+
+  filename = "/tmp/rendered_script.ps1"
+}
+
+resource "null_resource" "database_init" {
+
+  triggers = {
+    build_number = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command     = local_file.powershell_script.filename
+    interpreter = ["pwsh", "-File"]
+  }
+}
