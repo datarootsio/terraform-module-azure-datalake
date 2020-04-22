@@ -24,6 +24,12 @@ variable "data_warehouse_dtu" {
   default     = "DW100c"
 }
 
+variable "databricks_sku" {
+  description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
+  type        = string
+  default     = "standard"
+}
+
 variable "data_lake_filesystems" {
   type        = "list"
   description = "A list of filesystems to create inside the storage account"
