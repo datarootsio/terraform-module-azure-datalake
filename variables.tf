@@ -24,6 +24,17 @@ variable "data_warehouse_dtu" {
   default     = "DW100c"
 }
 
+variable "cosmosdb_consistency_level" {
+  description = "Default consistency level for the CosmosDB account"
+  type        = string
+  default     = "Session"
+}
+
+variable "cosmosdb_db_throughput" {
+  description = "Throughput for the database inside CosmosDB"
+  type        = number
+  default     = 400
+}
 variable "databricks_sku" {
   description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
   type        = string
