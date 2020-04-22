@@ -23,3 +23,9 @@ variable "data_warehouse_dtu" {
   type        = string
   default     = "DW100c"
 }
+
+variable "data_lake_filesystems" {
+  type        = "list"
+  description = "A list of filesystems to create inside the storage account"
+  default     = ["default"]
+}
