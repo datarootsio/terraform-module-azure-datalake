@@ -30,9 +30,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: true
         id: bump_version
-      - run: |
-          MAJOR=$(echo ${{ steps.bump_version.outputs.new_version }}) | cut -d. -f1
-          echo "::set-output name=major_version::v${MAJOR}"
+      - run: echo "::set-output name=major_version::v$(echo ${{ steps.bump_version.outputs.new_version }} | cut -d. -f1)"
         shell: bash
         id: get_major_version
       - uses: montudor/action-zip@v0.1.0
