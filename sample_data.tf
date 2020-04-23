@@ -5,7 +5,7 @@ resource "null_resource" "sample_data" {
 }
 
 resource "azurerm_storage_blob" "example" {
-  depends_on             = [null_resource.sample_data]
+  depends_on             = [null_resource.sample_data, azurerm_storage_data_lake_gen2_filesystem.dlfs]
   name                   = "sample_data.json"
   storage_account_name   = azurerm_storage_account.dls.name
   storage_container_name = "fs${var.data_lake_name}${var.data_lake_fs_raw}"
