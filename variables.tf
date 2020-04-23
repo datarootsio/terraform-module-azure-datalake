@@ -44,7 +44,13 @@ variable "databricks_sku" {
 variable "data_lake_filesystems" {
   type        = list
   description = "A list of filesystems to create inside the storage account"
-  default     = ["default"]
+  default     = ["raw", "cleansed", "transformed"]
+}
+
+variable "data_lake_fs_raw" {
+  type        = string
+  description = "Name of the data lake filesystem with raw data"
+  default     = "raw"
 }
 
 variable "sql_server_admin_username" {
