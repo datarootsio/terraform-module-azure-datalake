@@ -12,7 +12,7 @@ data "external" "databricks_token" {
   query = {
     # arbitrary map from strings to strings, passed
     # to the external program as the data query.
-    region               = lower(replace(var.region," ",""))
+    region               = lower(replace(var.region, " ", ""))
     databricks_workspace = azurerm_databricks_workspace.dbks.name
     resource_group       = azurerm_resource_group.rg.name
   }
@@ -20,6 +20,6 @@ data "external" "databricks_token" {
 
 module "databricks_sample_data" {
   source = "./databricks_sample_data"
-  host   = "https://${lower(replace(var.region," ",""))}.azuredatabricks.net"
+  host   = "https://${lower(replace(var.region, " ", ""))}.azuredatabricks.net"
   token  = data.external.databricks_token.result["token"]
 }
