@@ -16,14 +16,14 @@ resource "null_resource" "databricks_token" {
     command = "${path.module}/files/generate_databricks_token.sh > /tmp/databricks_token.txt"
     environment = {
       DATABRICKS_WORKSPACE_RESOURCE_ID = azurerm_databricks_workspace.dbks.id
-      DATABRICKS_ENDPOINT = "https://${var.region}.azuredatabricks.net"
+      DATABRICKS_ENDPOINT              = "https://${var.region}.azuredatabricks.net"
     }
   }
 }
 
 data "local_file" "databricks_token" {
   depends_on = [null_resource.databricks_token]
-  filename = "/tmp/databricks_token.txt"
+  filename   = "/tmp/databricks_token.txt"
 }
 
 module "databricks_sample_data" {
