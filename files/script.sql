@@ -19,12 +19,12 @@ END
 %{ for container in containers ~}
 IF (SELECT COUNT(*)
 FROM sys.external_data_sources
-WHERE name = 'fs${data_lake_name}${container}') = 0
+WHERE name = 'fs${container}${data_lake_name}') = 0
 BEGIN
-    CREATE EXTERNAL DATA SOURCE fs${data_lake_name}${container}
+    CREATE EXTERNAL DATA SOURCE fs${container}${data_lake_name}
     WITH (
         TYPE = HADOOP,
-        LOCATION='abfss://fs${data_lake_name}${container}@${account_name}.dfs.core.windows.net',
+        LOCATION='abfss://fs${container}${data_lake_name}@${account_name}.dfs.core.windows.net',
         CREDENTIAL = ADLSCredential
     );
 END
