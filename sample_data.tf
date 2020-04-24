@@ -1,9 +1,3 @@
-resource "null_resource" "sample_data" {
-  provisioner "local-exec" {
-    command = "curl -H 'X-API-Key: 592257d0' -o '/tmp/sample_data.json' https://my.api.mockaroo.com/sales.json"
-  }
-}
-
 resource "azurerm_template_deployment" "dfpipeline" {
   name                = "armdfpipeline"
   resource_group_name = azurerm_resource_group.rg.name
