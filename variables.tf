@@ -62,3 +62,13 @@ variable "sql_server_admin_password" {
   type        = string
   description = "Password of the administrator of the SQL server"
 }
+
+variable "databricks_cluster_version" {
+  type        = string
+  description = "Runtime version of the Databricks cluster"
+}
+
+variable "databricks_cluster_node_type" {
+  type        = string
+  description = "Node type of the Databricks cluster machines"
+}
