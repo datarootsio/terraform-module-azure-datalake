@@ -3,6 +3,7 @@ resource "azurerm_storage_account" "dls" {
   location                 = var.region
   resource_group_name      = azurerm_resource_group.rg.name
   account_tier             = "Standard"
+  access_tier              = "Cool"
   is_hns_enabled           = true
   account_replication_type = var.storage_replication
   tags                     = azurerm_resource_group.rg.tags
@@ -23,6 +24,6 @@ resource "azurerm_role_assignment" "current_user" {
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
   depends_on         = [azurerm_role_assignment.current_user]
   count              = length(var.data_lake_filesystems)
-  name               = "fs${var.data_lake_name}${var.data_lake_filesystems[count.index]}"
+  name               = "fs${var.data_lake_filesystems[count.index]}${var.data_lake_name}"
   storage_account_id = azurerm_storage_account.dls.id
 }
