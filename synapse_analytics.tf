@@ -18,6 +18,18 @@ resource "azurerm_sql_database" "synapse" {
   requested_service_objective_name = var.data_warehouse_dtu
 }
 
+data "http" "current_ip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
+resource "azurerm_sql_firewall_rule" "allow_current_ip" {
+  name                = "terraform-deployment-rule"
+  start_ip_address    = chomp(data.http.current_ip.body)
+  end_ip_address      = chomp(data.http.current_ip.body)
+  resource_group_name = azurerm_resource_group.rg.name
+  server_name         = azurerm_sql_server.synapse_srv.name
+}
+
 resource "local_file" "sql_script" {
   sensitive_content = templatefile("${path.module}/files/script.sql",
     {
@@ -48,6 +60,10 @@ resource "null_resource" "database_init" {
   triggers = {
     build_number = timestamp()
   }
+
+  depends_on = [
+    azurerm_sql_firewall_rule.allow_current_ip
+  ]
 
   provisioner "local-exec" {
     command     = local_file.powershell_script.filename
