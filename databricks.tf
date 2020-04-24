@@ -8,6 +8,7 @@ resource "azurerm_databricks_workspace" "dbks" {
 }
 
 data "external" "databricks_token" {
+  depends_on = [azurerm_databricks_workspace.dbks]
   program = ["bash", "${path.module}/files/generate_databricks_token.sh"]
   query = {
     # arbitrary map from strings to strings, passed
