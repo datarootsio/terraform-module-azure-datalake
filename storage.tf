@@ -3,6 +3,7 @@ resource "azurerm_storage_account" "dls" {
   location                 = var.region
   resource_group_name      = azurerm_resource_group.rg.name
   account_tier             = "Standard"
+  access_tier              = "Cool"
   is_hns_enabled           = true
   account_replication_type = var.storage_replication
   tags                     = azurerm_resource_group.rg.tags
