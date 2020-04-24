@@ -10,7 +10,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
 
   template_body = <<DEPLOY
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
@@ -22,8 +22,8 @@ resource "azurerm_template_deployment" "dfpipeline" {
             "metadata": "Name of the filesystem in the Azure Data Lake Storage for raw data"
         },
         "adlsLinkedService": {
-          "type": "string",
-          "metadata": "Name of the linked service to the Azure Data Lake Storage"
+            "type": "string",
+            "metadata": "Name of the linked service to the Azure Data Lake Storage"
         }
     },
     "variables": {
@@ -35,15 +35,13 @@ resource "azurerm_template_deployment" "dfpipeline" {
             "type": "Microsoft.DataFactory/factories/linkedServices",
             "apiVersion": "2018-06-01",
             "properties": {
-                "annotations": [],
                 "type": "HttpServer",
                 "typeProperties": {
                     "url": "https://my.api.mockaroo.com",
                     "enableServerCertificateValidation": true,
                     "authenticationType": "Anonymous"
                 }
-            },
-            "dependsOn": []
+            }
         },
         {
             "name": "[concat(parameters('factoryName'), '/sampledataset')]",
@@ -54,18 +52,74 @@ resource "azurerm_template_deployment" "dfpipeline" {
                     "referenceName": "sampledataservice",
                     "type": "LinkedServiceReference"
                 },
-                "annotations": [],
                 "type": "Json",
                 "typeProperties": {
                     "location": {
                         "type": "HttpServerLocation",
                         "relativeUrl": "/sales.json?key=592257d0"
                     }
-                },
-                "schema": {}
+                }
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/linkedServices/sampledataservice')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/copysampledata')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "Copy from sample to data lake storage",
+                        "type": "Copy",
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "typeProperties": {
+                            "source": {
+                                "type": "JsonSource",
+                                "storeSettings": {
+                                    "type": "HttpReadSettings",
+                                    "requestMethod": "GET"
+                                }
+                            },
+                            "sink": {
+                                "type": "JsonSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobFSWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "JsonWriteSettings",
+                                    "quoteAllText": true
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "sampledataset",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "rawdata",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ]
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/sampledataset')]",
+                "[concat(variables('factoryId'), '/datasets/rawdata')]"
             ]
         },
         {
@@ -74,10 +128,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
             "apiVersion": "2018-06-01",
             "properties": {
                 "linkedServiceName": {
-                    "referenceName": "@parameters('adlsLinkedService')",
+                    "referenceName": "[parameters('adlsLinkedService')]",
                     "type": "LinkedServiceReference"
                 },
-                "annotations": [],
                 "type": "Json",
                 "typeProperties": {
                     "location": {
@@ -90,10 +143,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
                             "value": "@formatDateTime(utcnow(), 'yyyyMM')",
                             "type": "Expression"
                         },
-                        "fileSystem": "@parameters('rawAdlsName')"
+                        "fileSystem": "[parameters('rawAdlsName')]"
                     }
-                },
-                "schema": {}
+                }
             }
         }
     ]
@@ -109,4 +161,13 @@ DEPLOY
   }
 
   deployment_mode = "Incremental"
+}
+
+resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
+  name                = "copy_sample_data_trigger"
+  resource_group_name = azurerm_resource_group.rg.name
+  data_factory_name   = azurerm_data_factory.df.name
+  pipeline_name       = "copysampledata"
+  interval            = 1
+  frequency           = "Day"
 }
