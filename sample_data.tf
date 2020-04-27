@@ -38,7 +38,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
             }
         },
         {
-            "name": "[concat(parameters('factoryName'), '/sampledataset')]",
+            "name": "[concat(parameters('factoryName'), '/sample_data_set')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -59,7 +59,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/copysampledata')]",
+            "name": "[concat(parameters('factoryName'), '/copy_sample_data')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -96,14 +96,14 @@ resource "azurerm_template_deployment" "dfpipeline" {
                         },
                         "inputs": [
                             {
-                                "referenceName": "sampledataset",
+                                "referenceName": "sample_data_set",
                                 "type": "DatasetReference",
                                 "parameters": {}
                             }
                         ],
                         "outputs": [
                             {
-                                "referenceName": "rawdata",
+                                "referenceName": "raw_data",
                                 "type": "DatasetReference",
                                 "parameters": {}
                             }
@@ -112,12 +112,12 @@ resource "azurerm_template_deployment" "dfpipeline" {
                 ]
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/sampledataset')]",
-                "[concat(variables('factoryId'), '/datasets/rawdata')]"
+                "[concat(variables('factoryId'), '/datasets/sample_data_set')]",
+                "[concat(variables('factoryId'), '/datasets/raw_data')]"
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/rawdata')]",
+            "name": "[concat(parameters('factoryName'), '/raw_data')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -150,7 +150,7 @@ DEPLOY
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters = {
     "factoryName"       = azurerm_data_factory.df.name
-    "rawAdlsName"       = "fs${var.data_lake_fs_raw}${var.data_lake_name}"
+    "rawAdlsName"       = local.data_lake_fs_raw_name
     "adlsLinkedService" = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls.name
   }
 
@@ -161,7 +161,41 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   name                = "copy_sample_data_trigger"
   resource_group_name = azurerm_resource_group.rg.name
   data_factory_name   = azurerm_data_factory.df.name
-  pipeline_name       = "copysampledata"
+  pipeline_name       = "copy_sample_data"
   interval            = 1
   frequency           = "Day"
+  depends_on          = [azurerm_template_deployment.dfpipeline]
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/set_df_trigger.sh"
+    interpreter = ["sh"]
+
+    environment = {
+      TRIGGER_ID     = self.id
+      TRIGGER_ACTION = "start"
+    }
+  }
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/set_df_trigger.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      TRIGGER_ID     = self.id
+      TRIGGER_ACTION = "stop"
+    }
+  }
+}
+
+resource "databricks_workspace_import" "data_cleansing" {
+  format   = "SOURCE"
+  language = "SCALA"
+  path     = "/Shared/data_cleansing.scala"
+  content = base64encode(templatefile("${path.module}/files/data_cleansing_notebook.scala",
+    {
+      adls_account = azurerm_storage_account.dls.name
+      adls_raw     = local.data_lake_fs_raw_name
+      adls_clean   = local.data_lake_fs_clean_name
+  }))
 }
