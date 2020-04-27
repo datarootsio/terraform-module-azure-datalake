@@ -54,9 +54,7 @@ resource "azuread_service_principal_password" "sppw" {
 resource "azurerm_resource_group" "rg" {
   name     = "rg${var.data_lake_name}"
   location = var.region
-  tags = {
-    DataLake = var.data_lake_name
-  }
+  tags     = local.common_tags
 }
 
 resource "azurerm_role_assignment" "sprg" {

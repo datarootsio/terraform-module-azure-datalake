@@ -2,7 +2,7 @@ resource "azurerm_cosmosdb_account" "cmdb" {
   name                = "cmdb${var.data_lake_name}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.region
-  tags                = azurerm_resource_group.rg.tags
+  tags                = local.common_tags
   offer_type          = "Standard"
   kind                = "GlobalDocumentDB"
   consistency_policy {
