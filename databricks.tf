@@ -4,7 +4,7 @@ resource "azurerm_databricks_workspace" "dbks" {
   managed_resource_group_name = "rgdbks${var.data_lake_name}"
   location                    = var.region
   sku                         = var.databricks_sku
-  tags                        = azurerm_resource_group.rg.tags
+  tags                        = local.common_tags
 }
 
 provider "databricks" {

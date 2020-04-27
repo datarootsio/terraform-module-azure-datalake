@@ -41,16 +41,28 @@ variable "databricks_sku" {
   default     = "standard"
 }
 
-variable "data_lake_filesystems" {
-  type        = list
-  description = "A list of filesystems to create inside the storage account"
-  default     = ["raw", "cleansed", "transformed"]
-}
-
 variable "data_lake_fs_raw" {
   type        = string
   description = "Name of the data lake filesystem with raw data"
   default     = "raw"
+}
+
+variable "data_lake_fs_cleansed" {
+  type        = string
+  description = "Name of the data lake filesystem with cleansed data"
+  default     = "cleansed"
+}
+
+variable "data_lake_fs_transformed" {
+  type        = string
+  description = "Name of the data lake filesystem with transformed data"
+  default     = "transformed"
+}
+
+variable "data_lake_filesystems" {
+  type        = list
+  description = "A list of filesystems to create inside the storage account besides the 3 default ones (raw, cleansed, transformed)"
+  default     = []
 }
 
 variable "sql_server_admin_username" {
@@ -71,4 +83,14 @@ variable "databricks_cluster_version" {
 variable "databricks_cluster_node_type" {
   type        = string
   description = "Node type of the Databricks cluster machines"
+}
+
+locals {
+  # Common tags to be assigned to all resources
+  common_tags = {
+    DataLake = var.data_lake_name
+  }
+
+  data_lake_fs_merged = distinct(concat([var.data_lake_fs_raw, var.data_lake_fs_cleansed, var.data_lake_fs_transformed], var.data_lake_filesystems))
+  data_lake_fs_names  = [for s in local.data_lake_fs_merged : "fs${s}${var.data_lake_name}"]
 }
