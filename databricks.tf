@@ -27,3 +27,26 @@ resource "databricks_cluster" "dbkscluster" {
 
   autotermination_minutes = 30
 }
+
+resource "databricks_secret_scope" "adls" {
+  scope                    = "adls"
+  initial_manage_principal = "users"
+}
+
+resource "databricks_secret" "adls_tenant_id" {
+  scope        = databricks_secret_scope.adls.scope
+  key          = "tenant_id"
+  string_value = data.azurerm_client_config.current.tenant_id
+}
+
+resource "databricks_secret" "adls_application_id" {
+  scope        = databricks_secret_scope.adls.scope
+  key          = "application_id"
+  string_value = azuread_application.aadapp.application_id
+}
+
+resource "databricks_secret" "adls_client_secret" {
+  scope        = databricks_secret_scope.adls.scope
+  key          = "client_secret"
+  string_value = random_password.aadapp_secret.result
+}
