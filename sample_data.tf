@@ -1,5 +1,6 @@
 resource "azurerm_template_deployment" "dfpipeline" {
   name                = "armdfpipeline"
+  count               = local.create_sample
   resource_group_name = azurerm_resource_group.rg.name
 
   template_body = <<DEPLOY
@@ -159,6 +160,7 @@ DEPLOY
 
 resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   name                = "copy_sample_data_trigger"
+  count               = local.create_sample
   resource_group_name = azurerm_resource_group.rg.name
   data_factory_name   = azurerm_data_factory.df.name
   pipeline_name       = "copy_sample_data"
@@ -167,7 +169,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   depends_on          = [azurerm_template_deployment.dfpipeline]
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/set_df_trigger.sh"
+    command     = "${path.module}/files/sample_data/set_df_trigger.sh"
     interpreter = ["sh"]
 
     environment = {
@@ -177,7 +179,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/set_df_trigger.sh"
+    command     = "${path.module}/files/sample_data/set_df_trigger.sh"
     interpreter = ["sh"]
     when        = destroy
 
@@ -189,6 +191,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
 }
 
 resource "databricks_workspace_import" "setup_mounts" {
+  count    = local.create_sample
   format   = "SOURCE"
   language = "SCALA"
   path     = "/Shared/setup_mounts.scala"
@@ -202,17 +205,26 @@ resource "databricks_workspace_import" "setup_mounts" {
 }
 
 resource "databricks_workspace_import" "clean" {
+  count    = local.create_sample
   format   = "SOURCE"
   language = "SCALA"
   path     = "/Shared/clean_data.scala"
-  content  = filebase64("${path.module}/files/clean.scala")
+  content  = filebase64("${path.module}/files/sample_data/clean.scala")
 }
 
 resource "databricks_workspace_import" "transform" {
+  count    = local.create_sample
   format   = "SOURCE"
   language = "SCALA"
   path     = "/Shared/transform_data.scala"
-  content  = filebase64("${path.module}/files/transform.scala")
+  content  = filebase64("${path.module}/files/sample_data/transform.scala")
+}
+
+resource "databricks_workspace_import" "present" {
+  count   = local.create_sample
+  format  = "DBC"
+  path    = "/Shared/presentation.scala"
+  content = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
 }
 
 resource "databricks_workspace_import" "present" {
