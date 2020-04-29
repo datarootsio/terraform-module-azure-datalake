@@ -205,12 +205,18 @@ resource "databricks_workspace_import" "clean" {
   format   = "SOURCE"
   language = "SCALA"
   path     = "/Shared/clean_data.scala"
-  content  = base64encode(file("${path.module}/files/clean.scala"))
+  content  = filebase64("${path.module}/files/clean.scala")
 }
 
 resource "databricks_workspace_import" "transform" {
   format   = "SOURCE"
   language = "SCALA"
   path     = "/Shared/transform_data.scala"
-  content  = base64encode(file("${path.module}/files/transform.scala"))
+  content  = filebase64("${path.module}/files/transform.scala")
+}
+
+resource "databricks_workspace_import" "present" {
+  format  = "DBC"
+  path    = "/Shared/presentation.scala"
+  content = filebase64("${path.module}/files/presentation.scala.dbc")
 }
