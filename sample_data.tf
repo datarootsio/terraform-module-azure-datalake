@@ -188,14 +188,29 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   }
 }
 
-resource "databricks_workspace_import" "data_cleansing" {
+resource "databricks_workspace_import" "setup_mounts" {
   format   = "SOURCE"
   language = "SCALA"
-  path     = "/Shared/data_cleansing.scala"
-  content = base64encode(templatefile("${path.module}/files/data_cleansing_notebook.scala",
+  path     = "/Shared/setup_mounts.scala"
+  content = base64encode(templatefile("${path.module}/files/setup_mounts.scala",
     {
-      adls_account = azurerm_storage_account.dls.name
-      adls_raw     = local.data_lake_fs_raw_name
-      adls_clean   = local.data_lake_fs_clean_name
+      adls_account     = azurerm_storage_account.dls.name
+      adls_raw         = local.data_lake_fs_raw_name
+      adls_clean       = local.data_lake_fs_clean_name
+      adls_transformed = local.data_lake_fs_transformed_name
   }))
+}
+
+resource "databricks_workspace_import" "clean" {
+  format   = "SOURCE"
+  language = "SCALA"
+  path     = "/Shared/clean_data.scala"
+  content  = base64encode(file("${path.module}/files/clean.scala"))
+}
+
+resource "databricks_workspace_import" "transform" {
+  format   = "SOURCE"
+  language = "SCALA"
+  path     = "/Shared/transform_data.scala"
+  content  = base64encode(file("${path.module}/files/transform.scala"))
 }

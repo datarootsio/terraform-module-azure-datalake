@@ -50,3 +50,14 @@ resource "databricks_secret" "adls_client_secret" {
   key          = "client_secret"
   string_value = random_password.aadapp_secret.result
 }
+
+resource "databricks_secret_scope" "cmdb" {
+  scope                    = "cosmosdb"
+  initial_manage_principal = "users"
+}
+
+resource "databricks_secret" "cmdb_master_key" {
+  scope        = databricks_secret_scope.cmdb.scope
+  key          = "master_key"
+  string_value = azurerm_cosmosdb_account.cmdb.primary_master_key
+}
