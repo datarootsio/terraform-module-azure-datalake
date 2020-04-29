@@ -214,3 +214,9 @@ resource "databricks_workspace_import" "transform" {
   path     = "/Shared/transform_data.scala"
   content  = base64encode(file("${path.module}/files/transform.scala"))
 }
+
+resource "databricks_workspace_import" "present" {
+  format   = "DBC"
+  path     = "/Shared/presentation.scala"
+  content  = base64encode(file("${path.module}/files/presentation.scala.dbc"))
+}
