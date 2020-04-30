@@ -226,9 +226,3 @@ resource "databricks_workspace_import" "present" {
   path    = "/Shared/presentation.scala"
   content = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
 }
-
-resource "databricks_workspace_import" "present" {
-  format  = "DBC"
-  path    = "/Shared/presentation.scala"
-  content = filebase64("${path.module}/files/presentation.scala.dbc")
-}
