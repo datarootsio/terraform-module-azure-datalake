@@ -220,33 +220,33 @@ resource "databricks_notebook" "presentation" {
 
 resource "databricks_job" "clean" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path = databricks_notebook.clean.path
-  name = "clean"
+  notebook_path       = databricks_notebook.clean.path
+  name                = "clean"
 
   schedule {
-      quartz_cron_expression = "0 1 * * *"
-      timezone_id = "UTC"
+    quartz_cron_expression = "0 1 * * *"
+    timezone_id            = "UTC"
   }
 }
 
 resource "databricks_job" "transform" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path = databricks_notebook.transform.path
-  name = "transform"
+  notebook_path       = databricks_notebook.transform.path
+  name                = "transform"
 
   schedule {
-      quartz_cron_expression = "0 2 * * *"
-      timezone_id = "UTC"
+    quartz_cron_expression = "0 2 * * *"
+    timezone_id            = "UTC"
   }
 }
 
 resource "databricks_job" "presentation" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path = databricks_notebook.presentation.path
-  name = "presentation"
+  notebook_path       = databricks_notebook.presentation.path
+  name                = "presentation"
 
   schedule {
-      quartz_cron_expression = "0 3 * * *"
-      timezone_id = "UTC"
+    quartz_cron_expression = "0 3 * * *"
+    timezone_id            = "UTC"
   }
 }
