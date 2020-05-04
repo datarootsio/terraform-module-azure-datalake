@@ -194,7 +194,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
 resource "databricks_notebook" "clean" {
   content   = filebase64("${path.module}/files/sample_data/clean.scala")
   language  = "SCALA"
-  path      = "/workspace/sample/clean.scala"
+  path      = "/Shared/sample/clean.scala"
   overwrite = false
   mkdirs    = true
   format    = "SOURCE"
@@ -204,7 +204,7 @@ resource "databricks_notebook" "clean" {
 resource "databricks_notebook" "transform" {
   content   = filebase64("${path.module}/files/sample_data/transform.scala")
   language  = "SCALA"
-  path      = "/workspace/sample/transform.scala"
+  path      = "/Shared/sample/transform.scala"
   overwrite = false
   mkdirs    = true
   format    = "SOURCE"
@@ -214,7 +214,7 @@ resource "databricks_notebook" "transform" {
 resource "databricks_notebook" "presentation" {
   content   = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
   language  = "SCALA"
-  path      = "/workspace/sample/presentation.scala"
+  path      = "/Shared/sample/presentation.scala"
   overwrite = false
   mkdirs    = true
   format    = "DBC"
