@@ -198,6 +198,7 @@ resource "databricks_notebook" "clean" {
   overwrite = false
   mkdirs    = true
   format    = "SOURCE"
+  count     = local.create_sample
 }
 
 resource "databricks_notebook" "transform" {
@@ -207,6 +208,7 @@ resource "databricks_notebook" "transform" {
   overwrite = false
   mkdirs    = true
   format    = "SOURCE"
+  count     = local.create_sample
 }
 
 resource "databricks_notebook" "presentation" {
@@ -216,12 +218,14 @@ resource "databricks_notebook" "presentation" {
   overwrite = false
   mkdirs    = true
   format    = "DBC"
+  count     = local.create_sample
 }
 
 resource "databricks_job" "clean" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.clean.path
+  notebook_path       = databricks_notebook.clean[count.index].path
   name                = "clean"
+  count               = local.create_sample
 
   schedule {
     quartz_cron_expression = "0 1 * * *"
@@ -231,8 +235,9 @@ resource "databricks_job" "clean" {
 
 resource "databricks_job" "transform" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.transform.path
+  notebook_path       = databricks_notebook.transform[count.index].path
   name                = "transform"
+  count               = local.create_sample
 
   schedule {
     quartz_cron_expression = "0 2 * * *"
@@ -242,8 +247,9 @@ resource "databricks_job" "transform" {
 
 resource "databricks_job" "presentation" {
   existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.presentation.path
+  notebook_path       = databricks_notebook.presentation[count.index].path
   name                = "presentation"
+  count               = local.create_sample
 
   schedule {
     quartz_cron_expression = "0 3 * * *"
