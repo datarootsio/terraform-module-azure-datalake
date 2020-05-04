@@ -38,7 +38,6 @@ resource "azuread_application" "aadapp" {
 
 resource "random_password" "aadapp_secret" {
   length  = 32
-  special = false # temp workaround for https://github.com/databrickslabs/databricks-terraform/issues/21
 }
 
 resource "azuread_service_principal" "sp" {
