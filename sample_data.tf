@@ -228,7 +228,7 @@ resource "databricks_job" "clean" {
   count               = local.create_sample
 
   schedule {
-    quartz_cron_expression = "0 1 * * *"
+    quartz_cron_expression = "0 0 1 * * ? *"
     timezone_id            = "UTC"
   }
 }
@@ -240,7 +240,7 @@ resource "databricks_job" "transform" {
   count               = local.create_sample
 
   schedule {
-    quartz_cron_expression = "0 2 * * *"
+    quartz_cron_expression = "0 0 2 * * ? *"
     timezone_id            = "UTC"
   }
 }
@@ -252,7 +252,7 @@ resource "databricks_job" "presentation" {
   count               = local.create_sample
 
   schedule {
-    quartz_cron_expression = "0 3 * * *"
+    quartz_cron_expression = "0 0 3 * * ? *"
     timezone_id            = "UTC"
   }
 }
