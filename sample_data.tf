@@ -166,6 +166,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   pipeline_name       = "copy_sample_data"
   interval            = 1
   frequency           = "Day"
+  start_time          = "${formatdate("YYYY-MM-DD", timestamp())}T00:00:00Z"
   depends_on          = [azurerm_template_deployment.dfpipeline]
 
   provisioner "local-exec" {
@@ -190,39 +191,68 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   }
 }
 
-resource "databricks_workspace_import" "setup_mounts" {
-  count    = local.create_sample
-  format   = "SOURCE"
-  language = "SCALA"
-  path     = "/Shared/setup_mounts.scala"
-  content = base64encode(templatefile("${path.module}/files/setup_mounts.scala",
-    {
-      adls_account     = azurerm_storage_account.dls.name
-      adls_raw         = local.data_lake_fs_raw_name
-      adls_clean       = local.data_lake_fs_clean_name
-      adls_transformed = local.data_lake_fs_transformed_name
-  }))
+resource "databricks_notebook" "clean" {
+  content   = filebase64("${path.module}/files/sample_data/clean.scala")
+  language  = "SCALA"
+  path      = "/Shared/sample/clean.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "SOURCE"
+  count     = local.create_sample
 }
 
-resource "databricks_workspace_import" "clean" {
-  count    = local.create_sample
-  format   = "SOURCE"
-  language = "SCALA"
-  path     = "/Shared/clean_data.scala"
-  content  = filebase64("${path.module}/files/sample_data/clean.scala")
+resource "databricks_notebook" "transform" {
+  content   = filebase64("${path.module}/files/sample_data/transform.scala")
+  language  = "SCALA"
+  path      = "/Shared/sample/transform.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "SOURCE"
+  count     = local.create_sample
 }
 
-resource "databricks_workspace_import" "transform" {
-  count    = local.create_sample
-  format   = "SOURCE"
-  language = "SCALA"
-  path     = "/Shared/transform_data.scala"
-  content  = filebase64("${path.module}/files/sample_data/transform.scala")
+resource "databricks_notebook" "presentation" {
+  content   = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
+  language  = "SCALA"
+  path      = "/Shared/sample/presentation.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "DBC"
+  count     = local.create_sample
 }
 
-resource "databricks_workspace_import" "present" {
-  count   = local.create_sample
-  format  = "DBC"
-  path    = "/Shared/presentation.scala"
-  content = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
+resource "databricks_job" "clean" {
+  existing_cluster_id = databricks_cluster.cluster.id
+  notebook_path       = databricks_notebook.clean[count.index].path
+  name                = "clean"
+  count               = local.create_sample
+
+  schedule {
+    quartz_cron_expression = "0 0 1 * * ? *"
+    timezone_id            = "UTC"
+  }
+}
+
+resource "databricks_job" "transform" {
+  existing_cluster_id = databricks_cluster.cluster.id
+  notebook_path       = databricks_notebook.transform[count.index].path
+  name                = "transform"
+  count               = local.create_sample
+
+  schedule {
+    quartz_cron_expression = "0 0 2 * * ? *"
+    timezone_id            = "UTC"
+  }
+}
+
+resource "databricks_job" "presentation" {
+  existing_cluster_id = databricks_cluster.cluster.id
+  notebook_path       = databricks_notebook.presentation[count.index].path
+  name                = "presentation"
+  count               = local.create_sample
+
+  schedule {
+    quartz_cron_expression = "0 0 3 * * ? *"
+    timezone_id            = "UTC"
+  }
 }
