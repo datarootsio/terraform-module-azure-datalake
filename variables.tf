@@ -84,6 +84,11 @@ variable "service_principal_end_date" {
   type        = string
 }
 
+variable "databricks_token_lifetime" {
+  description = "Lifetime (in seconds) of the Databricks access token that will be created for communication with other services in the data lake."
+  type        = number
+}
+
 variable "sql_server_admin_username" {
   type        = string
   description = "Username of the administrator of the SQL server"

@@ -202,7 +202,10 @@ resource "databricks_notebook" "clean" {
 }
 
 resource "databricks_notebook" "transform" {
-  content   = filebase64("${path.module}/files/sample_data/transform.scala")
+  content = base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
+    container = azurerm_storage_container.databricks.name,
+  storage_account_blob_endpoint = azurerm_storage_account.dbkstemp.primary_blob_host }))
+
   language  = "SCALA"
   path      = "/Shared/sample/transform.scala"
   overwrite = false
@@ -224,7 +227,7 @@ resource "databricks_notebook" "presentation" {
 resource "databricks_job" "clean" {
   existing_cluster_id = databricks_cluster.cluster.id
   notebook_path       = databricks_notebook.clean[count.index].path
-  name                = "clean"
+  name                = "sample_clean"
   count               = local.create_sample
 
   schedule {
@@ -236,7 +239,7 @@ resource "databricks_job" "clean" {
 resource "databricks_job" "transform" {
   existing_cluster_id = databricks_cluster.cluster.id
   notebook_path       = databricks_notebook.transform[count.index].path
-  name                = "transform"
+  name                = "sample_transform"
   count               = local.create_sample
 
   schedule {
@@ -248,7 +251,7 @@ resource "databricks_job" "transform" {
 resource "databricks_job" "presentation" {
   existing_cluster_id = databricks_cluster.cluster.id
   notebook_path       = databricks_notebook.presentation[count.index].path
-  name                = "presentation"
+  name                = "sample_presentation"
   count               = local.create_sample
 
   schedule {
