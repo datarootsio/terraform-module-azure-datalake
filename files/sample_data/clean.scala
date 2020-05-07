@@ -11,7 +11,7 @@ dbutils.fs.ls("/mnt/raw/")
 import java.text.SimpleDateFormat
 import java.util.Date
 
-val dateFormat = new SimpleDateFormat("yyyyMM/dd")
+val dateFormat = new SimpleDateFormat("yyyyMM/d")
 val today = new Date
 val date = dateFormat.format(today)
 val raw = spark.read.json(s"/mnt/raw/$date.json")

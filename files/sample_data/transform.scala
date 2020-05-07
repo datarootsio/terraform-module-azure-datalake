@@ -98,24 +98,103 @@ import org.apache.spark.sql.SaveMode
 
 // COMMAND ----------
 
-highestAmountsLastWeek.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/highest_amounts_last_week.parquet")
+highestAmountsLastWeek
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/highest_amounts_last_week.parquet")
 
 // COMMAND ----------
 
-topGrossingDepartmentsLast30Days.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/top_grossing_departments.parquet")
+topGrossingDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/top_grossing_departments.parquet")
 
 // COMMAND ----------
 
-topSalesDepartmentsLast30Days.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/top_sales_departments.parquet")
+topSalesDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/top_sales_departments.parquet")
 
 // COMMAND ----------
 
-highestAmountPerSaleDepartmentsLast30Days.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/highest_amount_sales_ratio.parquet")
+highestAmountPerSaleDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/highest_amount_sales_ratio.parquet")
 
 // COMMAND ----------
 
-topGrossingCountriesLast30Days.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/top_grossing_countries.parquet")
+topGrossingCountriesLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/top_grossing_countries.parquet")
 
 // COMMAND ----------
 
-topGrossingDepartmentsCountriesLast30Days.write.mode(SaveMode.Overwrite).parquet("/mnt/transformed/top_grossing_departments_countries.parquet")
+topGrossingDepartmentsCountriesLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .parquet("/mnt/transformed/top_grossing_departments_countries.parquet")
+
+// COMMAND ----------
+
+highestAmountsLastWeek
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/highestAmountsLastWeek")
+    .option("dbTable", "highestAmountsLastWeek")
+    .save()
+
+// COMMAND ----------
+
+topGrossingDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingDepartmentsLast30Days")
+    .option("dbTable", "topGrossingDepartmentsLast30Days")
+    .save()
+
+// COMMAND ----------
+
+topSalesDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topSalesDepartmentsLast30Days")
+    .option("dbTable", "topSalesDepartmentsLast30Days")
+    .save()
+
+// COMMAND ----------
+
+highestAmountPerSaleDepartmentsLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/highestAmountPerSaleDepartmentsLast30Days")
+    .option("dbTable", "highestAmountPerSaleDepartmentsLast30Days")
+    .save()
+
+// COMMAND ----------
+
+topGrossingCountriesLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingCountriesLast30Days")
+    .option("dbTable", "topGrossingCountriesLast30Days")
+    .save()
+
+// COMMAND ----------
+
+topGrossingDepartmentsCountriesLast30Days
+    .write.mode(SaveMode.Overwrite)
+    .format("com.databricks.spark.sqldw")
+    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("forwardSparkAzureStorageCredentials", "true")
+    .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingDepartmentsCountriesLast30Days")
+    .option("dbTable", "topGrossingDepartmentsCountriesLast30Days")
+    .save()
+

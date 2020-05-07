@@ -1,5 +1,5 @@
 region                       = "eastus2"
-data_lake_name               = "tfazuredatalake"
+data_lake_name               = "tfadl"
 storage_replication          = "LRS"
 service_principal_end_date   = "2030-01-01T00:00:00Z"
 databricks_cluster_node_type = "Standard_DS3_v2"
@@ -8,3 +8,4 @@ data_warehouse_dtu           = "DW100c"
 cosmosdb_consistency_level   = "Session"
 cosmosdb_db_throughput       = 400
 databricks_sku               = "standard"
+databricks_token_lifetime    = 315360000

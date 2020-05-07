@@ -137,6 +137,13 @@ The Azure SKU for the Databricks driver and workers.
 Type: string\
 Example: `"Standard_DS3_v2"`
 
+### `databricks_token_lifetime`
+
+Lifetime (in seconds) of the Databricks access token that will be created for communication with other services in the data lake.
+
+Type: number\
+Example: `315360000` (10 years)
+
 ### `cosmosdb_consistency_level`
 
 Default consistency level for the CosmosDB account.\
