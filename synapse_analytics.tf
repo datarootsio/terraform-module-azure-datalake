@@ -38,30 +38,32 @@ resource "azurerm_sql_firewall_rule" "allow_current_ip" {
   server_name         = azurerm_sql_server.synapse_srv.name
 }
 
-resource "local_file" "powershell_script" {
-  sensitive_content = templatefile("${path.module}/files/db_init.ps1",
-    {
-      server   = azurerm_sql_server.synapse_srv.name,
-      database = azurerm_sql_database.synapse.name,
-      user     = var.sql_server_admin_username,
-      password = var.sql_server_admin_password
-  })
-
-  filename = "/tmp/rendered_script.ps1"
+resource "random_password" "sql_databricks_loader" {
+  length = 16
 }
 
-resource "null_resource" "database_init" {
+resource "random_password" "sql_powerbi_viewer" {
+  length = 16
+}
 
+resource "null_resource" "sql_init" {
   triggers = {
     every_time = timestamp()
   }
 
   depends_on = [
-    azurerm_sql_firewall_rule.allow_current_ip,
-    azurerm_role_assignment.spsa_sa_adls
+    azurerm_sql_firewall_rule.allow_current_ip
   ]
 
   provisioner "local-exec" {
-    command = "pwsh -File ${local_file.powershell_script.filename} ${path.module}/files/script.sql"
+    command = "pwsh -File ${path.module}/files/sql_init.ps1"
+    environment = {
+      SERVER                     = azurerm_sql_server.synapse_srv.fully_qualified_domain_name,
+      DATABASE                   = azurerm_sql_database.synapse.name,
+      USER                       = var.sql_server_admin_username,
+      PASSWORD                   = var.sql_server_admin_password,
+      DATABRICKS_LOADER_PASSWORD = random_password.sql_databricks_loader.result
+      POWERBI_VIEWER_PASSWORD    = random_password.sql_powerbi_viewer.result
+    }
   }
 }
