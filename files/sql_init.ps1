@@ -56,6 +56,8 @@ WHERE name = '$env:POWERBI_VIEWER_USER')
 BEGIN
     CREATE USER $env:POWERBI_VIEWER_USER;
 END
+
+EXEC sp_addrolemember 'db_datareader', '$env:POWERBI_VIEWER_USER';
 "@
 
 $MasterSqlConnection.Open()
