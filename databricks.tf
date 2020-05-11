@@ -71,7 +71,7 @@ resource "databricks_secret_scope" "synapse" {
 
 resource "databricks_secret" "synapse" {
   key          = "connection_string"
-  string_value = "jdbc:sqlserver://${azurerm_sql_server.synapse_srv.fully_qualified_domain_name}:1433;database=${azurerm_sql_database.synapse.name};user=${azurerm_sql_server.synapse_srv.administrator_login}@${azurerm_sql_server.synapse_srv.name};password=${azurerm_sql_server.synapse_srv.administrator_login_password};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+  string_value = "jdbc:sqlserver://${azurerm_sql_server.synapse_srv.fully_qualified_domain_name}:1433;database=${azurerm_sql_database.synapse.name};user=${local.databricks_loader_user}@${azurerm_sql_server.synapse_srv.name};password=${random_password.sql_databricks_loader.result};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
   scope        = databricks_secret_scope.synapse.name
 }
 

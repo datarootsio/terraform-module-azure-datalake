@@ -43,6 +43,12 @@ resource "azurerm_role_assignment" "current_user_sa_dbks" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "spsa_sa_dbks" {
+  scope                = azurerm_storage_account.dbkstemp.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = azuread_service_principal.sp.id
+}
+
 resource "azurerm_storage_container" "databricks" {
   name                 = "databricks"
   storage_account_name = azurerm_storage_account.dbkstemp.name

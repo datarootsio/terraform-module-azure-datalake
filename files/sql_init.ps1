@@ -19,17 +19,15 @@ $MasterSqlCommand.CommandText = @"
 IF NOT EXISTS
     (SELECT name
 FROM sys.sql_logins
-WHERE name = 'DatabricksLoader') BEGIN
-    CREATE LOGIN DatabricksLoader WITH PASSWORD = '$env:DATABRICKS_LOADER_PASSWORD';
-
+WHERE name = '$env:DATABRICKS_LOADER_USER') BEGIN
+    CREATE LOGIN $env:DATABRICKS_LOADER_USER WITH PASSWORD = '$env:DATABRICKS_LOADER_PASSWORD';
 END
 
 IF NOT EXISTS
     (SELECT name
 FROM sys.sql_logins
-WHERE name = 'PowerBiViewer') BEGIN
-    CREATE LOGIN PowerBiViewer WITH PASSWORD = '$env:POWERBI_VIEWER_PASSWORD';
-
+WHERE name = '$env:POWERBI_VIEWER_USER') BEGIN
+    CREATE LOGIN $env:POWERBI_VIEWER_USER WITH PASSWORD = '$env:POWERBI_VIEWER_PASSWORD';
 END
 "@
 
@@ -43,20 +41,20 @@ END
 
 IF NOT EXISTS (SELECT name
 FROM sys.database_principals
-WHERE name = 'DatabricksLoader')
+WHERE name = '$env:DATABRICKS_LOADER_USER')
 BEGIN
-    CREATE USER DatabricksLoader;
+    CREATE USER $env:DATABRICKS_LOADER_USER;
 END
 
-GRANT CONTROL ON DATABASE::[dwtfadl] to DatabricksLoader;
+GRANT CONTROL ON DATABASE::[dwtfadl] to $env:DATABRICKS_LOADER_USER;
 
-EXEC sp_addrolemember 'staticrc20', 'DatabricksLoader';
+EXEC sp_addrolemember 'staticrc20', '$env:DATABRICKS_LOADER_USER';
 
 IF NOT EXISTS (SELECT name
 FROM sys.database_principals
-WHERE name = 'PowerBiViewer')
+WHERE name = '$env:POWERBI_VIEWER_USER')
 BEGIN
-    CREATE USER PowerBiViewer;
+    CREATE USER $env:POWERBI_VIEWER_USER;
 END
 "@
 

@@ -62,7 +62,9 @@ resource "null_resource" "sql_init" {
       DATABASE                   = azurerm_sql_database.synapse.name,
       USER                       = var.sql_server_admin_username,
       PASSWORD                   = var.sql_server_admin_password,
+      DATABRICKS_LOADER_USER     = local.databricks_loader_user
       DATABRICKS_LOADER_PASSWORD = random_password.sql_databricks_loader.result
+      POWERBI_VIEWER_USER        = local.powerbi_viewer_user
       POWERBI_VIEWER_PASSWORD    = random_password.sql_powerbi_viewer.result
     }
   }

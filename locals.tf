@@ -11,4 +11,7 @@ locals {
   data_lake_fs_transformed_name = "fs${var.data_lake_fs_transformed}${var.data_lake_name}"
 
   create_sample = var.provision_sample_data ? 1 : 0
+
+  databricks_loader_user = "DatabricksLoader"
+  powerbi_viewer_user    = "PowerBiViewer"
 }
