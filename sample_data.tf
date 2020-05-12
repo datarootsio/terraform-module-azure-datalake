@@ -60,6 +60,32 @@ resource "azurerm_template_deployment" "dfpipeline" {
             ]
         },
         {
+            "name": "[concat(parameters('factoryName'), '/raw_data')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "[parameters('adlsLinkedService')]",
+                    "type": "LinkedServiceReference"
+                },
+                "type": "Json",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobFSLocation",
+                        "fileName": {
+                            "value": "@concat(string(dayOfMonth(utcnow())), '.json')",
+                            "type": "Expression"
+                        },
+                        "folderPath": {
+                            "value": "@formatDateTime(utcnow(), 'yyyyMM')",
+                            "type": "Expression"
+                        },
+                        "fileSystem": "[parameters('rawAdlsName')]"
+                    }
+                }
+            }
+        },
+        {
             "name": "[concat(parameters('factoryName'), '/copy_sample_data')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
@@ -99,14 +125,16 @@ resource "azurerm_template_deployment" "dfpipeline" {
                             {
                                 "referenceName": "sample_data_set",
                                 "type": "DatasetReference",
-                                "parameters": {}
+                                "parameters": {
+                                }
                             }
                         ],
                         "outputs": [
                             {
                                 "referenceName": "raw_data",
                                 "type": "DatasetReference",
-                                "parameters": {}
+                                "parameters": {
+                                }
                             }
                         ]
                     }
@@ -116,34 +144,18 @@ resource "azurerm_template_deployment" "dfpipeline" {
                 "[concat(variables('factoryId'), '/datasets/sample_data_set')]",
                 "[concat(variables('factoryId'), '/datasets/raw_data')]"
             ]
-        },
-        {
-            "name": "[concat(parameters('factoryName'), '/raw_data')]",
-            "type": "Microsoft.DataFactory/factories/datasets",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "linkedServiceName": {
-                    "referenceName": "[parameters('adlsLinkedService')]",
-                    "type": "LinkedServiceReference"
-                },
-                "type": "Json",
-                "typeProperties": {
-                    "location": {
-                        "type": "AzureBlobFSLocation",
-                        "fileName": {
-                            "value": "@concat(string(dayOfMonth(utcnow())), '.json')",
-                            "type": "Expression"
-                        },
-                        "folderPath": {
-                            "value": "@formatDateTime(utcnow(), 'yyyyMM')",
-                            "type": "Expression"
-                        },
-                        "fileSystem": "[parameters('rawAdlsName')]"
-                    }
-                }
-            }
         }
-    ]
+    ],
+    "outputs": {
+        "pipelineName": {
+            "type": "string",
+            "value": "copy_sample_data"
+        },
+        "pipelineId": {
+            "type": "string",
+            "value": "[concat(variables('factoryId'), '/pipelines/copy_sample_data')]"
+        }
+    }
 }
 DEPLOY
 
@@ -163,11 +175,10 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   count               = local.create_sample
   resource_group_name = azurerm_resource_group.rg.name
   data_factory_name   = azurerm_data_factory.df.name
-  pipeline_name       = "copy_sample_data"
+  pipeline_name       = azurerm_template_deployment.dfpipeline[count.index].outputs["pipelineName"]
   interval            = 1
   frequency           = "Day"
   start_time          = "${formatdate("YYYY-MM-DD", timestamp())}T00:00:00Z"
-  depends_on          = [azurerm_template_deployment.dfpipeline]
 
   provisioner "local-exec" {
     command     = "${path.module}/files/sample_data/set_df_trigger.sh"
