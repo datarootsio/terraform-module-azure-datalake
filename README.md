@@ -191,4 +191,4 @@ Example: `"2030-01-01T00:00:00Z"`
 
 ## License
 
-Not licensed yet. &copy; dataroots
+MIT license. Please see [LICENSE](LICENSE) for details.
