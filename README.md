@@ -4,6 +4,7 @@ This is a module for Terraform that deploys a complete and opinionated data lake
 
 [![maintained by dataroots](https://img.shields.io/badge/maintained%20by-dataroots-%2300b189)](https://dataroots.io)
 [![Terraform 0.12](https://img.shields.io/badge/terraform-0.12-%23623CE4)](https://www.terraform.io)
+[![Terraform GitHub Actions](https://github.com/datarootsio/terraform-module-azure-datalake/workflows/Terraform%20GitHub%20Actions/badge.svg)](https://github.com/datarootsio/terraform-module-azure-datalake/actions?query=workflow%3A%22Terraform+GitHub+Actions%22)
 
 ## Components
 
@@ -13,7 +14,17 @@ This is a module for Terraform that deploys a complete and opinionated data lake
 * Azure Synapse Analytics to store presentation data
 * Azure CosmosDB to store metadata
 * Credentials and access management configured ready to go
-* Sample data pipeline
+* Sample data pipeline (optional)
+
+This design is based on one of Microsoft's architecture patterns for an [advanced analytics](https://docs.microsoft.com/en-us/azure/architecture/solution-ideas/articles/advanced-analytics-on-big-data) solution.
+
+![Microsoft Advanced Analytics pattern](https://docs.microsoft.com/en-us/azure/architecture/solution-ideas/media/advanced-analytics-on-big-data.png)
+
+It includes some additional changes that [dataroots](https://dataroots.io) is recommending.
+
+* Multiple storage containers to store every version of the data (raw, cleansed, transformed)
+* Cosmos DB is used to store the metadata of the data as a Data Catalog
+* Azure Analysis Services is not used for now as some services might be replaced when [Azure Synapse Analytics Workspace](https://docs.microsoft.com/en-us/azure/synapse-analytics/overview-what-is) becomes GA
 
 ## Usage
 
@@ -42,6 +53,27 @@ module "azuredatalake" {
 The following providers have to be configured:
 * [AzureRM](https://www.terraform.io/docs/providers/azurerm/index.html)
 * [AzureAD](https://www.terraform.io/docs/providers/azuread/index.html)
+
+The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/databricks-terraform). This provider is not in the registry yet and would have to be installed manually. This can be done with the command below:
+
+```sh
+curl https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
+```
+
+## Sample pipeline
+
+The sample pipeline uses generated sales data. In the cleansing phase, personal information is removed and missing values are dealt with. In the transformation phase some aggregated values are calculated to show how each department and country is performing.
+
+![Sample pipeline](assets/pipeline.png)
+
+Finally, the data is presented in a Power BI dashboard. The dashboard cannot be deployed through Terraform, but you can find it [in the assets folder](assets/dashboard.pbix). The dashboard can be opened with Power BI Desktop (available in the Windows Store) or it can be uploaded to your workspace in the Power BI cloud.
+
+Power BI will let you know that the credentials for the data source are incorrect. That is why you still need to go the settings of your dashboard and change the data source location and credentials according to your configuration for the data lake. The module gives you the following variables as output:
+
+* `powerbi_sql_dw_server_hostname`
+* `powerbi_sql_dw_server_database`
+* `powerbi_sql_dw_server_user`
+* `powerbi_sql_dw_server_password`
 
 ## Configuration
 
