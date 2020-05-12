@@ -14,7 +14,7 @@ provider "databricks" {
     workspace_name         = azurerm_databricks_workspace.dbks.name
     resource_group         = azurerm_databricks_workspace.dbks.resource_group_name
     client_id              = azuread_application.aadapp.application_id
-    client_secret          = random_password.aadapp_secret.result
+    client_secret          = azuread_service_principal_password.sppw.value
     tenant_id              = data.azurerm_client_config.current.tenant_id
     subscription_id        = data.azurerm_client_config.current.subscription_id
   }
