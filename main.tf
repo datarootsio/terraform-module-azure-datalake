@@ -1,13 +1,13 @@
 terraform {
   required_version = "~> 0.12"
   required_providers {
-    azurerm = "~> 2.6.0"
+    azurerm = "~> 2.9.0"
     azuread = "~> 0.8.0"
   }
 }
 
 provider "azurerm" {
-  version = "~> 2.6.0"
+  version = "~> 2.9.0"
   features {}
 }
 
