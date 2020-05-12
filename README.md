@@ -75,6 +75,8 @@ Power BI will let you know that the credentials for the data source are incorrec
 * `powerbi_sql_dw_server_user`
 * `powerbi_sql_dw_server_password`
 
+![Power BI screenshot](assets/powerbi_screenshot.png)
+
 ## Configuration
 
 The Azure tenant and subscription can be configured through the providers mentioned above.
