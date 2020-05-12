@@ -191,4 +191,4 @@ Example: `"2030-01-01T00:00:00Z"`
 
 ## License
 
-MIT license. Please see [LICENSE](LICENSE) for details.
+MIT license. Please see [LICENSE](LICENSE.md) for details.
