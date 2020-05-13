@@ -15,7 +15,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
   deployment_mode = "Incremental"
 
   provisioner "local-exec" {
-    command     = "${path.module}/sample_data/run_pipeline.sh"
+    command     = "${path.module}/files/sample_data/run_pipeline.sh"
     interpreter = ["sh"]
 
     environment = {
