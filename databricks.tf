@@ -117,12 +117,13 @@ resource "databricks_token" "token" {
 }
 
 resource "databricks_notebook" "spark_setup" {
-  content   = base64encode(templatefile("${path.module}/files/spark_setup.scala", { blob_host = azurerm_storage_account.dbkstemp.primary_blob_host }))
-  language  = "SCALA"
-  path      = "/Shared/spark_setup.scala"
-  overwrite = false
-  mkdirs    = true
-  format    = "SOURCE"
+  content    = base64encode(templatefile("${path.module}/files/spark_setup.scala", { blob_host = azurerm_storage_account.dbkstemp.primary_blob_host }))
+  language   = "SCALA"
+  path       = "/Shared/spark_setup.scala"
+  overwrite  = false
+  mkdirs     = true
+  format     = "SOURCE"
+  depends_on = [databricks_secret.access_key]
 
   provisioner "local-exec" {
     command     = "${path.module}/files/spark_setup.sh"
