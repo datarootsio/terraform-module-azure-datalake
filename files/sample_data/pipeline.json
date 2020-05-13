@@ -8,17 +8,29 @@
         "rawAdlsName": {
             "type": "string"
         },
-        "adlsLinkedService": {
+        "adlsLinkedServiceName": {
+            "type": "string"
+        },
+        "cleanNotebookPath": {
+            "type": "string"
+        },
+        "transformNotebookPath": {
+            "type": "string"
+        },
+        "databricksLinkedServiceName": {
             "type": "string"
         }
     },
     "variables": {
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
-        "pipelineName": "copy_sample_data"
+        "pipelineName": "sampleDataPipeline",
+        "sampleDataLinkedServiceName": "sampleDataService",
+        "sampleDataDatasetName": "sampleDataSet",
+        "rawDataSetName": "rawData"
     },
     "resources": [
         {
-            "name": "[concat(parameters('factoryName'), '/sampledataservice')]",
+            "name": "[concat(parameters('factoryName'), '/', variables('sampleDataLinkedServiceName'))]",
             "type": "Microsoft.DataFactory/factories/linkedServices",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -31,12 +43,12 @@
             }
         },
         {
-            "name": "[concat(parameters('factoryName'), '/sample_data_set')]",
+            "name": "[concat(parameters('factoryName'), '/', variables('sampleDataDatasetName'))]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
                 "linkedServiceName": {
-                    "referenceName": "sampledataservice",
+                    "referenceName": "[variables('sampleDataLinkedServiceName')]",
                     "type": "LinkedServiceReference"
                 },
                 "type": "Json",
@@ -48,16 +60,16 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/linkedServices/sampledataservice')]"
+                "[concat(variables('factoryId'), '/linkedServices/', variables('sampleDataLinkedServiceName'))]"
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/raw_data')]",
+            "name": "[concat(parameters('factoryName'), '/', variables('rawDataSetName'))]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
                 "linkedServiceName": {
-                    "referenceName": "[parameters('adlsLinkedService')]",
+                    "referenceName": "[parameters('adlsLinkedServiceName')]",
                     "type": "LinkedServiceReference"
                 },
                 "type": "Json",
@@ -115,22 +127,74 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "sample_data_set",
+                                "referenceName": "[variables('sampleDataDatasetName')]",
                                 "type": "DatasetReference"
                             }
                         ],
                         "outputs": [
                             {
-                                "referenceName": "raw_data",
+                                "referenceName": "[variables('rawDataSetName')]",
                                 "type": "DatasetReference"
                             }
                         ]
+                    },
+                    {
+                        "name": "Cleanse raw data",
+                        "type": "DatabricksNotebook",
+                        "dependsOn": [
+                            {
+                                "activity": "Copy from sample to data lake storage",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "typeProperties": {
+                            "notebookPath": "[parameters('cleanNotebookPath')]"
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "[parameters('databricksLinkedServiceName')]",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "Transform data",
+                        "type": "DatabricksNotebook",
+                        "dependsOn": [
+                            {
+                                "activity": "Cleanse raw data",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "typeProperties": {
+                            "notebookPath": "[parameters('transformNotebookPath')]"
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "[parameters('databricksLinkedServiceName')]",
+                            "type": "LinkedServiceReference"
+                        }
                     }
                 ]
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/sample_data_set')]",
-                "[concat(variables('factoryId'), '/datasets/raw_data')]"
+                "[concat(variables('factoryId'), '/datasets/', variables('sampleDataDatasetName'))]",
+                "[concat(variables('factoryId'), '/datasets/', variables('rawDataSetName'))]"
             ]
         }
     ],
@@ -141,7 +205,19 @@
         },
         "pipelineId": {
             "type": "string",
-            "value": "[resourceId('Microsoft.DataFactory/factories/pipelines', parameters('factoryName'), 'copy_sample_data')]"
+            "value": "[resourceId('Microsoft.DataFactory/factories/pipelines', parameters('factoryName'), variables('pipelineName'))]"
+        },
+        "sampleDataDatasetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.DataFactory/factories/datasets', parameters('factoryName'), variables('sampleDataDatasetName'))]"
+        },
+        "rawDataSetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.DataFactory/factories/datasets', parameters('factoryName'), variables('rawDataSetName'))]"
+        },
+        "sampleDataLinkedServiceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.DataFactory/factories/linkedServices', parameters('factoryName'), variables('sampleDataLinkedServiceName'))]"
         }
     }
 }
