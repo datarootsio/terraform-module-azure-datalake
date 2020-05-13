@@ -13,7 +13,8 @@
         }
     },
     "variables": {
-        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
+        "pipelineName": "copy_sample_data"
     },
     "resources": [
         {
@@ -77,7 +78,7 @@
             }
         },
         {
-            "name": "[concat(parameters('factoryName'), '/copy_sample_data')]",
+            "name": "[concat(parameters('factoryName'), '/', variables('pipelineName'))]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -136,11 +137,11 @@
     "outputs": {
         "pipelineName": {
             "type": "string",
-            "value": "copy_sample_data"
+            "value": "[variables('pipelineName')]"
         },
         "pipelineId": {
             "type": "string",
-            "value": "[concat(variables('factoryId'), '/pipelines/copy_sample_data')]"
+            "value": "[resourceId('Microsoft.DataFactory/factories/pipelines', parameters('factoryName'), 'copy_sample_data')]"
         }
     }
 }
