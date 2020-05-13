@@ -13,6 +13,15 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   deployment_mode = "Incremental"
+
+  provisioner "local-exec" {
+    command     = "${path.module}/sample_data/run_pipeline.sh"
+    interpreter = ["sh"]
+
+    environment = {
+      PIPELINE_ID = self.outputs["pipelineId"]
+    }
+  }
 }
 
 resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
