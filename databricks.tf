@@ -69,9 +69,15 @@ resource "databricks_secret_scope" "synapse" {
   initial_manage_principal = "users"
 }
 
-resource "databricks_secret" "synapse" {
-  key          = "connection_string"
-  string_value = "jdbc:sqlserver://${azurerm_sql_server.synapse_srv.fully_qualified_domain_name}:1433;database=${azurerm_sql_database.synapse.name};user=${local.databricks_loader_user}@${azurerm_sql_server.synapse_srv.name};password=${random_password.sql_databricks_loader.result};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+resource "databricks_secret" "synapse_username" {
+  key          = "username"
+  string_value = "${local.databricks_loader_user}@${azurerm_sql_server.synapse_srv.name}"
+  scope        = databricks_secret_scope.synapse.name
+}
+
+resource "databricks_secret" "synapse_password" {
+  key          = "password"
+  string_value = random_password.sql_databricks_loader.result
   scope        = databricks_secret_scope.synapse.name
 }
 
@@ -133,7 +139,7 @@ resource "databricks_notebook" "spark_setup" {
       DATABRICKS_HOST  = format("https://%s.azuredatabricks.net", azurerm_databricks_workspace.dbks.location)
       DATABRICKS_TOKEN = databricks_token.token.token_value
       CLUSTER_ID       = databricks_cluster.cluster.id
-      NOTEBOOK_PATH    = databricks_notebook.spark_setup.path
+      NOTEBOOK_PATH    = self.path
     }
   }
 }

@@ -134,10 +134,16 @@ topGrossingDepartmentsCountriesLast30Days
 
 // COMMAND ----------
 
+val connectionString = "jdbc:sqlserver://${server}:1433;database=${database};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+
+// COMMAND ----------
+
 highestAmountsLastWeek
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/highestAmountsLastWeek")
     .option("dbTable", "highestAmountsLastWeek")
@@ -148,7 +154,9 @@ highestAmountsLastWeek
 topGrossingDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingDepartmentsLast30Days")
     .option("dbTable", "topGrossingDepartmentsLast30Days")
@@ -159,7 +167,9 @@ topGrossingDepartmentsLast30Days
 topSalesDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topSalesDepartmentsLast30Days")
     .option("dbTable", "topSalesDepartmentsLast30Days")
@@ -170,7 +180,9 @@ topSalesDepartmentsLast30Days
 highestAmountPerSaleDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/highestAmountPerSaleDepartmentsLast30Days")
     .option("dbTable", "highestAmountPerSaleDepartmentsLast30Days")
@@ -181,7 +193,9 @@ highestAmountPerSaleDepartmentsLast30Days
 topGrossingCountriesLast30Days
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingCountriesLast30Days")
     .option("dbTable", "topGrossingCountriesLast30Days")
@@ -192,7 +206,9 @@ topGrossingCountriesLast30Days
 topGrossingDepartmentsCountriesLast30Days
     .write.mode(SaveMode.Overwrite)
     .format("com.databricks.spark.sqldw")
-    .option("url", dbutils.secrets.get(scope = "synapse", key = "connection_string"))
+    .option("url", connectionString)
+    .option("user", dbutils.secrets.get(scope = "synapse", key = "username"))
+    .option("password", dbutils.secrets.get(scope = "synapse", key = "password"))
     .option("forwardSparkAzureStorageCredentials", "true")
     .option("tempDir", "wasbs://${container}@${storage_account_blob_endpoint}/topGrossingDepartmentsCountriesLast30Days")
     .option("dbTable", "topGrossingDepartmentsCountriesLast30Days")
