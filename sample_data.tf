@@ -1,15 +1,60 @@
+resource "databricks_notebook" "clean" {
+  content   = filebase64("${path.module}/files/sample_data/clean.scala")
+  language  = "SCALA"
+  path      = "/Shared/sample/clean.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "SOURCE"
+  count     = local.create_sample
+
+  depends_on = [databricks_azure_adls_gen2_mount.raw, databricks_azure_adls_gen2_mount.clean]
+}
+
+resource "databricks_notebook" "transform" {
+  content = base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
+    container                     = azurerm_storage_container.databricks.name,
+    storage_account_blob_endpoint = azurerm_storage_account.dbkstemp.primary_blob_host,
+    server                        = azurerm_sql_server.synapse_srv.fully_qualified_domain_name,
+    database                      = azurerm_sql_database.synapse.name
+  }))
+
+  language  = "SCALA"
+  path      = "/Shared/sample/transform.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "SOURCE"
+  count     = local.create_sample
+
+  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.transformed]
+}
+
+resource "databricks_notebook" "presentation" {
+  content   = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
+  language  = "SCALA"
+  path      = "/Shared/sample/presentation.scala"
+  overwrite = false
+  mkdirs    = true
+  format    = "DBC"
+  count     = local.create_sample
+
+  depends_on = [databricks_azure_adls_gen2_mount.transformed]
+}
+
 resource "azurerm_template_deployment" "dfpipeline" {
   name                = "armdfpipeline"
   count               = local.create_sample
   resource_group_name = azurerm_resource_group.rg.name
 
-  template_body = file("${path.module}/files/sample_data/dfpipeline.json")
+  template_body = file("${path.module}/files/sample_data/pipeline.json")
 
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters = {
-    "factoryName"       = azurerm_data_factory.df.name
-    "rawAdlsName"       = local.data_lake_fs_raw_name
-    "adlsLinkedService" = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls.name
+    "factoryName"                 = azurerm_data_factory.df.name
+    "rawAdlsName"                 = local.data_lake_fs_raw_name
+    "adlsLinkedServiceName"       = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls.name
+    "cleanNotebookPath"           = databricks_notebook.clean[count.index].path
+    "transformNotebookPath"       = databricks_notebook.transform[count.index].path
+    "databricksLinkedServiceName" = azurerm_template_deployment.lsdbks.outputs["databricksLinkedServiceName"]
   }
 
   deployment_mode = "Incremental"
@@ -55,74 +100,5 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
       TRIGGER_ID     = self.id
       TRIGGER_ACTION = "stop"
     }
-  }
-}
-
-resource "databricks_notebook" "clean" {
-  content   = filebase64("${path.module}/files/sample_data/clean.scala")
-  language  = "SCALA"
-  path      = "/Shared/sample/clean.scala"
-  overwrite = false
-  mkdirs    = true
-  format    = "SOURCE"
-  count     = local.create_sample
-}
-
-resource "databricks_notebook" "transform" {
-  content = base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
-    container = azurerm_storage_container.databricks.name,
-  storage_account_blob_endpoint = azurerm_storage_account.dbkstemp.primary_blob_host }))
-
-  language  = "SCALA"
-  path      = "/Shared/sample/transform.scala"
-  overwrite = false
-  mkdirs    = true
-  format    = "SOURCE"
-  count     = local.create_sample
-}
-
-resource "databricks_notebook" "presentation" {
-  content   = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
-  language  = "SCALA"
-  path      = "/Shared/sample/presentation.scala"
-  overwrite = false
-  mkdirs    = true
-  format    = "DBC"
-  count     = local.create_sample
-}
-
-resource "databricks_job" "clean" {
-  existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.clean[count.index].path
-  name                = "sample_clean"
-  count               = local.create_sample
-
-  schedule {
-    quartz_cron_expression = "0 0 1 * * ? *"
-    timezone_id            = "UTC"
-  }
-}
-
-resource "databricks_job" "transform" {
-  existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.transform[count.index].path
-  name                = "sample_transform"
-  count               = local.create_sample
-
-  schedule {
-    quartz_cron_expression = "0 0 2 * * ? *"
-    timezone_id            = "UTC"
-  }
-}
-
-resource "databricks_job" "presentation" {
-  existing_cluster_id = databricks_cluster.cluster.id
-  notebook_path       = databricks_notebook.presentation[count.index].path
-  name                = "sample_presentation"
-  count               = local.create_sample
-
-  schedule {
-    quartz_cron_expression = "0 0 3 * * ? *"
-    timezone_id            = "UTC"
   }
 }

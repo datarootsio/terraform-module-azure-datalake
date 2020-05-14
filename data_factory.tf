@@ -23,11 +23,11 @@ resource "azurerm_template_deployment" "lsdbks" {
 
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters = {
-    "factoryName"    = azurerm_data_factory.df.name
-    "accessToken"    = databricks_token.token.token_value
-    "domain"         = format("https://%s.azuredatabricks.net", azurerm_databricks_workspace.dbks.location)
-    "databricksName" = azurerm_databricks_workspace.dbks.name
-    "clusterId"      = databricks_cluster.cluster.id
+    "factoryName"                 = azurerm_data_factory.df.name
+    "accessToken"                 = databricks_token.token.token_value
+    "domain"                      = format("https://%s.azuredatabricks.net", azurerm_databricks_workspace.dbks.location)
+    "databricksLinkedServiceName" = azurerm_databricks_workspace.dbks.name
+    "clusterId"                   = databricks_cluster.cluster.id
   }
 
   deployment_mode = "Incremental"

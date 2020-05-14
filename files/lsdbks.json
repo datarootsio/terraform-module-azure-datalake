@@ -11,7 +11,7 @@
         "domain": {
             "type": "string"
         },
-        "databricksName": {
+        "databricksLinkedServiceName": {
             "type": "string"
         },
         "clusterId": {
@@ -20,11 +20,10 @@
     },
     "resources": [
         {
-            "name": "[concat(parameters('factoryName'), '/', parameters('databricksName'))]",
+            "name": "[concat(parameters('factoryName'), '/', parameters('databricksLinkedServiceName'))]",
             "type": "Microsoft.DataFactory/factories/linkedServices",
             "apiVersion": "2018-06-01",
             "properties": {
-                "annotations": [],
                 "type": "AzureDatabricks",
                 "typeProperties": {
                     "domain": "[parameters('domain')]",
@@ -36,5 +35,15 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {
+        "databricksLinkedServiceName": {
+            "type": "string",
+            "value": "[parameters('databricksLinkedServiceName')]"
+        },
+        "databricksLinkedServiceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.DataFactory/factories/linkedServices', parameters('factoryName'), parameters('databricksLinkedServiceName'))]"
+        }
+    }
 }
