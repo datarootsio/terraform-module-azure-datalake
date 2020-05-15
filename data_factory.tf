@@ -13,6 +13,7 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
   url                   = "https://${azurerm_storage_account.adls.name}.dfs.core.windows.net/"
   service_principal_id  = azuread_application.aadapp.application_id
   service_principal_key = azuread_service_principal_password.sppw.value
+  depends_on            = [azurerm_role_assignment.spsa_sa_adls]
 }
 
 resource "azurerm_template_deployment" "lsdbks" {
@@ -31,4 +32,14 @@ resource "azurerm_template_deployment" "lsdbks" {
   }
 
   deployment_mode = "Incremental"
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/destroy_resource.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      RESOURCE_ID = self.outputs["databricksLinkedServiceId"]
+    }
+  }
 }

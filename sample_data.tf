@@ -7,7 +7,7 @@ resource "databricks_notebook" "clean" {
   format    = "SOURCE"
   count     = local.create_sample
 
-  depends_on = [databricks_azure_adls_gen2_mount.raw, databricks_azure_adls_gen2_mount.clean]
+  depends_on = [databricks_azure_adls_gen2_mount.raw, databricks_azure_adls_gen2_mount.clean, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_notebook" "transform" {
@@ -25,7 +25,7 @@ resource "databricks_notebook" "transform" {
   format    = "SOURCE"
   count     = local.create_sample
 
-  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.transformed]
+  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.transformed, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_notebook" "presentation" {
@@ -37,13 +37,14 @@ resource "databricks_notebook" "presentation" {
   format    = "DBC"
   count     = local.create_sample
 
-  depends_on = [databricks_azure_adls_gen2_mount.transformed]
+  depends_on = [databricks_azure_adls_gen2_mount.transformed, azurerm_role_assignment.spdbks]
 }
 
 resource "azurerm_template_deployment" "dfpipeline" {
   name                = "armdfpipeline"
   count               = local.create_sample
   resource_group_name = azurerm_resource_group.rg.name
+  depends_on          = [azurerm_template_deployment.lsdbks, azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls]
 
   template_body = file("${path.module}/files/sample_data/pipeline.json")
 
@@ -65,6 +66,46 @@ resource "azurerm_template_deployment" "dfpipeline" {
 
     environment = {
       PIPELINE_ID = self.outputs["pipelineId"]
+    }
+  }
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/destroy_resource.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      RESOURCE_ID = self.outputs["pipelineId"]
+    }
+  }
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/destroy_resource.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      RESOURCE_ID = self.outputs["rawDataSetId"]
+    }
+  }
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/destroy_resource.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      RESOURCE_ID = self.outputs["sampleDataDatasetId"]
+    }
+  }
+
+  provisioner "local-exec" {
+    command     = "${path.module}/files/destroy_resource.sh"
+    interpreter = ["sh"]
+    when        = destroy
+
+    environment = {
+      RESOURCE_ID = self.outputs["sampleDataLinkedServiceId"]
     }
   }
 }
