@@ -1,18 +1,13 @@
 terraform {
   required_version = "~> 0.12"
   required_providers {
-    azurerm = "~> 2.9.0"
-    azuread = "~> 0.8.0"
+    azurerm = ">= 2.10.0"
+    azuread = ">= 0.8.0"
   }
 }
 
 provider "azurerm" {
-  version = "~> 2.9.0"
   features {}
-}
-
-provider "azuread" {
-  version = "~> 0.8.0"
 }
 
 data "azurerm_client_config" "current" {
