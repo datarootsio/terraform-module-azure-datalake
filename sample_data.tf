@@ -123,7 +123,6 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   provisioner "local-exec" {
     command     = "${path.module}/files/sample_data/set_df_trigger.sh"
     interpreter = ["sh"]
-    on_failure  = continue
 
     environment = {
       TRIGGER_ID     = self.id
@@ -135,7 +134,6 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
     command     = "${path.module}/files/sample_data/set_df_trigger.sh"
     interpreter = ["sh"]
     when        = destroy
-    on_failure  = continue
 
     environment = {
       TRIGGER_ID     = self.id
