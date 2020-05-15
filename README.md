@@ -66,14 +66,7 @@ The sample pipeline uses generated sales data. In the cleansing phase, personal 
 
 ![Sample pipeline](assets/pipeline.png)
 
-Finally, the data is presented in a Power BI dashboard. The dashboard cannot be deployed through Terraform, but you can find it [in the assets folder](assets/dashboard.pbix). The dashboard can be opened with Power BI Desktop (available in the Windows Store) or it can be uploaded to your workspace in the Power BI cloud.
-
-Power BI will let you know that the credentials for the data source are incorrect. That is why you still need to go the settings of your dashboard and change the data source location and credentials according to your configuration for the data lake. The module gives you the following variables as output:
-
-* `powerbi_sql_dw_server_hostname`
-* `powerbi_sql_dw_server_database`
-* `powerbi_sql_dw_server_user`
-* `powerbi_sql_dw_server_password`
+Finally, the data is presented in a Power BI dashboard. The dashboard cannot be deployed through Terraform, but you can find it [in the assets folder](assets/dashboard.pbix). You can follow [this guide](POWERBI.md) on how to open the report and connect it to the data lake.
 
 ![Power BI screenshot](assets/powerbi_screenshot.png)
 
