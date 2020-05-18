@@ -18,9 +18,6 @@ jobs:
         uses: actions/setup-go@master
         with:
           go-version: ${{ env.go_version }}
-      
-      - name: Install git and unzip
-        run: apt update -qq && apt install -qq -y git unzip
 
       - name: Set GOPATH
         run: |
