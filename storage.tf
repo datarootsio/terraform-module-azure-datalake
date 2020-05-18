@@ -21,11 +21,20 @@ resource "azurerm_role_assignment" "current_user_sa_adls" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "time_sleep" "adls_ra" {
+  create_duration = "10s"
+
+  triggers = {
+    spsa_sa_adls         = azurerm_role_assignment.spsa_sa_adls.id
+    current_user_sa_adls = azurerm_role_assignment.current_user_sa_adls.id
+  }
+}
+
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
   count              = length(local.data_lake_fs_names)
   name               = local.data_lake_fs_names[count.index]
   storage_account_id = azurerm_storage_account.adls.id
-  depends_on         = [azurerm_role_assignment.current_user_sa_adls]
+  depends_on         = [azurerm_role_assignment.current_user_sa_adls, time_sleep.adls_ra]
 }
 
 resource "azurerm_storage_account" "dbkstemp" {
@@ -50,8 +59,17 @@ resource "azurerm_role_assignment" "spsa_sa_dbks" {
   principal_id         = azuread_service_principal.sp.id
 }
 
+resource "time_sleep" "dbks_ra" {
+  create_duration = "10s"
+
+  triggers = {
+    spsa_sa_adls         = azurerm_role_assignment.spsa_sa_dbks.id
+    current_user_sa_adls = azurerm_role_assignment.current_user_sa_dbks.id
+  }
+}
+
 resource "azurerm_storage_container" "databricks" {
   name                 = "databricks"
   storage_account_name = azurerm_storage_account.dbkstemp.name
-  depends_on           = [azurerm_role_assignment.current_user_sa_dbks]
+  depends_on           = [time_sleep.dbks_ra, azurerm_role_assignment.current_user_sa_dbks]
 }
