@@ -19,12 +19,6 @@ jobs:
         with:
           go-version: ${{ env.go_version }}
 
-      - name: Set GOPATH
-        run: |
-          echo "::set-env name=GOPATH::$GITHUB_WORKSPACE/go"
-          mkdir -p $GOPATH/bin
-          echo "::add-path::$GOPATH/bin"
-
       - name: Get databricks provider dependency
         run: go get -u github.com/databrickslabs/databricks-terraform
 
