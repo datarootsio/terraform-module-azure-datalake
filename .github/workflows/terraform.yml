@@ -21,7 +21,7 @@ jobs:
 
       - name: Set GOPATH
         run: |
-          echo "::set-env name=GOPATH::(go env GOPATH)"
+          echo "::set-env name=GOPATH::$(go env GOPATH)"
           echo "::add-path::$GOPATH/bin"
 
       - name: Get databricks provider dependency
