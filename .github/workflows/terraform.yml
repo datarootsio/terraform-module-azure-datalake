@@ -40,6 +40,9 @@ jobs:
         uses: hashicorp/setup-terraform@master
         with:
           terraform_version: ${{ env.tf_version }}
+      
+      - name: 'Checkout'
+        uses: actions/checkout@master
 
       - name: Terraform Init
         run: terraform init
