@@ -31,7 +31,7 @@ jobs:
         run: |
           cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
           go build -mod vendor -v -o terraform-provider-databricks
-          cd ${{ github.workspace }}
+          cd -
 
       - name: Setup databricks provider dependency
         run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
