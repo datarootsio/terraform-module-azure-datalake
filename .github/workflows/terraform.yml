@@ -40,8 +40,8 @@ jobs:
         uses: hashicorp/setup-terraform@master
         with:
           terraform_version: ${{ env.tf_version }}
-      
-      - name: 'Checkout'
+
+      - name: "Checkout"
         uses: actions/checkout@master
 
       - name: Terraform Init
@@ -88,9 +88,15 @@ jobs:
         uses: hashicorp/setup-terraform@master
         with:
           terraform_version: ${{ env.tf_version }}
-      
-      - name: 'Checkout'
+
+      - name: Azure Login
+        uses: Azure/login@master
+        with:
+          enable-AzPSSession: true
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
+
+      - name: "Checkout"
         uses: actions/checkout@master
-      
-      - name: 'Run Terratests'
-        run: go test -timeout 1h ./... 
+
+      - name: "Run Terratests"
+        run: go test -timeout 1h ./...
