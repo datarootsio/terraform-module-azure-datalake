@@ -88,5 +88,5 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Run Terratests"
+      - name: "go test"
         run: go test -timeout 1h ./...
