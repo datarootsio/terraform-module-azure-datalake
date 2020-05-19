@@ -9,6 +9,8 @@ on:
 env:
   tf_version: "latest"
   go_version: "^1.14.3"
+  databricks_repo: "datarootsio/databricks-terraform"
+  databricks_branch: "bugfix/content-state-validate"
 jobs:
   validate:
     name: "Validate"
@@ -20,7 +22,9 @@ jobs:
           go-version: ${{ env.go_version }}
 
       - name: Get databricks provider dependency
-        run: rm -rf ${{ github.workspace }}/databricks-terraform && git clone https://github.com/databrickslabs/databricks-terraform.git ${{ github.workspace }}/databricks-terraform
+        run: |
+          rm -rf ${{ github.workspace }}/databricks-terraform
+          git clone --depth 1 -b ${{ env.databricks_branch }} https://github.com/${{ env.databricks_repo }}.git ${{ github.workspace }}/databricks-terraform
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
@@ -60,7 +64,9 @@ jobs:
           go-version: ${{ env.go_version }}
 
       - name: Get databricks provider dependency
-        run: rm -rf ${{ github.workspace }}/databricks-terraform && git clone https://github.com/databrickslabs/databricks-terraform.git ${{ github.workspace }}/databricks-terraform
+        run: |
+          rm -rf ${{ github.workspace }}/databricks-terraform
+          git clone --depth 1 -b ${{ env.databricks_branch }} https://github.com/${{ env.databricks_repo }}.git ${{ github.workspace }}/databricks-terraform
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
