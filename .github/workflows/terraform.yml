@@ -19,27 +19,19 @@ jobs:
         with:
           go-version: ${{ env.go_version }}
 
-      - name: Set GOPATH
-        run: |
-          echo "::set-env name=GOPATH::$(go env GOPATH)"
-          echo "::add-path::$GOPATH/bin"
-
       - name: Get databricks provider dependency
-        run: go get -u github.com/databrickslabs/databricks-terraform
-
-      - name: Build databricks provider dependency
-        run: |
-          cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
-          go build -o terraform-provider-databricks
-          cd -
-
-      - name: Setup databricks provider dependency
-        run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
+        run: rm -rf ${{ github.workspace }}/databricks-terraform && git clone https://github.com/databrickslabs/databricks-terraform.git ${{ github.workspace }}/databricks-terraform
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
         with:
           terraform_version: ${{ env.tf_version }}
+
+      - name: Build databricks provider dependency
+        run: |
+          cd ${{ github.workspace }}/databricks-terraform
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
+          cd -
 
       - name: "Checkout"
         uses: actions/checkout@master
@@ -67,27 +59,19 @@ jobs:
         with:
           go-version: ${{ env.go_version }}
 
-      - name: Set GOPATH
-        run: |
-          echo "::set-env name=GOPATH::$(go env GOPATH)"
-          echo "::add-path::$GOPATH/bin"
-
       - name: Get databricks provider dependency
-        run: go get -u github.com/databrickslabs/databricks-terraform
-
-      - name: Build databricks provider dependency
-        run: |
-          cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
-          go build -o terraform-provider-databricks
-          cd -
-
-      - name: Setup databricks provider dependency
-        run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
+        run: rm -rf ${{ github.workspace }}/databricks-terraform && git clone https://github.com/databrickslabs/databricks-terraform.git ${{ github.workspace }}/databricks-terraform
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
         with:
           terraform_version: ${{ env.tf_version }}
+
+      - name: Build databricks provider dependency
+        run: |
+          cd ${{ github.workspace }}/databricks-terraform
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
+          cd -
 
       - name: Azure Login
         uses: Azure/login@v1.1
