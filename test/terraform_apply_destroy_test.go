@@ -17,7 +17,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	sqlServerPass := randSeq(20) + strconv.Itoa(rand.Intn(1000))
 	dataLakeName := "tfadltest" + strconv.Itoa(rand.Intn(1000))
 
-	region, err := azure.GetRandomRegionE(t, nil, nil, "")
+	region, err := azure.GetRandomRegionE(t, nil, []string{"southafricawest"}, "")
 	if err != nil {
 		return "", nil, err
 	}
@@ -26,7 +26,8 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		TerraformDir: "../",
 		Vars:         map[string]interface{}{},
 		RetryableTerraformErrors: map[string]string{
-			".*Response from server (429).*": "Failed to create notebooks due to rate limiting",
+			".*Response from server (429).*":                        "Failed to create notebooks due to rate limiting",
+			".*does not have any associated worker environments.*:": "Databricks API was not ready for requests",
 		},
 		MaxRetries:         5,
 		TimeBetweenRetries: 30 * time.Second,
