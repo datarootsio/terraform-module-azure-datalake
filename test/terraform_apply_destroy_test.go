@@ -11,8 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const KeyDataLakeName = "data_lake_name"
-
 func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error) {
 	rand.Seed(time.Now().UnixNano())
 	sqlServerAdmin := randSeq(10)
@@ -28,13 +26,13 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		TerraformDir: "../",
 		Vars:         map[string]interface{}{},
 		RetryableTerraformErrors: map[string]string{
-			"*Response from server (429)": "Failed to create notebooks due to rate limiting",
+			".*Response from server (429).*": "Failed to create notebooks due to rate limiting",
 		},
 		MaxRetries:         5,
 		TimeBetweenRetries: 30 * time.Second,
 	}
 
-	terraformOptions.Vars[KeyDataLakeName] = dataLakeName
+	terraformOptions.Vars["data_lake_name"] = dataLakeName
 	terraformOptions.Vars["sql_server_admin_username"] = sqlServerAdmin
 	terraformOptions.Vars["sql_server_admin_password"] = sqlServerPass
 	terraformOptions.Vars["region"] = region
@@ -52,10 +50,10 @@ func TestApplyAndDestroyWithSamples(t *testing.T) {
 	_, err = terraform.InitAndApplyE(t, options)
 	assert.NoError(t, err)
 
-	outDataLakeName, err := terraform.OutputE(t, options, KeyDataLakeName)
+	outDataLakeName, err := terraform.OutputE(t, options, "name")
 	assert.NoError(t, err)
 
-	assert.Equal(t, outDataLakeName, name)
+	assert.Equal(t, name, outDataLakeName)
 }
 
 func TestApplyAndDestroyWithoutSamples(t *testing.T) {
@@ -70,8 +68,8 @@ func TestApplyAndDestroyWithoutSamples(t *testing.T) {
 	_, err = terraform.InitAndApplyE(t, options)
 	assert.NoError(t, err)
 
-	outDataLakeName, err := terraform.OutputE(t, options, KeyDataLakeName)
+	outDataLakeName, err := terraform.OutputE(t, options, "name")
 	assert.NoError(t, err)
 
-	assert.Equal(t, outDataLakeName, name)
+	assert.Equal(t, name, outDataLakeName)
 }
