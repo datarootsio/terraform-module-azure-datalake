@@ -30,7 +30,7 @@ jobs:
       - name: Build databricks provider dependency
         run: |
           cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
-          go build -mod vendor -v -o terraform-provider-databricks
+          go build -o terraform-provider-databricks
           cd -
 
       - name: Setup databricks provider dependency
@@ -52,3 +52,45 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+  terratests:
+    name: "Terratests"
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@master
+        with:
+          go-version: ${{ env.go_version }}
+
+      - name: Set GOPATH
+        run: |
+          echo "::set-env name=GOPATH::$(go env GOPATH)"
+          echo "::add-path::$GOPATH/bin"
+
+      - name: Get databricks provider dependency
+        run: go get -u github.com/databrickslabs/databricks-terraform
+
+      - name: Build databricks provider dependency
+        run: |
+          cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
+          go build -o terraform-provider-databricks
+          cd -
+
+      - name: Setup databricks provider dependency
+        run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@master
+        with:
+          terraform_version: ${{ env.tf_version }}
+      
+      - name: 'Checkout'
+        uses: actions/checkout@master
+      
+      - name: 'Run Terratests'
+        run: go test -timeout 1h ./... 
