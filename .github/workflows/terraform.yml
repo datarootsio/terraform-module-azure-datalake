@@ -17,7 +17,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@master
         with:
-          go-version: ${{ env.go_version }}
+          go-version: "^1.14.3"
 
       - name: Set GOPATH
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
         with:
-          terraform_version: ${{ env.tf_version }}
+          terraform_version: "latest"
 
       - name: "Checkout"
         uses: actions/checkout@master
@@ -65,7 +65,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@master
         with:
-          go-version: ${{ env.go_version }}
+          go-version: "^1.14.3"
 
       - name: Set GOPATH
         run: |
@@ -87,10 +87,10 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@master
         with:
-          terraform_version: ${{ env.tf_version }}
+          terraform_version: "latest"
 
       - name: Azure Login
-        uses: Azure/login@master
+        uses: Azure/login@v1.1
         with:
           enable-AzPSSession: true
           creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
