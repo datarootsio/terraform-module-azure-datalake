@@ -1,48 +1,54 @@
-name: 'Terraform Module GitHub Actions'
+name: "tests"
 on:
-  - pull_request
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 env:
-  tf_version: 'latest'
-  tf_working_dir: '.'
+  tf_version: "latest"
+  go_version: "^1.14.3"
 jobs:
   validate:
-    name: 'Validate'
+    name: "Validate"
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Go
+        uses: actions/setup-go@master
+        with:
+          go-version: ${{ env.go_version }}
+
+      - name: Set GOPATH
+        run: |
+          echo "::set-env name=GOPATH::$(go env GOPATH)"
+          echo "::add-path::$GOPATH/bin"
+
+      - name: Get databricks provider dependency
+        run: go get -u github.com/databrickslabs/databricks-terraform
+
+      - name: Build databricks provider dependency
+        run: |
+          cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
+          go build -mod vendor -v -o terraform-provider-databricks
+          cd -
+
+      - name: Setup databricks provider dependency
+        run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@master
+        with:
+          terraform_version: ${{ env.tf_version }}
+      
       - name: 'Checkout'
         uses: actions/checkout@master
-      - name: 'Terraform Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: ${{ env.tf_version }}
-          tf_actions_subcommand: 'fmt'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  build:
-    name: 'Build'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@master
-      - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: true
-        id: bump_version
-      - run: echo "::set-output name=major_version::v$(echo ${{ steps.bump_version.outputs.new_version }} | cut -d. -f1)"
-        shell: bash
-        id: get_major_version
-      - uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.bump_version.outputs.new_tag) }}.zip .
-      - uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ${{ format('azure-datalake-{0}-beta', steps.get_major_version.outputs.major_version) }}.zip . -x "*.zip"
-      - uses: actions-hub/gcloud@master
-        env:
-          PROJECT_ID: dataroots-terraform-modules
-          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON_B64 }}
-          CLI: gsutil
-        with:
-          args: cp *.zip gs://dataroots-terraform-modules/
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate

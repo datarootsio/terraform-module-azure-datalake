@@ -1,14 +1,11 @@
-name: 'Terraform GitHub Actions'
+name: 'publish'
 on:
   push:
     branches:
       - master
-env:
-  tf_version: 'latest'
-  tf_working_dir: '.'
 jobs:
-  build:
-    name: 'Build'
+  publish:
+    name: 'Publish'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
