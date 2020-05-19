@@ -1,6 +1,27 @@
 
-# Created by https://www.gitignore.io/api/macos,terraform,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=macos,terraform,visualstudiocode
+# Created by https://www.gitignore.io/api/go,macos,terraform,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=go,macos,terraform,visualstudiocode
+
+### Go ###
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+### Go Patch ###
+/vendor/
+/Godeps/
 
 ### macOS ###
 # General
@@ -71,4 +92,4 @@ override.tf.json
 # Ignore all local history of files
 .history
 
-# End of https://www.gitignore.io/api/macos,terraform,visualstudiocode
+# End of https://www.gitignore.io/api/go,macos,terraform,visualstudiocode
