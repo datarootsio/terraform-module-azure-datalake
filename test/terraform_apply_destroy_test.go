@@ -17,7 +17,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	sqlServerPass := randSeq(20) + strconv.Itoa(rand.Intn(1000))
 	dataLakeName := "tfadltest" + strconv.Itoa(rand.Intn(1000))
 
-	region, err := azure.GetRandomRegionE(t, nil, []string{"southafricawest", "australiacentral"}, "")
+	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
 	if err != nil {
 		return "", nil, err
 	}
