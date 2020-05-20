@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 token_response=$(az account get-access-token --resource https://management.core.windows.net/)
 azToken=$(jq .accessToken -r <<< "$token_response")
