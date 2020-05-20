@@ -35,6 +35,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		},
 		MaxRetries:         5,
 		TimeBetweenRetries: 30 * time.Second,
+		NoColor:            true,
 	}
 
 	terraformOptions.Vars["data_lake_name"] = dataLakeName
