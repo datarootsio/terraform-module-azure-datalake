@@ -30,7 +30,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		TerraformDir: tempTestFolder,
 		Vars:         map[string]interface{}{},
 		RetryableTerraformErrors: map[string]string{
-			".*Response from server (429).*":                        "Failed to create notebooks due to rate limiting",
+			".*429.*": "Failed to create notebooks due to rate limiting",
 			".*does not have any associated worker environments.*:": "Databricks API was not ready for requests",
 		},
 		MaxRetries:         5,
