@@ -97,39 +97,42 @@ resource "databricks_secret" "synapse_password" {
 }
 
 resource "databricks_azure_adls_gen2_mount" "raw" {
-  cluster_id           = databricks_cluster.cluster.id
-  container_name       = local.data_lake_fs_raw_name
-  storage_account_name = azurerm_storage_account.adls.name
-  mount_name           = "raw"
-  tenant_id            = data.azurerm_client_config.current.tenant_id
-  client_id            = azuread_application.aadapp.application_id
-  client_secret_scope  = databricks_secret.client_secret.scope
-  client_secret_key    = databricks_secret.client_secret.key
-  depends_on           = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
+  cluster_id             = databricks_cluster.cluster.id
+  container_name         = local.data_lake_fs_raw_name
+  storage_account_name   = azurerm_storage_account.adls.name
+  mount_name             = "raw"
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+  client_id              = azuread_application.aadapp.application_id
+  client_secret_scope    = databricks_secret.client_secret.scope
+  client_secret_key      = databricks_secret.client_secret.key
+  initialize_file_system = true
+  depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_azure_adls_gen2_mount" "clean" {
-  cluster_id           = databricks_cluster.cluster.id
-  container_name       = local.data_lake_fs_clean_name
-  storage_account_name = azurerm_storage_account.adls.name
-  mount_name           = "clean"
-  tenant_id            = data.azurerm_client_config.current.tenant_id
-  client_id            = azuread_application.aadapp.application_id
-  client_secret_scope  = databricks_secret.client_secret.scope
-  client_secret_key    = databricks_secret.client_secret.key
-  depends_on           = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
+  cluster_id             = databricks_cluster.cluster.id
+  container_name         = local.data_lake_fs_clean_name
+  storage_account_name   = azurerm_storage_account.adls.name
+  mount_name             = "clean"
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+  client_id              = azuread_application.aadapp.application_id
+  client_secret_scope    = databricks_secret.client_secret.scope
+  client_secret_key      = databricks_secret.client_secret.key
+  initialize_file_system = true
+  depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_azure_adls_gen2_mount" "transformed" {
-  cluster_id           = databricks_cluster.cluster.id
-  container_name       = local.data_lake_fs_transformed_name
-  storage_account_name = azurerm_storage_account.adls.name
-  mount_name           = "transformed"
-  tenant_id            = data.azurerm_client_config.current.tenant_id
-  client_id            = azuread_application.aadapp.application_id
-  client_secret_scope  = databricks_secret.client_secret.scope
-  client_secret_key    = databricks_secret.client_secret.key
-  depends_on           = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
+  cluster_id             = databricks_cluster.cluster.id
+  container_name         = local.data_lake_fs_transformed_name
+  storage_account_name   = azurerm_storage_account.adls.name
+  mount_name             = "transformed"
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+  client_id              = azuread_application.aadapp.application_id
+  client_secret_scope    = databricks_secret.client_secret.scope
+  client_secret_key      = databricks_secret.client_secret.key
+  initialize_file_system = true
+  depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_token" "token" {
