@@ -151,7 +151,7 @@ resource "databricks_notebook" "spark_setup" {
   depends_on = [databricks_secret.access_key, azurerm_role_assignment.spdbks]
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/spark_setup.sh"
+    command = "${path.module}/files/spark_setup.sh"
 
     environment = {
       DATABRICKS_HOST  = format("https://%s.azuredatabricks.net", azurerm_databricks_workspace.dbks.location)

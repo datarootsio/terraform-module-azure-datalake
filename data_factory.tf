@@ -34,8 +34,8 @@ resource "azurerm_template_deployment" "lsdbks" {
   deployment_mode = "Incremental"
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/destroy_resource.sh"
-    when        = destroy
+    command = "${path.module}/files/destroy_resource.sh"
+    when    = destroy
 
     environment = {
       RESOURCE_ID = self.outputs["databricksLinkedServiceId"]
