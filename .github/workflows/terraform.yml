@@ -9,6 +9,7 @@ on:
 env:
   tf_version: "latest"
   go_version: "^1.14.3"
+  tests_timeout: "2h"
   databricks_repo: "datarootsio/databricks-terraform"
   databricks_branch: "bugfix/content-state-validate"
 jobs:
@@ -89,4 +90,4 @@ jobs:
         uses: actions/checkout@master
 
       - name: "go test"
-        run: go test -timeout 1h ./...
+        run: go test -timeout ${{ env.tests_timeout }} ./...
