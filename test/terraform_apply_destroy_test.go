@@ -2,6 +2,7 @@ package test
 
 import (
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -18,7 +19,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 
 	sqlServerAdmin := random.UniqueId()
 	sqlServerPass := random.UniqueId() + strconv.Itoa(random.Random(10, 99))
-	dataLakeName := "tfadlt" + random.UniqueId()
+	dataLakeName := "tfadlt" + strings.ToLower(random.UniqueId())
 
 	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
 	if err != nil {
