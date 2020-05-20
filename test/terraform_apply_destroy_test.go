@@ -1,12 +1,12 @@
 package test
 
 import (
-	"math/rand"
 	"strconv"
 	"testing"
 	"time"
 
 	"github.com/gruntwork-io/terratest/modules/azure"
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
@@ -16,10 +16,9 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 
 	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "..", ".")
 
-	rand.Seed(time.Now().UnixNano())
-	sqlServerAdmin := randSeq(10)
-	sqlServerPass := randSeq(20) + strconv.Itoa(rand.Intn(1000))
-	dataLakeName := "tfadltest" + strconv.Itoa(rand.Intn(1000))
+	sqlServerAdmin := random.UniqueId()
+	sqlServerPass := random.UniqueId() + strconv.Itoa(random.Random(10, 99))
+	dataLakeName := "tfadlt" + random.UniqueId()
 
 	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
 	if err != nil {
