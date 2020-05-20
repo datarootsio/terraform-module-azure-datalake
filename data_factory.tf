@@ -35,7 +35,6 @@ resource "azurerm_template_deployment" "lsdbks" {
 
   provisioner "local-exec" {
     command     = "${path.module}/files/destroy_resource.sh"
-    interpreter = ["sh"]
     when        = destroy
 
     environment = {

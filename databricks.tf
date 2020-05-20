@@ -152,7 +152,6 @@ resource "databricks_notebook" "spark_setup" {
 
   provisioner "local-exec" {
     command     = "${path.module}/files/spark_setup.sh"
-    interpreter = ["sh"]
 
     environment = {
       DATABRICKS_HOST  = format("https://%s.azuredatabricks.net", azurerm_databricks_workspace.dbks.location)
