@@ -8,10 +8,14 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/azure"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
 )
 
 func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error) {
+
+	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "..", ".")
+
 	rand.Seed(time.Now().UnixNano())
 	sqlServerAdmin := randSeq(10)
 	sqlServerPass := randSeq(20) + strconv.Itoa(rand.Intn(1000))
@@ -23,7 +27,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	}
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../",
+		TerraformDir: tempTestFolder,
 		Vars:         map[string]interface{}{},
 		RetryableTerraformErrors: map[string]string{
 			".*Response from server (429).*":                        "Failed to create notebooks due to rate limiting",
