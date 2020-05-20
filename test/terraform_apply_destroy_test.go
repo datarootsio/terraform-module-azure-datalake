@@ -30,10 +30,11 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		Vars:         map[string]interface{}{},
 		RetryableTerraformErrors: map[string]string{
 			".*429.*": "Failed to create notebooks due to rate limiting",
-			".*does not have any associated worker environments.*:": "Databricks API was not ready for requests",
+			".*does not have any associated worker environments.*:":        "Databricks API was not ready for requests",
+			".*we are currently experiencing high demand in this region.*": "Azure service at capacity",
 		},
 		MaxRetries:         5,
-		TimeBetweenRetries: 30 * time.Second,
+		TimeBetweenRetries: 5 * time.Minute,
 		NoColor:            true,
 	}
 
