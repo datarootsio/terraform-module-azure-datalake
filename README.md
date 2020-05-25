@@ -5,6 +5,7 @@ This is a module for Terraform that deploys a complete and opinionated data lake
 [![maintained by dataroots](https://img.shields.io/badge/maintained%20by-dataroots-%2300b189)](https://dataroots.io)
 [![Terraform 0.12](https://img.shields.io/badge/terraform-0.12-%23623CE4)](https://www.terraform.io)
 [![tests](https://github.com/datarootsio/terraform-module-azure-datalake/workflows/tests/badge.svg?branch=master)](https://github.com/datarootsio/terraform-module-azure-datalake/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/datarootsio/terraform-module-azure-datalake)](https://goreportcard.com/report/github.com/datarootsio/terraform-module-azure-datalake)
 
 ## Components
 
