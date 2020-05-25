@@ -26,7 +26,20 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 
 	dataLakeName := "tfadlt" + strings.ToLower(random.UniqueId())
 
-	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
+	region, err := azure.GetRandomRegionE(t, []string{
+		"centralus",
+		"eastus",
+		"eastus2",
+		"westus",
+		"westus2",
+		"northcentralus",
+		"southcentralus",
+		"northeurope",
+		"westeurope",
+		"francecentral",
+		"uksouth",
+		"ukwest",
+	}, nil, "")
 	if err != nil {
 		return "", nil, err
 	}
