@@ -12,7 +12,7 @@ fmt:
 lint-tf: tools
 	terraform fmt -check
 	terraform validate
-	docker run --rm -v $(pwd):/data -t wata727/tflint
+	tflint
 
 lint-go:
 	test -z $(gofmt -l -s test)
