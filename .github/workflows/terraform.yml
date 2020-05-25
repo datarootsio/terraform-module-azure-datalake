@@ -7,41 +7,26 @@ on:
     branches:
       - master
 env:
-  tf_version: "latest"
-  go_version: "^1.14.3"
+  tests_timeout: "2h"
+  databricks_repo: "datarootsio/databricks-terraform"
+  databricks_branch: "bugfix/content-state-validate"
 jobs:
   validate:
     name: "Validate"
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Go
-        uses: actions/setup-go@master
-        with:
-          go-version: ${{ env.go_version }}
-
-      - name: Set GOPATH
-        run: |
-          echo "::set-env name=GOPATH::$(go env GOPATH)"
-          echo "::add-path::$GOPATH/bin"
-
       - name: Get databricks provider dependency
-        run: go get -u github.com/databrickslabs/databricks-terraform
+        run: |
+          rm -rf ${{ github.workspace }}/databricks-terraform
+          git clone --depth 1 -b ${{ env.databricks_branch }} https://github.com/${{ env.databricks_repo }}.git ${{ github.workspace }}/databricks-terraform
 
       - name: Build databricks provider dependency
         run: |
-          cd $GOPATH/src/github.com/databrickslabs/databricks-terraform/
-          go build -mod vendor -v -o terraform-provider-databricks
+          cd ${{ github.workspace }}/databricks-terraform
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
           cd -
 
-      - name: Setup databricks provider dependency
-        run: mkdir -p ~/.terraform.d/plugins/ && cp $GOPATH/src/github.com/databrickslabs/databricks-terraform/terraform-provider-databricks ~/.terraform.d/plugins/terraform-provider-databricks
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@master
-        with:
-          terraform_version: ${{ env.tf_version }}
-      
-      - name: 'Checkout'
+      - name: "Checkout"
         uses: actions/checkout@master
 
       - name: Terraform Init
@@ -52,3 +37,35 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+  terratests:
+    name: "Terratests"
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    steps:
+      - name: Get databricks provider dependency
+        run: |
+          rm -rf ${{ github.workspace }}/databricks-terraform
+          git clone --depth 1 -b ${{ env.databricks_branch }} https://github.com/${{ env.databricks_repo }}.git ${{ github.workspace }}/databricks-terraform
+
+      - name: Build databricks provider dependency
+        run: |
+          cd ${{ github.workspace }}/databricks-terraform
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
+          cd -
+
+      - name: Azure Login
+        uses: Azure/login@v1.1
+        with:
+          enable-AzPSSession: true
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
+
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "go test"
+        run: go test -timeout ${{ env.tests_timeout }} ./...

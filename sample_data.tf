@@ -61,8 +61,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
   deployment_mode = "Incremental"
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/sample_data/run_pipeline.sh"
-    interpreter = ["sh"]
+    command = "${path.module}/files/sample_data/run_pipeline.sh"
 
     environment = {
       PIPELINE_ID = self.outputs["pipelineId"]
@@ -70,9 +69,8 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/destroy_resource.sh"
-    interpreter = ["sh"]
-    when        = destroy
+    command = "${path.module}/files/destroy_resource.sh"
+    when    = destroy
 
     environment = {
       RESOURCE_ID = self.outputs["pipelineId"]
@@ -80,9 +78,8 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/destroy_resource.sh"
-    interpreter = ["sh"]
-    when        = destroy
+    command = "${path.module}/files/destroy_resource.sh"
+    when    = destroy
 
     environment = {
       RESOURCE_ID = self.outputs["rawDataSetId"]
@@ -90,9 +87,8 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/destroy_resource.sh"
-    interpreter = ["sh"]
-    when        = destroy
+    command = "${path.module}/files/destroy_resource.sh"
+    when    = destroy
 
     environment = {
       RESOURCE_ID = self.outputs["sampleDataDatasetId"]
@@ -100,9 +96,8 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/destroy_resource.sh"
-    interpreter = ["sh"]
-    when        = destroy
+    command = "${path.module}/files/destroy_resource.sh"
+    when    = destroy
 
     environment = {
       RESOURCE_ID = self.outputs["sampleDataLinkedServiceId"]
@@ -121,8 +116,7 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   start_time          = "${formatdate("YYYY-MM-DD", timestamp())}T00:00:00Z"
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/sample_data/set_df_trigger.sh"
-    interpreter = ["sh"]
+    command = "${path.module}/files/sample_data/set_df_trigger.sh"
 
     environment = {
       TRIGGER_ID     = self.id
@@ -131,9 +125,8 @@ resource "azurerm_data_factory_trigger_schedule" "copy_sample_data_trigger" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/files/sample_data/set_df_trigger.sh"
-    interpreter = ["sh"]
-    when        = destroy
+    command = "${path.module}/files/sample_data/set_df_trigger.sh"
+    when    = destroy
 
     environment = {
       TRIGGER_ID     = self.id
