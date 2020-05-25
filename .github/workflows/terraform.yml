@@ -8,6 +8,7 @@ on:
       - master
 env:
   tests_timeout: "2h"
+  golangci_lint_version: "v1.26"
   databricks_repo: "datarootsio/databricks-terraform"
   databricks_branch: "bugfix/content-state-validate"
 jobs:
@@ -66,6 +67,14 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@master
+      
+      - name: "go vet"
+        run: go vet ./...
+      
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v1
+        with:
+          version: ${{ env.golangci_lint_version }}
 
       - name: "go test"
         run: go test -timeout ${{ env.tests_timeout }} ./...
