@@ -2,7 +2,6 @@ default: lint
 
 tools:
 	go install gotest.tools/gotestsum
-	curl -s https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b ~/.terraform.d/plugins
 	terraform init
 
 fmt:
