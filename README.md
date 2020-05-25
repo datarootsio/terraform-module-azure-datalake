@@ -218,6 +218,17 @@ This module uses a service principal to allow communication between the differen
 Type: string\
 Example: `"2030-01-01T00:00:00Z"`
 
+## Contributing
+
+Contributions to this repository are very welcome! Found a bug or do you have a suggestion? Please open an issue. Do you know how to fix it? Pull requests are welcome as well! To get you started faster, a Makefile is provided.
+
+Make sure to install Terraform, Go (for automated testing) and Make (optional, if you want to use the Makefile) on your computer.
+
+* Setup tools & dependencies: `make tools`
+* Format your code: `make fmt`
+* Linting: `make lint`
+* Run tests: `make test` (or `go test -timeout 2h ./...` without Make)
+
 ## License
 
 MIT license. Please see [LICENSE](LICENSE.md) for details.
