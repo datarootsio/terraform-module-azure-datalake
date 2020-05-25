@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gruntwork-io/terratest/modules/azure"
+	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
@@ -41,6 +42,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		MaxRetries:         5,
 		TimeBetweenRetries: 5 * time.Minute,
 		NoColor:            true,
+		Logger:             logger.TestingT,
 	}
 
 	terraformOptions.Vars["data_lake_name"] = dataLakeName
