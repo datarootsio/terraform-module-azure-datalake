@@ -1,7 +1,6 @@
 package test
 
 import (
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
+	"github.com/sethvargo/go-password/password"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +18,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "..", ".")
 
 	sqlServerAdmin := random.UniqueId()
-	sqlServerPass := random.UniqueId() + strconv.Itoa(random.Random(10, 99))
+	sqlServerPass := password.Generate(30, 10, 10, false, true)
 	dataLakeName := "tfadlt" + strings.ToLower(random.UniqueId())
 
 	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
