@@ -57,6 +57,9 @@ jobs:
           cd ${{ github.workspace }}/databricks-terraform
           go build -o ~/.terraform.d/plugins/terraform-provider-databricks
           cd -
+      
+      - name: Setup gotestsum
+        run: go install gotest.tools/gotestsum
 
       - name: Azure Login
         uses: Azure/login@v1.1
@@ -68,4 +71,4 @@ jobs:
         uses: actions/checkout@master
 
       - name: "go test"
-        run: go test -timeout ${{ env.tests_timeout }} ./...
+        run: gotestsum -- -timeout ${{ env.tests_timeout }} ./...
