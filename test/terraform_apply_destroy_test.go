@@ -18,7 +18,11 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "..", ".")
 
 	sqlServerAdmin := random.UniqueId()
-	sqlServerPass := password.Generate(30, 10, 10, false, true)
+	sqlServerPass, err := password.Generate(30, 10, 10, false, true)
+	if err != nil {
+		return "", nil, err
+	}
+
 	dataLakeName := "tfadlt" + strings.ToLower(random.UniqueId())
 
 	region, err := azure.GetRandomRegionE(t, []string{"centralus", "eastus", "eastus2", "westus", "westus2", "northeurope", "westeurope"}, nil, "")
