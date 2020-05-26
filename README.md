@@ -52,15 +52,34 @@ module "azuredatalake" {
 
 ## Requirements
 
-The following providers have to be configured:
-* [AzureRM](https://www.terraform.io/docs/providers/azurerm/index.html)
-* [AzureAD](https://www.terraform.io/docs/providers/azuread/index.html)
+### Supported environments
+
+This module works on macOS and Linux.
+
+### Databricks provider installation
 
 The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/databricks-terraform). This provider is not in the registry yet and would have to be installed manually. This can be done with the command below:
 
 ```sh
 curl https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
 ```
+
+### Azure provider configuration
+
+The following providers have to be configured:
+
+* [AzureRM](https://www.terraform.io/docs/providers/azurerm/index.html)
+* [AzureAD](https://www.terraform.io/docs/providers/azuread/index.html)
+
+You can either log in through the Azure CLI, or set environment variables as documented in the links above.
+
+### Azure CLI
+
+The module uses some workarounds for features that are not yet available in the Azure providers. Therefore, you need to be logged in to the Azure CLI as well. You can use both a user account, as well as service principal authentication.
+
+### PowerShell
+
+The module uses some workarounds for features that are not yet available in the Azure providers. Therefore, you need to have [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) installed.
 
 ## Sample pipeline
 
@@ -217,6 +236,19 @@ This module uses a service principal to allow communication between the differen
 
 Type: string\
 Example: `"2030-01-01T00:00:00Z"`
+
+## Contributing
+
+Contributions to this repository are very welcome! Found a bug or do you have a suggestion? Please open an issue. Do you know how to fix it? Pull requests are welcome as well! To get you started faster, a Makefile is provided.
+
+Make sure to install [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html), [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?), [Go](https://golang.org/doc/install) (for automated testing) and Make (optional, if you want to use the Makefile) on your computer. Install [tflint](https://github.com/terraform-linters/tflint) to be able to run the linting.
+
+* Setup tools & dependencies: `make tools`
+* Format your code: `make fmt`
+* Linting: `make lint`
+* Run tests: `make test` (or `go test -timeout 2h ./...` without Make)
+
+To run the automated tests, the environment variable `ARM_SUBSCRIPTION_ID` has to be set to your Azure subscription ID.
 
 ## License
 
