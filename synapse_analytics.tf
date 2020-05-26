@@ -44,13 +44,21 @@ resource "azurerm_sql_firewall_rule" "allow_current_ip" {
 }
 
 resource "random_password" "sql_databricks_loader" {
-  count  = local.create_synapse
-  length = 16
+  count       = local.create_synapse
+  length      = 100
+  min_lower   = 10
+  min_upper   = 10
+  min_special = 10
+  min_numeric = 10
 }
 
 resource "random_password" "sql_powerbi_viewer" {
-  count  = local.create_synapse
-  length = 16
+  count       = local.create_synapse
+  length      = 100
+  min_lower   = 10
+  min_upper   = 10
+  min_special = 10
+  min_numeric = 10
 }
 
 resource "null_resource" "sql_init" {
