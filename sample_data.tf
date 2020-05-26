@@ -11,12 +11,12 @@ resource "databricks_notebook" "clean" {
 }
 
 resource "databricks_notebook" "transform" {
-  content = base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
+  content = var.provision_synapse ? base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
     container                     = azurerm_storage_container.databricks.name,
     storage_account_blob_endpoint = azurerm_storage_account.dbkstemp.primary_blob_host,
-    server                        = azurerm_sql_server.synapse_srv.fully_qualified_domain_name,
-    database                      = azurerm_sql_database.synapse.name
-  }))
+    server                        = azurerm_sql_server.synapse_srv[count.index].fully_qualified_domain_name,
+    database                      = azurerm_sql_database.synapse[count.index].name
+  })) : ""
 
   language  = "SCALA"
   path      = "/Shared/sample/transform.scala"
