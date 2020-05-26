@@ -7,7 +7,6 @@ on:
     branches:
       - master
 env:
-  gotestsum_version: "0.4.2"
   tests_timeout: "2h"
   golangci_lint_version: "v1.26"
   databricks_repo: "datarootsio/databricks-terraform"
@@ -59,9 +58,6 @@ jobs:
           cd ${{ github.workspace }}/databricks-terraform
           go build -o ~/.terraform.d/plugins/terraform-provider-databricks
           cd -
-      
-      - name: Setup gotestsum
-        run: curl -sSL "https://github.com/gotestyourself/gotestsum/releases/download/v${{ env.gotestsum_version }}/gotestsum_${{ env.gotestsum_version }}_linux_amd64.tar.gz" | sudo tar -xz -C /usr/local/bin gotestsum
 
       - name: Azure Login
         uses: Azure/login@v1.1
@@ -81,4 +77,4 @@ jobs:
           version: ${{ env.golangci_lint_version }}
 
       - name: "go test"
-        run: gotestsum -- -timeout ${{ env.tests_timeout }} ./...
+        run: go test -timeout ${{ env.tests_timeout }} ./...
