@@ -38,7 +38,6 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		"westeurope",
 		"francecentral",
 		"uksouth",
-		"ukwest",
 	}, nil, "")
 	if err != nil {
 		return "", nil, err
