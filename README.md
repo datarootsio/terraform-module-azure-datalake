@@ -42,6 +42,7 @@ module "azuredatalake" {
   service_principal_end_date   = "2030-01-01T00:00:00Z"
   databricks_cluster_node_type = "Standard_DS3_v2"
   databricks_cluster_version   = "6.5.x-scala2.11"
+  databricks_token_lifetime    = 315360000
   databricks_sku               = "standard"
   data_warehouse_dtu           = "DW100c"
   cosmosdb_consistency_level   = "Session"
