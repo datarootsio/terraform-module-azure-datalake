@@ -32,7 +32,8 @@ It includes some additional changes that [dataroots](https://dataroots.io) is re
 
 ```hcl
 module "azuredatalake" {
-  source = "./azure-datalake/"
+  source  = "datarootsio/azure-datalake/module"
+  version = "~> 0.1" 
 
   data_lake_name = "example name"
   region         = "eastus2"
