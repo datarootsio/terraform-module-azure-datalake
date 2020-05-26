@@ -11,7 +11,7 @@ variable "region" {
 }
 
 variable "provision_sample_data" {
-  description = "Boolean to indicate if a sample data pipeline should be deployed"
+  description = "Boolean to indicate if a sample data pipeline should be deployed. Note that enable_synapse also has to be true for this (default: true)."
   type        = bool
   default     = true
 }
@@ -43,6 +43,12 @@ variable "data_lake_filesystems" {
 variable "databricks_cluster_version" {
   type        = string
   description = "Runtime version of the Databricks cluster"
+}
+
+variable "provision_synapse" {
+  type        = bool
+  description = "Set this to false to disable the creation of the Synapse Analytics instance. Without this, the sample data will not be created."
+  default     = true
 }
 
 # Pricing, performance and replication

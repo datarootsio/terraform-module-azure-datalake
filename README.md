@@ -121,6 +121,14 @@ Type: bool\
 Example: `false`\
 Default: `true`
 
+### `provision_synapse`
+
+Whether to provision the Azure Synapse Analytics instance. Note that this has to be `true` for the sample data pipeline to be provisioned.
+
+Type: bool\
+Example: `false`\
+Default: `true`
+
 ### `data_lake_fs_raw`
 
 Name of the data lake filesystem that will contain the raw data. The name of the data lake itself will be appended.

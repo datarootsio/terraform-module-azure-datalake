@@ -78,22 +78,25 @@ resource "databricks_secret" "cmdb_master" {
 }
 
 resource "databricks_secret_scope" "synapse" {
+  count                    = local.create_synapse
   depends_on               = [azurerm_role_assignment.spdbks]
   name                     = "synapse"
   initial_manage_principal = "users"
 }
 
 resource "databricks_secret" "synapse_username" {
+  count        = local.create_synapse
   depends_on   = [azurerm_role_assignment.spdbks]
   key          = "username"
-  string_value = "${local.databricks_loader_user}@${azurerm_sql_server.synapse_srv.name}"
-  scope        = databricks_secret_scope.synapse.name
+  string_value = "${local.databricks_loader_user}@${azurerm_sql_server.synapse_srv[count.index].name}"
+  scope        = databricks_secret_scope.synapse[count.index].name
 }
 
 resource "databricks_secret" "synapse_password" {
+  count        = local.create_synapse
   key          = "password"
-  string_value = random_password.sql_databricks_loader.result
-  scope        = databricks_secret_scope.synapse.name
+  string_value = random_password.sql_databricks_loader[count.index].result
+  scope        = databricks_secret_scope.synapse[count.index].name
 }
 
 resource "databricks_azure_adls_gen2_mount" "raw" {

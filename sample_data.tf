@@ -14,8 +14,8 @@ resource "databricks_notebook" "transform" {
   content = base64encode(templatefile("${path.module}/files/sample_data/transform.scala", {
     container                     = azurerm_storage_container.databricks.name,
     storage_account_blob_endpoint = azurerm_storage_account.dbkstemp.primary_blob_host,
-    server                        = azurerm_sql_server.synapse_srv.fully_qualified_domain_name,
-    database                      = azurerm_sql_database.synapse.name
+    server                        = azurerm_sql_server.synapse_srv[local.create_synapse].fully_qualified_domain_name,
+    database                      = azurerm_sql_database.synapse[local.create_synapse].name
   }))
 
   language  = "SCALA"
