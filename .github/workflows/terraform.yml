@@ -59,7 +59,7 @@ jobs:
           cd -
       
       - name: Setup gotestsum
-        run: go install gotest.tools/gotestsum
+        run: go get -u gotest.tools/gotestsum && go install gotest.tools/gotestsum
 
       - name: Azure Login
         uses: Azure/login@v1.1
