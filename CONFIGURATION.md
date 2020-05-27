@@ -16,6 +16,9 @@
          * [sql_server_admin_password](#sql_server_admin_password)
          * [service_principal_end_date](#service_principal_end_date)
       * [Optional arguments](#optional-arguments)
+         * [application_id](#application_id)
+         * [service_principal_id](#service_principal_id)
+         * [service_principal_secret](#service_principal_secret)
          * [provision_sample_data](#provision_sample_data)
          * [provision_synapse](#provision_synapse)
          * [data_lake_fs_raw](#data_lake_fs_raw)
@@ -132,6 +135,30 @@ Type: string\
 Example: `"2030-01-01T00:00:00Z"`
 
 ## Optional arguments
+
+### `use_existing_service_principal`
+
+This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If you want to provide an existing one, set this to `true`.
+Type: bool\
+Example: `false`
+
+### `application_id`
+
+This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the application id cannot be created by Terraform, you can specify it here.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_id`
+
+This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify it here.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_password`
+
+This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify its password here.
+Type: string\
+Example: `"ThisIsA$ecret1"`
 
 ### `provision_sample_data`
 

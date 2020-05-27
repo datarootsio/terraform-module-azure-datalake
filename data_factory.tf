@@ -11,8 +11,8 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
   data_factory_name     = azurerm_data_factory.df.name
   tenant                = data.azurerm_client_config.current.tenant_id
   url                   = "https://${azurerm_storage_account.adls.name}.dfs.core.windows.net/"
-  service_principal_id  = azuread_application.aadapp.application_id
-  service_principal_key = azuread_service_principal_password.sppw.value
+  service_principal_id  = local.application_id
+  service_principal_key = local.service_principal_secret
   depends_on            = [azurerm_role_assignment.spsa_sa_adls]
 }
 
