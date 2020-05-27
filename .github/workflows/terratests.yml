@@ -1,8 +1,7 @@
 name: "terratests"
 on:
-  pull_request:
-    branches:
-      - master
+  repository_dispatch:
+    types: [run-tests-command]
   schedule:
     - cron:  '0 0 * * *'
 env:
@@ -20,6 +19,14 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
     steps:
+
+      - name: Get the target branch name
+        id: vars
+        run: |
+          branch=${{ github.event.client_payload.slash_command.branch }}
+          if [[ -z "$branch" ]]; then branch="master"; fi
+          echo ::set-output name=branch::$branch
+
       - name: Get databricks provider dependency
         run: |
           rm -rf ${{ github.workspace }}/databricks-terraform
@@ -39,6 +46,8 @@ jobs:
 
       - name: "Checkout"
         uses: actions/checkout@master
+        with:
+          ref: ${{ steps.vars.outputs.branch }}
       
       - name: "go vet"
         run: go vet ./...
