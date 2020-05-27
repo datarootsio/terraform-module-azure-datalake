@@ -131,3 +131,71 @@ variable "sql_server_admin_password" {
   description = "Password of the administrator of the SQL server"
   default     = null
 }
+
+# Data Factory VSTS
+variable "data_factory_vsts_account_name" {
+  type        = string
+  default     = null
+  description = "Optional account name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+variable "data_factory_vsts_branch_name" {
+  type        = string
+  default     = null
+  description = "Optional branch name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+variable "data_factory_vsts_project_name" {
+  type        = string
+  default     = null
+  description = "Optional project name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+variable "data_factory_vsts_repository_name" {
+  type        = string
+  default     = null
+  description = "Optional repository name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+variable "data_factory_vsts_root_folder" {
+  type        = string
+  default     = null
+  description = "Optional root folder for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+variable "data_factory_vsts_tenant_id" {
+  type        = string
+  default     = null
+  description = "Optional tenant ID for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
+}
+
+# Data Factory GitHub
+variable "data_factory_github_account_name" {
+  type        = string
+  default     = null
+  description = "Optional account name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
+}
+
+variable "data_factory_github_branch_name" {
+  type        = string
+  default     = null
+  description = "Optional branch name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
+}
+
+variable "data_factory_github_git_url" {
+  type        = string
+  default     = null
+  description = "Optional Git URL (either https://github.mycompany.com or https://github.com) for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
+}
+
+variable "data_factory_github_repository_name" {
+  type        = string
+  default     = null
+  description = "Optional repository name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
+}
+
+variable "data_factory_github_root_folder" {
+  type        = string
+  default     = null
+  description = "Optional root folder for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
+}
