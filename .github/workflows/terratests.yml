@@ -29,12 +29,12 @@ jobs:
 
       - name: Get databricks provider dependency
         run: |
-          rm -rf ${{ github.workspace }}/databricks-terraform
-          git clone --depth 1 -b ${{ env.databricks_branch }} https://github.com/${{ env.databricks_repo }}.git ${{ github.workspace }}/databricks-terraform
+          rm -rf $GITHUB_WORKSPACE/databricks-terraform
+          git clone --depth 1 -b $databricks_branch https://github.com/$databricks_repo.git $GITHUB_WORKSPACE/databricks-terraform
 
       - name: Build databricks provider dependency
         run: |
-          cd ${{ github.workspace }}/databricks-terraform
+          cd $GITHUB_WORKSPACE/databricks-terraform
           go build -o ~/.terraform.d/plugins/terraform-provider-databricks
           cd -
 
