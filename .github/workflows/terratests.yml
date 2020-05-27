@@ -3,7 +3,7 @@ on:
   repository_dispatch:
     types: [run-tests-command]
   schedule:
-    - cron:  '0 0 * * *'
+    - cron:  '0 0 * * 1-5'
 env:
   tests_timeout: "2h"
   golangci_lint_version: "v1.26"
