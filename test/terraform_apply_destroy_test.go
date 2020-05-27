@@ -109,3 +109,24 @@ func TestApplyAndDestroyWithoutSamples(t *testing.T) {
 
 	assert.Equal(t, name, outDataLakeName)
 }
+
+func TestApplyAndDestroyWithoutSynapse(t *testing.T) {
+	t.Parallel()
+
+	name, options, err := getDefaultTerraformOptions(t)
+	assert.NoError(t, err)
+
+	options.Vars["provision_synapse"] = false
+	delete(options.Vars, "data_warehouse_dtu")
+	delete(options.Vars, "sql_server_admin_username")
+	delete(options.Vars, "sql_server_admin_password")
+
+	defer terraform.Destroy(t, options)
+	_, err = terraform.InitAndApplyE(t, options)
+	assert.NoError(t, err)
+
+	outDataLakeName, err := terraform.OutputE(t, options, "name")
+	assert.NoError(t, err)
+
+	assert.Equal(t, name, outDataLakeName)
+}
