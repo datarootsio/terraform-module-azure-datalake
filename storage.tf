@@ -12,7 +12,7 @@ resource "azurerm_storage_account" "adls" {
 resource "azurerm_role_assignment" "spsa_sa_adls" {
   scope                = azurerm_storage_account.adls.id
   role_definition_name = "Storage Blob Data Owner"
-  principal_id         = azuread_service_principal.sp.id
+  principal_id         = local.service_principal_id
 }
 
 resource "azurerm_role_assignment" "current_user_sa_adls" {
@@ -56,7 +56,7 @@ resource "azurerm_role_assignment" "current_user_sa_dbks" {
 resource "azurerm_role_assignment" "spsa_sa_dbks" {
   scope                = azurerm_storage_account.dbkstemp.id
   role_definition_name = "Storage Blob Data Owner"
-  principal_id         = azuread_service_principal.sp.id
+  principal_id         = local.service_principal_id
 }
 
 resource "time_sleep" "dbks_ra" {

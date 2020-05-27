@@ -86,6 +86,26 @@ variable "databricks_cluster_node_type" {
 
 # Security
 
+variable "application_id" {
+  type        = string
+  description = "Existing application ID"
+}
+
+variable "application_secret" {
+  type        = string
+  description = "Existing application secret"
+}
+
+variable "service_principal_id" {
+  type        = string
+  description = "Existing service principal ID"
+}
+
+variable "service_principal_secret" {
+  type        = string
+  description = "Existing service principal secret"
+}
+
 variable "service_principal_end_date" {
   description = "End date of when the service principal is valid, formatted as a RFC3339 date string (e.g. 2018-01-01T01:02:03Z). Changing this field forces a new resource to be created."
   type        = string

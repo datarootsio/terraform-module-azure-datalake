@@ -14,7 +14,8 @@ data "azurerm_client_config" "current" {
 }
 
 resource "azuread_application" "aadapp" {
-  name = "app-${var.data_lake_name}"
+  count = local.use_existing_service_principal
+  name  = "app-${var.data_lake_name}"
   required_resource_access {
     resource_app_id = "e406a681-f3d4-42a8-90b6-c2b029497af1"
     resource_access {
@@ -36,13 +37,15 @@ resource "random_password" "aadapp_secret" {
 }
 
 resource "azuread_service_principal" "sp" {
-  application_id = azuread_application.aadapp.application_id
+  count          = local.use_existing_service_principal
+  application_id = azuread_application.aadapp[0].application_id
   tags           = [var.data_lake_name]
 }
 
 resource "azuread_service_principal_password" "sppw" {
-  service_principal_id = azuread_service_principal.sp.id
-  value                = random_password.aadapp_secret.result
+  count                = local.use_existing_service_principal
+  service_principal_id = azuread_service_principal.sp[0].id
+  value                = random_password.aadapp_secret[0].result
   end_date             = var.service_principal_end_date
 }
 
