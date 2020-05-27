@@ -62,6 +62,9 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	terraformOptions.Vars["sql_server_admin_username"] = sqlServerAdmin
 	terraformOptions.Vars["sql_server_admin_password"] = sqlServerPass
 	terraformOptions.Vars["region"] = region
+	terraformOptions.Vars["extra_tags"] = map[string]string{
+		"Automation": "Terratest",
+	}
 
 	// default values
 	terraformOptions.Vars["storage_replication"] = "LRS"

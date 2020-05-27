@@ -51,6 +51,12 @@ variable "provision_synapse" {
   default     = true
 }
 
+variable "extra_tags" {
+  description = "Extra tags that you would like to add to all created resources."
+  type        = map
+  default     = {}
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
