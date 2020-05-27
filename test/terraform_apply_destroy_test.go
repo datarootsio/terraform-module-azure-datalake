@@ -1,6 +1,7 @@
 package test
 
 import (
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -62,8 +63,13 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	terraformOptions.Vars["sql_server_admin_username"] = sqlServerAdmin
 	terraformOptions.Vars["sql_server_admin_password"] = sqlServerPass
 	terraformOptions.Vars["region"] = region
-	terraformOptions.Vars["extra_tags"] = map[string]string{
-		"Automation": "Terratest",
+
+	// used to distinguish resources from each test run
+	githubRunID, inGithub := os.LookupEnv("GITHUB_RUN_ID")
+	if inGithub {
+		terraformOptions.Vars["extra_tags"] = map[string]string{
+			"Terratest": githubRunID,
+		}
 	}
 
 	// default values
