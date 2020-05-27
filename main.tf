@@ -33,6 +33,7 @@ resource "azuread_application" "aadapp" {
 }
 
 resource "random_password" "aadapp_secret" {
+  count  = local.use_existing_service_principal
   length = 32
 }
 
