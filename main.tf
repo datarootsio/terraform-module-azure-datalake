@@ -59,5 +59,5 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_role_assignment" "sprg" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Owner"
-  principal_id         = azuread_service_principal.sp.object_id
+  principal_id         = local.service_principal_id
 }
