@@ -3,6 +3,29 @@ resource "azurerm_data_factory" "df" {
   location            = var.region
   resource_group_name = azurerm_resource_group.rg.name
   tags                = local.common_tags
+
+  dynamic "vsts_configuration" {
+    for_each = local.create_data_factory_git_vsts
+    content {
+      account_name    = var.data_factory_vsts_account_name
+      branch_name     = var.data_factory_vsts_branch_name
+      project_name    = var.data_factory_vsts_project_name
+      repository_name = var.data_factory_vsts_repository_name
+      root_folder     = var.data_factory_vsts_root_folder
+      tenant_id       = var.data_factory_vsts_tenant_id
+    }
+  }
+
+  dynamic "github_configuration" {
+    for_each = local.create_data_factory_git_github
+    content {
+      account_name    = var.data_factory_github_account_name
+      branch_name     = var.data_factory_github_branch_name
+      git_url         = var.data_factory_github_git_url
+      repository_name = var.data_factory_github_repository_name
+      root_folder     = var.data_factory_github_root_folder
+    }
+  }
 }
 
 resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {

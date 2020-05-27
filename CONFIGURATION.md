@@ -207,3 +207,88 @@ A list of additional filesystems to be created in the data lake storage. The mod
 Type: list\
 Example: `["gdprcompliant", "presentation"]`\
 Default: `[]`
+
+## Optional Data Factory Git back-ends
+
+Use one of the sets of arguments below to configure a Git back-end for the created Azure Data Factory.
+
+### Azure DevOps (Visual Studio Team Services)
+
+#### `data_factory_vsts_account_name`
+
+Optional account name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_vsts_branch_name`
+
+Optional branch name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_vsts_project_name`
+
+Optional project name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_vsts_repository_name`
+
+Optional repository name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_vsts_root_folder`
+
+Optional root folder for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_vsts_tenant_id`
+
+Optional tenant ID for the VSTS back-end for the created Azure Data Factory. You need to fill in all other `data_factory_vsts_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+### GitHub
+
+#### `data_factory_github_account_name`
+
+Optional account name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other `data_factory_github_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_github_branch_name`
+
+Optional branch name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other `data_factory_github_` variables if you use this one.
+
+Type: string\
+Example: `""`
+
+#### `data_factory_github_git_url`
+
+Optional Git URL (either `https://github.mycompany.com` or `https://github.com`) for the GitHub back-end for the created Azure Data Factory. You need to fill in all other `data_factory_github_` variables if you use this one.
+
+Type: string\
+Example: `"https://github.com"`
+
+#### `data_factory_github_repository_name`
+
+Optional repository name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other `data_factory_github_` variables if you use this one.
+
+Type: string\
+Example: `"myrepo"`
+
+#### `data_factory_github_root_folder`
+
+Optional root folder for the GitHub back-end for the created Azure Data Factory. You need to fill in all other `data_factory_github_` variables if you use this one.
+
+Type: string\
+Example: `"."`
