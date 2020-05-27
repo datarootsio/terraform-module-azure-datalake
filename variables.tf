@@ -61,7 +61,7 @@ variable "storage_replication" {
 variable "data_warehouse_dtu" {
   description = "Service objective (DTU) for the created data warehouse (e.g. DW100c)"
   type        = string
-  default     = "ignored"
+  default     = null
 }
 
 variable "cosmosdb_consistency_level" {
@@ -119,11 +119,11 @@ variable "databricks_token_lifetime" {
 variable "sql_server_admin_username" {
   type        = string
   description = "Username of the administrator of the SQL server"
-  default     = ""
+  default     = null
 }
 
 variable "sql_server_admin_password" {
   type        = string
   description = "Password of the administrator of the SQL server"
-  default     = ""
+  default     = null
 }
