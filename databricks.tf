@@ -10,7 +10,7 @@ resource "azurerm_databricks_workspace" "dbks" {
 resource "azurerm_role_assignment" "spdbks" {
   scope                = azurerm_databricks_workspace.dbks.id
   role_definition_name = "Owner"
-  principal_id         = azuread_service_principal.sp.object_id
+  principal_id         = local.service_principal_id
 }
 
 provider "databricks" {
@@ -19,8 +19,8 @@ provider "databricks" {
     azure_region           = azurerm_databricks_workspace.dbks.location
     workspace_name         = azurerm_databricks_workspace.dbks.name
     resource_group         = azurerm_databricks_workspace.dbks.resource_group_name
-    client_id              = azuread_application.aadapp.application_id
-    client_secret          = azuread_service_principal_password.sppw.value
+    client_id              = local.application_id
+    client_secret          = local.service_principal_secret
     tenant_id              = data.azurerm_client_config.current.tenant_id
     subscription_id        = data.azurerm_client_config.current.subscription_id
   }
@@ -47,7 +47,7 @@ resource "databricks_secret_scope" "adls" {
 resource "databricks_secret" "client_secret" {
   depends_on   = [azurerm_role_assignment.spdbks]
   key          = "client_secret"
-  string_value = azuread_service_principal_password.sppw.value
+  string_value = local.service_principal_secret
   scope        = databricks_secret_scope.adls.name
 }
 
@@ -105,7 +105,7 @@ resource "databricks_azure_adls_gen2_mount" "raw" {
   storage_account_name   = azurerm_storage_account.adls.name
   mount_name             = "raw"
   tenant_id              = data.azurerm_client_config.current.tenant_id
-  client_id              = azuread_application.aadapp.application_id
+  client_id              = local.application_id
   client_secret_scope    = databricks_secret.client_secret.scope
   client_secret_key      = databricks_secret.client_secret.key
   initialize_file_system = true
@@ -118,7 +118,7 @@ resource "databricks_azure_adls_gen2_mount" "clean" {
   storage_account_name   = azurerm_storage_account.adls.name
   mount_name             = "clean"
   tenant_id              = data.azurerm_client_config.current.tenant_id
-  client_id              = azuread_application.aadapp.application_id
+  client_id              = local.application_id
   client_secret_scope    = databricks_secret.client_secret.scope
   client_secret_key      = databricks_secret.client_secret.key
   initialize_file_system = true
@@ -131,7 +131,7 @@ resource "databricks_azure_adls_gen2_mount" "transformed" {
   storage_account_name   = azurerm_storage_account.adls.name
   mount_name             = "transformed"
   tenant_id              = data.azurerm_client_config.current.tenant_id
-  client_id              = azuread_application.aadapp.application_id
+  client_id              = local.application_id
   client_secret_scope    = databricks_secret.client_secret.scope
   client_secret_key      = databricks_secret.client_secret.key
   initialize_file_system = true

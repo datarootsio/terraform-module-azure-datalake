@@ -86,6 +86,30 @@ variable "databricks_cluster_node_type" {
 
 # Security
 
+variable "use_existing_service_principal" {
+  type        = bool
+  description = "Should Terraform create the SP or use an existing one, provided by variables ?"
+  default     = false
+}
+
+variable "application_id" {
+  type        = string
+  description = "Existing application ID"
+  default     = ""
+}
+
+variable "service_principal_id" {
+  type        = string
+  description = "Existing service principal ID"
+  default     = ""
+}
+
+variable "service_principal_secret" {
+  type        = string
+  description = "Existing service principal secret"
+  default     = ""
+}
+
 variable "service_principal_end_date" {
   description = "End date of when the service principal is valid, formatted as a RFC3339 date string (e.g. 2018-01-01T01:02:03Z). Changing this field forces a new resource to be created."
   type        = string
