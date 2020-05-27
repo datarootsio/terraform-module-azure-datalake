@@ -10,25 +10,13 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+        with:
+          fetch-depth: '0'
       - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: master
-        id: bump_version
-      - run: echo "::set-output name=major_version::v$(echo ${{ steps.bump_version.outputs.new_version }} | cut -d. -f1)"
-        shell: bash
-        id: get_major_version
-      - uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ${{ format('azure-datalake-{0}', steps.bump_version.outputs.new_tag) }}.zip .
-      - uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ${{ format('azure-datalake-{0}', steps.get_major_version.outputs.major_version) }}.zip . -x "*.zip"
-      - uses: actions-hub/gcloud@master
+        uses: anothrNick/github-tag-action@1.22.0
         env:
-          PROJECT_ID: dataroots-terraform-modules
-          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KEYFILE_JSON_B64 }}
-          CLI: gsutil
-        with:
-          args: cp *.zip gs://dataroots-terraform-modules/
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          RELEASES_BRANCHES: master
+        id: bump_version
