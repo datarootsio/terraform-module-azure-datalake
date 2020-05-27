@@ -136,6 +136,12 @@ Example: `"2030-01-01T00:00:00Z"`
 
 ## Optional arguments
 
+### `use_existing_service_principal`
+
+This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If you want to provide an existing one, set this to `true`.
+Type: bool\
+Example: `false`
+
 ### `application_id`
 
 This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the application id cannot be created by Terraform, you can specify it here.
