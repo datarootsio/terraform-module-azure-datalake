@@ -103,6 +103,7 @@ The name of the data lake. This name will be used in every resource so that you 
 
 Modifying this value after deployment will result in destroying and deploying the complete data lake.
 
+**Required**\
 Type: string\
 Example: `"example name"`
 
@@ -112,6 +113,7 @@ The primary Azure region in which to deploy the data lake. Further configuration
 
 Modifying this value after deployment will result in destroying and deploying the complete data lake.
 
+**Required**\
 Type: string\
 Example: `"eastus2"`
 
@@ -168,6 +170,7 @@ Default: `[]`
 Replication strategy to be used for the data lake storage.\
 [Available options](https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy)
 
+**Required**\
 Type: string\
 Example: `"ZRS"`
 
@@ -177,6 +180,7 @@ Version of the Databricks runtime, required for the Databricks cluster.\
 [Version syntax](https://docs.databricks.com/dev-tools/api/latest/index.html#programmatic-version)\
 [Supported versions](https://docs.databricks.com/release-notes/runtime/releases.html#supported-list)
 
+**Required**\
 Type: string\
 Example: `"6.5.x-scala2.11"`
 
@@ -185,6 +189,7 @@ Example: `"6.5.x-scala2.11"`
 The Azure SKU for the Databricks workspace.\
 [Available SKUs](https://azure.microsoft.com/en-us/pricing/details/databricks/) (currently "standard" or "premium")
 
+**Required**\
 Type: string\
 Example: `"standard"`
 
@@ -192,6 +197,7 @@ Example: `"standard"`
 
 The Azure SKU for the Databricks driver and workers.
 
+**Required**\
 Type: string\
 Example: `"Standard_DS3_v2"`
 
@@ -199,6 +205,7 @@ Example: `"Standard_DS3_v2"`
 
 Lifetime (in seconds) of the Databricks access token that will be created for communication with other services in the data lake.
 
+**Required**\
 Type: number\
 Example: `315360000` (10 years)
 
@@ -207,6 +214,7 @@ Example: `315360000` (10 years)
 Default consistency level for the CosmosDB account.\
 [Available consistency levels](https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels)
 
+**Required**\
 Type: string\
 Example: `"Session"`
 
@@ -215,6 +223,7 @@ Example: `"Session"`
 Provisioned request units for the CosmosDB account.\
 [Request units](https://docs.microsoft.com/en-us/azure/cosmos-db/request-units)
 
+**Required**\
 Type: number\
 Example: `400`
 
@@ -223,6 +232,7 @@ Example: `400`
 The provisioned Data Warehouse Units for the Azure Synapse Analytics instance. We recommend to scale this as you go.\
 [Data Warehouse Units](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/what-is-a-data-warehouse-unit-dwu-cdwu)
 
+**Required** (unless you disable the Synapse Analytics Instance with `provision_synapse` set to `false`)\
 Type: string\
 Example: `"DW100c"`
 
@@ -230,6 +240,7 @@ Example: `"DW100c"`
 
 The admin username of the SQL server that hosts the Synapse Analytics instance.
 
+**Required** (unless you disable the Synapse Analytics Instance with `provision_synapse` set to `false`)\
 Type: string\
 Example: `"theboss"`
 
@@ -237,6 +248,7 @@ Example: `"theboss"`
 
 The password of the admin account of the SQL server that hosts the Synapse Analytics instance.
 
+**Required** (unless you disable the Synapse Analytics Instance with `provision_synapse` set to `false`)\
 Type: string\
 Example: `"ThisIsA$ecret1"`
 
@@ -244,6 +256,7 @@ Example: `"ThisIsA$ecret1"`
 
 This module uses a service principal to allow communication between the different Azure services. The service principal will no longer be valid after this time.
 
+**Required**\
 Type: string\
 Example: `"2030-01-01T00:00:00Z"`
 
