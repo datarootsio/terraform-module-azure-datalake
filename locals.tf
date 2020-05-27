@@ -16,7 +16,7 @@ locals {
   databricks_loader_user = "DatabricksLoader"
   powerbi_viewer_user    = "PowerBiViewer"
 
-  service_principal_id           = var.use_existing_service_principal == 1 ? var.service_principal_id : azuread_service_principal.sp[0].object_id
-  service_principal_secret       = var.use_existing_service_principal == 1 ? var.service_principal_secret : azuread_service_principal_password.sppw[0].value
-  application_id                 = var.use_existing_service_principal == 1 ? var.application_id : azuread_application.aadapp[0].application_id
+  service_principal_id     = var.use_existing_service_principal == 1 ? var.service_principal_id : azuread_service_principal.sp[0].object_id
+  service_principal_secret = var.use_existing_service_principal == 1 ? var.service_principal_secret : azuread_service_principal_password.sppw[0].value
+  application_id           = var.use_existing_service_principal == 1 ? var.application_id : azuread_application.aadapp[0].application_id
 }

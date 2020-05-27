@@ -87,9 +87,9 @@ variable "databricks_cluster_node_type" {
 # Security
 
 variable "use_existing_service_principal" {
-  type = bool
+  type        = bool
   description = "Should Terraform create the SP or use an existing one, provided by variables ?"
-  default = false
+  default     = false
 }
 
 variable "application_id" {
