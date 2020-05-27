@@ -89,21 +89,19 @@ variable "databricks_cluster_node_type" {
 variable "application_id" {
   type        = string
   description = "Existing application ID"
-}
-
-variable "application_secret" {
-  type        = string
-  description = "Existing application secret"
+  default     = ""
 }
 
 variable "service_principal_id" {
   type        = string
   description = "Existing service principal ID"
+  default     = ""
 }
 
 variable "service_principal_secret" {
   type        = string
   description = "Existing service principal secret"
+  default     = ""
 }
 
 variable "service_principal_end_date" {
