@@ -37,8 +37,8 @@ output "storage_dfs_endpoint" {
   value       = azurerm_storage_account.adls.primary_dfs_endpoint
 }
 
-output "databricks_url" {
-  description = "Databricks workspace URL of the created workspace"
+output "databricks_host" {
+  description = "Databricks workspace hostname of the created workspace"
   value       = azurerm_databricks_workspace.dbks.workspace_url
 }
 
