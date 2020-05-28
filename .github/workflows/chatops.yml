@@ -9,6 +9,7 @@ jobs:
       - name: Slash Command Dispatch
         uses: peter-evans/slash-command-dispatch@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
+          reaction-token: ${{ secrets.GITHUB_TOKEN }}
           commands: run-tests
           issue-type: pull-request
