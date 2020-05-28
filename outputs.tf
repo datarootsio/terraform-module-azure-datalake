@@ -29,3 +29,18 @@ output "created_key_vault_keys" {
     azurerm_key_vault_secret.sp_id[0].name,
   azurerm_key_vault_secret.sp_secret[0].name] : []
 }
+
+output "storage_dfs_endpoint" {
+  description = "Primary DFS endpoint of the created storage account"
+  value       = azurerm_storage_account.adls.primary_dfs_endpoint
+}
+
+output "databricks_url" {
+  description = "Databricks workspace URL of the created workspace"
+  value       = azurerm_databricks_workspace.dbks.workspace_url
+}
+
+output "databricks_cluster_id" {
+  description = "ID of the cluster that is created inside the Databricks workspace"
+  value       = databricks_cluster.cluster.id
+}
