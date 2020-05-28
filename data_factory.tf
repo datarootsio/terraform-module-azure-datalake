@@ -53,7 +53,7 @@ resource "azurerm_template_deployment" "lsdbks" {
   parameters = {
     "factoryName"                 = azurerm_data_factory.df.name
     "accessToken"                 = databricks_token.token.token_value
-    "domain"                      = azurerm_databricks_workspace.dbks.workspace_url
+    "domain"                      = format("https://%s", azurerm_databricks_workspace.dbks.workspace_url)
     "databricksLinkedServiceName" = azurerm_databricks_workspace.dbks.name
     "clusterId"                   = databricks_cluster.cluster.id
   }

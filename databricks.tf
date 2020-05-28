@@ -157,7 +157,7 @@ resource "databricks_notebook" "spark_setup" {
     command = "${path.module}/files/spark_setup.sh"
 
     environment = {
-      DATABRICKS_HOST  = azurerm_databricks_workspace.dbks.workspace_url
+      DATABRICKS_HOST  = format("https://%s", azurerm_databricks_workspace.dbks.workspace_url)
       DATABRICKS_TOKEN = databricks_token.token.token_value
       CLUSTER_ID       = databricks_cluster.cluster.id
       NOTEBOOK_PATH    = self.path
