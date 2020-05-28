@@ -138,7 +138,20 @@ variable "sql_server_admin_password" {
   default     = null
 }
 
+variable "key_vault_resource_group" {
+  type        = string
+  default     = null
+  description = "Name of the resource group where the optional Key Vault is located. The module will store all relevant secrets inside this Key Vault and output the keys."
+}
+
+variable "key_vault_name" {
+  type        = string
+  default     = null
+  description = "Name of the optional Key Vault. The module will store all relevant secrets inside this Key Vault and output the keys."
+}
+
 # Data Factory VSTS
+
 variable "data_factory_vsts_account_name" {
   type        = string
   default     = null

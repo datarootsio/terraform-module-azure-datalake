@@ -136,30 +136,6 @@ Example: `"2030-01-01T00:00:00Z"`
 
 ## Optional arguments
 
-### `use_existing_service_principal`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If you want to provide an existing one, set this to `true`.
-Type: bool\
-Example: `false`
-
-### `application_id`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the application id cannot be created by Terraform, you can specify it here.
-Type: string\
-Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
-
-### `service_principal_id`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify it here.
-Type: string\
-Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
-
-### `service_principal_password`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify its password here.
-Type: string\
-Example: `"ThisIsA$ecret1"`
-
 ### `provision_sample_data`
 
 Whether to provision the sample data pipeline.
@@ -215,6 +191,50 @@ A list of additional filesystems to be created in the data lake storage. The mod
 Type: list\
 Example: `["gdprcompliant", "presentation"]`\
 Default: `[]`
+
+## Existing Key Vault
+
+You can optionally store all created keys and secrets to use the module components in an existing Azure Key Vault. We will also grant the necessary permissions to the Data Factory and the Service Principal to access the Key Vault. Please make sure that the account executing the Terraform has access to manage the Key Vault. The keys that have been created will be outputted.
+
+### `key_vault_resource_group`
+
+Name of the resource group in which the optional Key Vault has been created.
+Type: string\
+Example: `"rgkeyvault"`
+
+### `key_vault_name`
+
+Name of the optional Key Vault.
+Type: string\
+Example: `"keyvault"`
+
+## Existing service principal
+
+You can optionally use an existing service principal to allow communication between the different Azure services. If you don't provide one, one will be created for you.
+
+### `use_existing_service_principal`
+
+If you want to provide an existing one, set this to `true`.
+Type: bool\
+Example: `false`
+
+### `application_id`
+
+Application ID of the optional service principal.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_id`
+
+Object ID of the optional service principal.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_password`
+
+Client secret of the optional service principal.
+Type: string\
+Example: `"ThisIsA$ecret1"`
 
 ## Optional Data Factory Git back-ends
 
