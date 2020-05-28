@@ -4,6 +4,10 @@ resource "azurerm_data_factory" "df" {
   resource_group_name = azurerm_resource_group.rg.name
   tags                = local.common_tags
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   dynamic "vsts_configuration" {
     for_each = local.create_data_factory_git_vsts
     content {
