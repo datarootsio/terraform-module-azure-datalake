@@ -22,3 +22,19 @@ output "powerbi_sql_dw_server_password" {
   description = "Password of the user dedicated to Power BI"
   value       = contains(random_password.sql_powerbi_viewer, 0) ? random_password.sql_powerbi_viewer[0].result : ""
 }
+
+output "service_principal_client_id" {
+  description = "Client ID of the service principal that is used for service connections"
+  value       = local.application_id
+}
+
+output "service_principal_client_secret" {
+  sensitive   = true
+  description = "Client secret of the service principal that is used for service connections"
+  value       = local.service_principal_secret
+}
+
+output "service_principal_tenant_id" {
+  description = "Tenant ID of the service principal that is used for service connections"
+  value       = data.azurerm_client_config.current.tenant_id
+}
