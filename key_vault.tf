@@ -25,3 +25,10 @@ resource "azurerm_key_vault_secret" "sp_secret" {
   value        = local.service_principal_secret
   key_vault_id = data.azurerm_key_vault.kv[count.index].id
 }
+
+resource "azurerm_key_vault_secret" "databricks_token" {
+  count        = local.use_kv
+  name         = "databricks-access-token"
+  value        = databricks_token.token.token_value
+  key_vault_id = data.azurerm_key_vault.kv[count.index].id
+}

@@ -27,7 +27,9 @@ output "created_key_vault_keys" {
   description = "Keys that have been created inside the optional Key Vault"
   value = local.use_kv == 1 ? [
     azurerm_key_vault_secret.sp_id[0].name,
-  azurerm_key_vault_secret.sp_secret[0].name] : []
+    azurerm_key_vault_secret.sp_secret[0].name,
+    azurerm_key_vault_secret.databricks_token[0].name
+  ] : []
 }
 
 output "storage_dfs_endpoint" {
