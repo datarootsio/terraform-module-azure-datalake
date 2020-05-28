@@ -46,3 +46,8 @@ output "databricks_cluster_id" {
   description = "ID of the cluster that is created inside the Databricks workspace"
   value       = databricks_cluster.cluster.id
 }
+
+output "service_principal_client_id" {
+  description = "Client ID of the service principal that was used"
+  value       = local.service_principal_id
+}
