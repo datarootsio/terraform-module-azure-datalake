@@ -1,30 +1,49 @@
 # Configuration options
 
-   * [Configuration options](#configuration-options)
-      * [Required arguments](#required-arguments)
-         * [data_lake_name](#data_lake_name)
-         * [region](#region)
-         * [storage_replication](#storage_replication)
-         * [databricks_cluster_version](#databricks_cluster_version)
-         * [databricks_sku](#databricks_sku)
-         * [databricks_cluster_node_type](#databricks_cluster_node_type)
-         * [databricks_token_lifetime](#databricks_token_lifetime)
-         * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
-         * [cosmosdb_db_throughput](#cosmosdb_db_throughput)
-         * [data_warehouse_dtu](#data_warehouse_dtu)
-         * [sql_server_admin_username](#sql_server_admin_username)
-         * [sql_server_admin_password](#sql_server_admin_password)
-         * [service_principal_end_date](#service_principal_end_date)
-      * [Optional arguments](#optional-arguments)
-         * [application_id](#application_id)
-         * [service_principal_id](#service_principal_id)
-         * [service_principal_secret](#service_principal_secret)
-         * [provision_sample_data](#provision_sample_data)
-         * [provision_synapse](#provision_synapse)
-         * [data_lake_fs_raw](#data_lake_fs_raw)
-         * [data_lake_fs_cleansed](#data_lake_fs_cleansed)
-         * [data_lake_fs_transformed](#data_lake_fs_transformed)
-         * [data_lake_filesystems](#data_lake_filesystems)
+* [Required arguments](#required-arguments)
+   * [data_lake_name](#data_lake_name)
+   * [region](#region)
+   * [storage_replication](#storage_replication)
+   * [databricks_cluster_version](#databricks_cluster_version)
+   * [databricks_sku](#databricks_sku)
+   * [databricks_cluster_node_type](#databricks_cluster_node_type)
+   * [databricks_token_lifetime](#databricks_token_lifetime)
+   * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
+   * [cosmosdb_db_throughput](#cosmosdb_db_throughput)
+   * [data_warehouse_dtu](#data_warehouse_dtu)
+   * [sql_server_admin_username](#sql_server_admin_username)
+   * [sql_server_admin_password](#sql_server_admin_password)
+   * [service_principal_end_date](#service_principal_end_date)
+* [Optional arguments](#optional-arguments)
+   * [provision_sample_data](#provision_sample_data)
+   * [provision_synapse](#provision_synapse)
+   * [extra_tags](#extra_tags)
+   * [data_lake_fs_raw](#data_lake_fs_raw)
+   * [data_lake_fs_cleansed](#data_lake_fs_cleansed)
+   * [data_lake_fs_transformed](#data_lake_fs_transformed)
+   * [data_lake_filesystems](#data_lake_filesystems)
+* [Existing Key Vault](#existing-key-vault)
+   * [key_vault_resource_group](#key_vault_resource_group)
+   * [key_vault_name](#key_vault_name)
+* [Existing service principal](#existing-service-principal)
+   * [use_existing_service_principal](#use_existing_service_principal)
+   * [application_id](#application_id)
+   * [service_principal_id](#service_principal_id)
+   * [service_principal_password](#service_principal_password)
+* [Optional Data Factory Git back-ends](#optional-data-factory-git-back-ends)
+   * [Azure DevOps (Visual Studio Team Services)](#azure-devops-visual-studio-team-services)
+      * [data_factory_vsts_account_name](#data_factory_vsts_account_name)
+      * [data_factory_vsts_branch_name](#data_factory_vsts_branch_name)
+      * [data_factory_vsts_project_name](#data_factory_vsts_project_name)
+      * [data_factory_vsts_repository_name](#data_factory_vsts_repository_name)
+      * [data_factory_vsts_root_folder](#data_factory_vsts_root_folder)
+      * [data_factory_vsts_tenant_id](#data_factory_vsts_tenant_id)
+   * [GitHub](#github)
+      * [data_factory_github_account_name](#data_factory_github_account_name)
+      * [data_factory_github_branch_name](#data_factory_github_branch_name)
+      * [data_factory_github_git_url](#data_factory_github_git_url)
+      * [data_factory_github_repository_name](#data_factory_github_repository_name)
+      * [data_factory_github_root_folder](#data_factory_github_root_folder)
 
 
 ## Required arguments
@@ -136,30 +155,6 @@ Example: `"2030-01-01T00:00:00Z"`
 
 ## Optional arguments
 
-### `use_existing_service_principal`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If you want to provide an existing one, set this to `true`.
-Type: bool\
-Example: `false`
-
-### `application_id`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the application id cannot be created by Terraform, you can specify it here.
-Type: string\
-Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
-
-### `service_principal_id`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify it here.
-Type: string\
-Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
-
-### `service_principal_password`
-
-This module uses a service principal (tied to an app registration) to allow communication between the different Azure services. If the service principal cannot be created by Terraform, you can specify its password here.
-Type: string\
-Example: `"ThisIsA$ecret1"`
-
 ### `provision_sample_data`
 
 Whether to provision the sample data pipeline.
@@ -215,6 +210,50 @@ A list of additional filesystems to be created in the data lake storage. The mod
 Type: list\
 Example: `["gdprcompliant", "presentation"]`\
 Default: `[]`
+
+## Existing Key Vault
+
+You can optionally store all created keys and secrets to use the module components in an existing Azure Key Vault. We will also grant the necessary permissions to the Data Factory and the Service Principal to access the Key Vault. Please make sure that the account executing the Terraform has access to manage the Key Vault. The keys that have been created will be outputted.
+
+### `key_vault_resource_group`
+
+Name of the resource group in which the optional Key Vault has been created.
+Type: string\
+Example: `"rgkeyvault"`
+
+### `key_vault_name`
+
+Name of the optional Key Vault.
+Type: string\
+Example: `"keyvault"`
+
+## Existing service principal
+
+You can optionally use an existing service principal to allow communication between the different Azure services. If you don't provide one, one will be created for you.
+
+### `use_existing_service_principal`
+
+If you want to provide an existing one, set this to `true`.
+Type: bool\
+Example: `false`
+
+### `application_id`
+
+Application ID of the optional service principal.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_id`
+
+Object ID of the optional service principal.
+Type: string\
+Example: `"09bd45b3-c884-4454-a3ca-459f1a8e581a"`
+
+### `service_principal_password`
+
+Client secret of the optional service principal.
+Type: string\
+Example: `"ThisIsA$ecret1"`
 
 ## Optional Data Factory Git back-ends
 

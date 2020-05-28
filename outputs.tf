@@ -5,12 +5,12 @@ output "name" {
 
 output "powerbi_sql_dw_server_hostname" {
   description = "Name of the SQL server that hosts the Azure Synapse Analytics instance"
-  value       = contains(azurerm_sql_server.synapse_srv, 0) ? azurerm_sql_server.synapse_srv[0].fully_qualified_domain_name : ""
+  value       = local.create_synapse == 1 ? azurerm_sql_server.synapse_srv[0].fully_qualified_domain_name : ""
 }
 
 output "powerbi_sql_dw_server_database" {
   description = "Name of the Azure Synapse Analytics instance"
-  value       = contains(azurerm_sql_database.synapse, 0) ? azurerm_sql_database.synapse[0].name : ""
+  value       = local.create_synapse == 1 ? azurerm_sql_database.synapse[0].name : ""
 }
 
 output "powerbi_sql_dw_server_user" {
@@ -20,5 +20,12 @@ output "powerbi_sql_dw_server_user" {
 
 output "powerbi_sql_dw_server_password" {
   description = "Password of the user dedicated to Power BI"
-  value       = contains(random_password.sql_powerbi_viewer, 0) ? random_password.sql_powerbi_viewer[0].result : ""
+  value       = local.create_synapse == 1 ? random_password.sql_powerbi_viewer[0].result : ""
+}
+
+output "created_key_vault_keys" {
+  description = "Keys that have been created inside the optional Key Vault"
+  value = local.use_kv == 1 ? [
+    azurerm_key_vault_secret.sp_id[0].name,
+  azurerm_key_vault_secret.sp_secret[0].name] : []
 }
