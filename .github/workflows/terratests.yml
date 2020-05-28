@@ -61,5 +61,5 @@ jobs:
         run: go test -timeout ${{ env.tests_timeout }} ./...
       
       - name: "cleanup Azure resources"
-        if: ${{ always }}
+        if: ${{ always() }}
         run: for group in $(az group list --subscription $ARM_SUBSCRIPTION_ID --tag "Terratest=$GITHUB_RUN_ID" --query "[].name" -o tsv); do az group delete -y --no-wait --subscription $ARM_SUBSCRIPTION_ID -n $group; done 
