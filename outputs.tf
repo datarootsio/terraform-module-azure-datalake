@@ -41,5 +41,5 @@ output "service_principal_tenant_id" {
 
 output "data_factory_managed_identity" {
   description = "Principal Client ID of the created Azure Data Factory"
-  value = azurerm_data_factory.df.identity.principal_id
+  value       = azurerm_data_factory.df.identity.principal_id
 }
