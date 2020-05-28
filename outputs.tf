@@ -38,3 +38,8 @@ output "service_principal_tenant_id" {
   description = "Tenant ID of the service principal that is used for service connections"
   value       = data.azurerm_client_config.current.tenant_id
 }
+
+output "data_factory_managed_identity" {
+  description = "Principal Client ID of the created Azure Data Factory"
+  value = azurerm_data_factory.df.identity.principal_id
+}
