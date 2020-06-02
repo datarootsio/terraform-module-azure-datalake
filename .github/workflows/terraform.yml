@@ -7,8 +7,8 @@ on:
     branches:
       - master
 env:
-  databricks_repo: "datarootsio/databricks-terraform"
-  databricks_branch: "bugfix/content-state-validate"
+  databricks_repo: "databrickslabs/databricks-terraform"
+  databricks_branch: "master"
 jobs:
   validate:
     name: "Validate"
