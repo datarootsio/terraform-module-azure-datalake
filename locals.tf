@@ -16,7 +16,6 @@ locals {
   create_data_factory_git_vsts   = var.data_factory_vsts_account_name == null ? [] : ["_"]
   create_data_factory_git_github = var.data_factory_github_account_name == null ? [] : ["_"]
   use_kv                         = var.key_vault_name == null ? 0 : 1
-  kv_depends_on                  = var.key_vault_depends_on == null ? [] : [var.key_vault_depends_on]
 
   databricks_loader_user = "DatabricksLoader"
   powerbi_viewer_user    = "PowerBiViewer"
