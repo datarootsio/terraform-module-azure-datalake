@@ -25,6 +25,7 @@
 * [Existing Key Vault](#existing-key-vault)
    * [key_vault_resource_group](#key_vault_resource_group)
    * [key_vault_name](#key_vault_name)
+   * [key_vault_depends_on](#key_vault_depends_on)
 * [Existing service principal](#existing-service-principal)
    * [use_existing_service_principal](#use_existing_service_principal)
    * [application_id](#application_id)
@@ -226,6 +227,12 @@ Example: `"rgkeyvault"`
 Name of the optional Key Vault.
 Type: string\
 Example: `"keyvault"`
+
+### `key_vault_depends_on`
+
+Set this to the resource that the Key Vault part should optionally depend on.
+Type: any\
+Example: `azurerm_resource_group.rg_containing_kv`
 
 ## Existing service principal
 
