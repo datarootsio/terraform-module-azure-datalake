@@ -51,11 +51,6 @@ jobs:
       
       - name: "go vet"
         run: go vet ./...
-      
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v1
-        with:
-          version: ${{ env.golangci_lint_version }}
 
       - name: "go test"
         run: go test -timeout ${{ env.tests_timeout }} ./...
