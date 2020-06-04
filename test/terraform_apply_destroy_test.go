@@ -33,7 +33,6 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 		"eastus2",
 		"westus",
 		"westus2",
-		"northcentralus",
 		"southcentralus",
 		"northeurope",
 		"westeurope",
