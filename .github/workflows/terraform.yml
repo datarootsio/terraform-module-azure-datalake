@@ -9,11 +9,22 @@ on:
 env:
   databricks_repo: "databrickslabs/databricks-terraform"
   databricks_branch: "master"
+  slack_channel: terraform-data-lake-module
 jobs:
   validate:
     name: "Validate"
     runs-on: ubuntu-latest
     steps:
+    
+      - id: slack
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: STARTED
+          color: warning
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
       - name: Get databricks provider dependency
         run: |
           rm -rf $GITHUB_WORKSPACE/databricks-terraform
@@ -39,3 +50,25 @@ jobs:
 
       - name: tflint
         run: docker run --rm -v $(pwd):/data -t wata727/tflint
+
+      - id: slack
+        if: success()
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: SUCCESS
+          color: good
+          message_id: ${{ steps.slack.outputs.message_id }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - id: slack
+        if: failure()
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: FAILED
+          color: danger
+          message_id: ${{ steps.slack.outputs.message_id }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
