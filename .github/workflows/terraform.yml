@@ -51,7 +51,7 @@ jobs:
       - name: tflint
         run: docker run --rm -v $(pwd):/data -t wata727/tflint
 
-      - id: slack
+      - id: slack-success
         if: success()
         uses: voxmedia/github-action-slack-notify-build@v1
         with:
@@ -62,7 +62,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - id: slack
+      - id: slack-failure
         if: failure()
         uses: voxmedia/github-action-slack-notify-build@v1
         with:
