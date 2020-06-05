@@ -37,3 +37,11 @@ resource "azurerm_key_vault_secret" "databricks_token" {
   value        = databricks_token.token.token_value
   key_vault_id = data.azurerm_key_vault.kv[count.index].id
 }
+
+resource "azurerm_key_vault_secret" "cosmosdb_connstr" {
+  depends_on   = [var.key_vault_depends_on]
+  count        = local.use_kv
+  name         = "cosmosdb-connection-string"
+  value        = "${azurerm_cosmosdb_account.cmdb.connection_strings[0]};Database=${azurerm_cosmosdb_sql_database.cmdb_db.name}"
+  key_vault_id = data.azurerm_key_vault.kv[count.index].id
+}
