@@ -9,6 +9,7 @@ env:
   golangci_lint_version: "v1.26"
   databricks_repo: "datarootsio/databricks-terraform"
   databricks_branch: "bugfix/content-state-validate"
+  slack_channel: terraform-data-lake-module
 jobs:
   terratests:
     name: "Terratests"
@@ -19,6 +20,15 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
     steps:
+    
+      - id: slack
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: STARTED
+          color: warning
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Get the target branch name
         id: vars
@@ -66,3 +76,25 @@ jobs:
         run: |
           az group list --subscription $ARM_SUBSCRIPTION_ID --tag "Terratest=$GITHUB_RUN_ID" -o table
           for group in $(az group list --subscription $ARM_SUBSCRIPTION_ID --tag "Terratest=$GITHUB_RUN_ID" --query "[].name" -o tsv); do az group delete -y --no-wait --subscription $ARM_SUBSCRIPTION_ID -n $group; done 
+
+      - id: slack
+        if: success()
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: SUCCESS
+          color: good
+          message_id: ${{ steps.slack.outputs.message_id }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - id: slack
+        if: failure()
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: ${{ env.slack_channel }}
+          status: FAILED
+          color: danger
+          message_id: ${{ steps.slack.outputs.message_id }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
