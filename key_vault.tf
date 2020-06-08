@@ -6,12 +6,15 @@ data "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_access_policy" "df" {
-  depends_on         = [var.key_vault_depends_on]
-  count              = local.use_kv
-  key_vault_id       = data.azurerm_key_vault.kv[count.index].id
-  tenant_id          = azurerm_data_factory.df.identity[0].tenant_id
-  object_id          = azurerm_data_factory.df.identity[0].principal_id
-  secret_permissions = ["list", "get"]
+  depends_on              = [var.key_vault_depends_on]
+  count                   = local.use_kv
+  key_vault_id            = data.azurerm_key_vault.kv[count.index].id
+  tenant_id               = azurerm_data_factory.df.identity[0].tenant_id
+  object_id               = azurerm_data_factory.df.identity[0].principal_id
+  secret_permissions      = ["list", "get"]
+  key_permissions         = []
+  storage_permissions     = []
+  certificate_permissions = []
 }
 
 resource "azurerm_key_vault_secret" "sp_id" {
