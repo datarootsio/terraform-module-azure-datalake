@@ -11,7 +11,7 @@ This is a module for Terraform that deploys a complete and opinionated data lake
 ## Components
 
 * Azure Data Factory for data ingestion from various sources
-* 3 or more Azure Data Lake Storage gen2 containers to store raw, clean and transformed data
+* 3 or more Azure Data Lake Storage gen2 containers to store raw, clean and curated data
 * Azure Databricks to clean and transform the data
 * Azure Synapse Analytics to store presentation data
 * Azure CosmosDB to store metadata
@@ -24,7 +24,7 @@ This design is based on one of Microsoft's architecture patterns for an [advance
 
 It includes some additional changes that [dataroots](https://dataroots.io) is recommending.
 
-* Multiple storage containers to store every version of the data (raw, cleansed, transformed)
+* Multiple storage containers to store every version of the data (raw, cleansed, curated)
 * Cosmos DB is used to store the metadata of the data as a Data Catalog
 * Azure Analysis Services is not used for now as some services might be replaced when [Azure Synapse Analytics Workspace](https://docs.microsoft.com/en-us/azure/synapse-analytics/overview-what-is) becomes GA
 

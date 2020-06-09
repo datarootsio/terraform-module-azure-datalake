@@ -20,7 +20,7 @@
    * [extra_tags](#extra_tags)
    * [data_lake_fs_raw](#data_lake_fs_raw)
    * [data_lake_fs_cleansed](#data_lake_fs_cleansed)
-   * [data_lake_fs_transformed](#data_lake_fs_transformed)
+   * [data_lake_fs_curated](#data_lake_fs_curated)
    * [data_lake_filesystems](#data_lake_filesystems)
 * [Existing Key Vault](#existing-key-vault)
    * [key_vault_resource_group](#key_vault_resource_group)
@@ -196,13 +196,13 @@ Type: string\
 Example: `"clean"`\
 Default: `"clean"`
 
-### `data_lake_fs_transformed`
+### `data_lake_fs_curated`
 
-Name of the data lake filesystem that will contain the transformed data. The name of the data lake itself will be appended.
+Name of the data lake filesystem that will contain the curated data. The name of the data lake itself will be appended.
 
 Type: string\
-Example: `"transformed"`\
-Default: `"transformed"`
+Example: `"curated"`\
+Default: `"curated"`
 
 ### `data_lake_filesystems`
 

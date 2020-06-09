@@ -25,7 +25,7 @@ resource "databricks_notebook" "transform" {
   format    = "SOURCE"
   count     = local.create_sample
 
-  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.transformed, azurerm_role_assignment.spdbks]
+  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.curated, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_notebook" "presentation" {
@@ -37,7 +37,7 @@ resource "databricks_notebook" "presentation" {
   format    = "DBC"
   count     = local.create_sample
 
-  depends_on = [databricks_azure_adls_gen2_mount.transformed, azurerm_role_assignment.spdbks]
+  depends_on = [databricks_azure_adls_gen2_mount.curated, azurerm_role_assignment.spdbks]
 }
 
 resource "azurerm_template_deployment" "dfpipeline" {

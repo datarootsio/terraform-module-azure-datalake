@@ -125,11 +125,11 @@ resource "databricks_azure_adls_gen2_mount" "clean" {
   depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
 }
 
-resource "databricks_azure_adls_gen2_mount" "transformed" {
+resource "databricks_azure_adls_gen2_mount" "curated" {
   cluster_id             = databricks_cluster.cluster.id
-  container_name         = local.data_lake_fs_transformed_name
+  container_name         = local.data_lake_fs_curated_name
   storage_account_name   = azurerm_storage_account.adls.name
-  mount_name             = "transformed"
+  mount_name             = "curated"
   tenant_id              = data.azurerm_client_config.current.tenant_id
   client_id              = local.application_id
   client_secret_scope    = databricks_secret.client_secret.scope
