@@ -52,3 +52,13 @@ output "service_principal_client_id" {
   description = "Client ID of the service principal that was used"
   value       = local.service_principal_id
 }
+
+output "data_factory_name" {
+  description = "Name of the created Data Factory"
+  value       = azurerm_data_factory.df.name
+}
+
+output "data_factory_identity" {
+  description = "Object ID of the managed identity of the created Data Factory"
+  value       = azurerm_data_factory.df.identity[0].principal_id
+}
