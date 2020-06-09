@@ -8,7 +8,7 @@ dbutils.fs.ls("/mnt/clean/")
 
 // COMMAND ----------
 
-dbutils.fs.ls("/mnt/transformed/")
+dbutils.fs.ls("/mnt/curated/")
 
 // COMMAND ----------
 
@@ -100,37 +100,37 @@ import org.apache.spark.sql.SaveMode
 
 highestAmountsLastWeek
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/highest_amounts_last_week.parquet")
+    .parquet("/mnt/curated/highest_amounts_last_week.parquet")
 
 // COMMAND ----------
 
 topGrossingDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/top_grossing_departments.parquet")
+    .parquet("/mnt/curated/top_grossing_departments.parquet")
 
 // COMMAND ----------
 
 topSalesDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/top_sales_departments.parquet")
+    .parquet("/mnt/curated/top_sales_departments.parquet")
 
 // COMMAND ----------
 
 highestAmountPerSaleDepartmentsLast30Days
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/highest_amount_sales_ratio.parquet")
+    .parquet("/mnt/curated/highest_amount_sales_ratio.parquet")
 
 // COMMAND ----------
 
 topGrossingCountriesLast30Days
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/top_grossing_countries.parquet")
+    .parquet("/mnt/curated/top_grossing_countries.parquet")
 
 // COMMAND ----------
 
 topGrossingDepartmentsCountriesLast30Days
     .write.mode(SaveMode.Overwrite)
-    .parquet("/mnt/transformed/top_grossing_departments_countries.parquet")
+    .parquet("/mnt/curated/top_grossing_departments_countries.parquet")
 
 // COMMAND ----------
 

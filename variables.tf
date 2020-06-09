@@ -28,15 +28,15 @@ variable "data_lake_fs_cleansed" {
   default     = "cleansed"
 }
 
-variable "data_lake_fs_transformed" {
+variable "data_lake_fs_curated" {
   type        = string
-  description = "Name of the data lake filesystem with transformed data"
-  default     = "transformed"
+  description = "Name of the data lake filesystem with curated data"
+  default     = "curated"
 }
 
 variable "data_lake_filesystems" {
   type        = list
-  description = "A list of filesystems to create inside the storage account besides the 3 default ones (raw, cleansed, transformed)"
+  description = "A list of filesystems to create inside the storage account besides the 3 default ones (raw, cleansed, curated)"
   default     = []
 }
 
