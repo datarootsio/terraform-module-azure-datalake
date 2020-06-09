@@ -138,22 +138,10 @@ variable "sql_server_admin_password" {
   default     = null
 }
 
-variable "key_vault_resource_group" {
+variable "key_vault_id" {
   type        = string
   default     = null
-  description = "Name of the resource group where the optional Key Vault is located. The module will store all relevant secrets inside this Key Vault and output the keys."
-}
-
-variable "key_vault_name" {
-  type        = string
-  default     = null
-  description = "Name of the optional Key Vault. The module will store all relevant secrets inside this Key Vault and output the keys."
-}
-
-variable "key_vault_depends_on" {
-  type        = any
-  default     = null
-  description = "Set this to the resource that the Key Vault part should optionally depend on."
+  description = "ID of the optional Key Vault. The module will store all relevant secrets inside this Key Vault and output the keys."
 }
 
 # Data Factory VSTS
