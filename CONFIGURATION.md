@@ -23,9 +23,8 @@
    * [data_lake_fs_curated](#data_lake_fs_curated)
    * [data_lake_filesystems](#data_lake_filesystems)
 * [Existing Key Vault](#existing-key-vault)
-   * [key_vault_resource_group](#key_vault_resource_group)
-   * [key_vault_name](#key_vault_name)
-   * [key_vault_depends_on](#key_vault_depends_on)
+   * [key_vault_id](#key_vault_id)
+   * [use_key_vault](#use_key_vault)
 * [Existing service principal](#existing-service-principal)
    * [use_existing_service_principal](#use_existing_service_principal)
    * [application_id](#application_id)
@@ -216,23 +215,17 @@ Default: `[]`
 
 You can optionally store all created keys and secrets to use the module components in an existing Azure Key Vault. We will also grant the necessary permissions to the Data Factory and the Service Principal to access the Key Vault. Please make sure that the account executing the Terraform has access to manage the Key Vault. The keys that have been created will be outputted.
 
-### `key_vault_resource_group`
+### `key_vault_id`
 
-Name of the resource group in which the optional Key Vault has been created.
+ID of the optional Key Vault.
 Type: string\
-Example: `"rgkeyvault"`
+Example: `azurerm_key_vault.myvault.id`
 
-### `key_vault_name`
+### `use_key_vault`
 
-Name of the optional Key Vault.
-Type: string\
-Example: `"keyvault"`
-
-### `key_vault_depends_on`
-
-Set this to the resource that the Key Vault part should optionally depend on.
-Type: any\
-Example: `azurerm_resource_group.rg_containing_kv`
+Set this to true to enable storage of secrets inside an Azure Key Vault.
+Type: bool\
+Example: `true`
 
 ## Existing service principal
 
