@@ -7,8 +7,6 @@ on:
     branches:
       - master
 env:
-  databricks_repo: "databrickslabs/databricks-terraform"
-  databricks_branch: "master"
   slack_channel: terraform-data-lake-module
 jobs:
   validate:
@@ -25,16 +23,8 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Get databricks provider dependency
-        run: |
-          rm -rf $GITHUB_WORKSPACE/databricks-terraform
-          git clone --depth 1 -b $databricks_branch https://github.com/$databricks_repo.git $GITHUB_WORKSPACE/databricks-terraform
-
-      - name: Build databricks provider dependency
-        run: |
-          cd $GITHUB_WORKSPACE/databricks-terraform
-          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
-          cd -
+      - name: Install databricks provider dependency
+        run: curl https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
 
       - name: "Checkout"
         uses: actions/checkout@master
