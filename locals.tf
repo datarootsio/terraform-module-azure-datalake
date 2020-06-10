@@ -15,7 +15,7 @@ locals {
   create_synapse                 = var.provision_synapse ? 1 : 0
   create_data_factory_git_vsts   = var.data_factory_vsts_account_name == null ? [] : ["_"]
   create_data_factory_git_github = var.data_factory_github_account_name == null ? [] : ["_"]
-  use_kv                         = var.key_vault_id == null ? 0 : 1
+  use_kv                         = var.use_key_vault ? 1 : 0
 
   databricks_loader_user = "DatabricksLoader"
   powerbi_viewer_user    = "PowerBiViewer"

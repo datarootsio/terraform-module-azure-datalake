@@ -144,6 +144,12 @@ variable "key_vault_id" {
   description = "ID of the optional Key Vault. The module will store all relevant secrets inside this Key Vault and output the keys."
 }
 
+variable "use_key_vault" {
+  type        = bool
+  default     = false
+  description = "Set this to true to enable the usage of your Key Vault"
+}
+
 # Data Factory VSTS
 
 variable "data_factory_vsts_account_name" {
