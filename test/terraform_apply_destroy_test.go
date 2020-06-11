@@ -52,6 +52,7 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 			".*we are currently experiencing high demand in this region.*": "Azure service at capacity",
 			".*connection reset by peer.*":                                 "Temporary connectivity issue",
 			".*Error 403 Failed to retrieve tenant ID for given token.*":   "Databricks access token not valid yet",
+			".*Timeout exceeded while awaiting headers.*":                  "Databricks HTTP timeout",
 		},
 		MaxRetries:         5,
 		TimeBetweenRetries: 5 * time.Minute,
