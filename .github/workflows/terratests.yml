@@ -31,7 +31,7 @@ jobs:
       - name: Get the target branch name
         id: vars
         run: |
-          branch=${{ github.event.client_payload.slash_command.branch }}
+          branch=${{ github.event.client_payload.pull_request.head.ref }}
           if [[ -z "$branch" ]]; then branch="master"; fi
           echo ::set-output name=branch::$branch
 
