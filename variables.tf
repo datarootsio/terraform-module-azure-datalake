@@ -96,6 +96,24 @@ variable "databricks_cosmosdb_spark_version" {
   default     = "3.0.5"
 }
 
+variable "databricks_autotermination_minutes" {
+  type        = number
+  description = "After this amount of minutes, the cluster will terminate"
+  default     = 120
+}
+
+variable "databricks_min_workers" {
+  type        = number
+  description = "Minimum amount of workers in an active cluster"
+  default     = 2
+}
+
+variable "databricks_max_workers" {
+  type        = number
+  description = "Maximum amount of workers in an active cluster"
+  default     = 4
+}
+
 # Security
 
 variable "use_existing_service_principal" {
@@ -146,45 +164,45 @@ variable "sql_server_admin_password" {
 
 variable "key_vault_id" {
   type        = string
-  default     = null
+  default     = ""
   description = "ID of the optional Key Vault. The module will store all relevant secrets inside this Key Vault and output the keys."
 }
 
 variable "use_key_vault" {
   type        = bool
   default     = false
-  description = "Set this to true to enable the usage of your Key Vault"
+  description = "Set this to true to enable the usage of your existing Key Vault"
 }
 
 # Data Factory VSTS
 
 variable "data_factory_vsts_account_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional account name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
 variable "data_factory_vsts_branch_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional branch name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
 variable "data_factory_vsts_project_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional project name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
 variable "data_factory_vsts_repository_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional repository name for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
 variable "data_factory_vsts_root_folder" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional root folder for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
@@ -197,30 +215,30 @@ variable "data_factory_vsts_tenant_id" {
 # Data Factory GitHub
 variable "data_factory_github_account_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional account name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }
 
 variable "data_factory_github_branch_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional branch name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }
 
 variable "data_factory_github_git_url" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional Git URL (either https://github.mycompany.com or https://github.com) for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }
 
 variable "data_factory_github_repository_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional repository name for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }
 
 variable "data_factory_github_root_folder" {
   type        = string
-  default     = null
+  default     = ""
   description = "Optional root folder for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }

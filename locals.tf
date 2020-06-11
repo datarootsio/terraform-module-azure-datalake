@@ -13,8 +13,8 @@ locals {
 
   create_sample                  = var.provision_sample_data && var.provision_synapse ? 1 : 0
   create_synapse                 = var.provision_synapse ? 1 : 0
-  create_data_factory_git_vsts   = var.data_factory_vsts_account_name == null ? [] : ["_"]
-  create_data_factory_git_github = var.data_factory_github_account_name == null ? [] : ["_"]
+  create_data_factory_git_vsts   = var.data_factory_vsts_account_name == "" ? [] : ["_"]
+  create_data_factory_git_github = var.data_factory_github_account_name == "" ? [] : ["_"]
   use_kv                         = var.use_key_vault ? 1 : 0
 
   databricks_loader_user = "DatabricksLoader"
