@@ -32,9 +32,14 @@ resource "databricks_cluster" "cluster" {
   cluster_name            = "cluster${var.data_lake_name}"
   node_type_id            = var.databricks_cluster_node_type
   autotermination_minutes = 120
+
   autoscale {
     min_workers = 2
     max_workers = 4
+  }
+
+  library_maven {
+    coordinates = "com.microsoft.azure:azure-cosmosdb-spark_2.4.0_2.11:${var.databricks_cosmosdb_spark_version}"
   }
 }
 
