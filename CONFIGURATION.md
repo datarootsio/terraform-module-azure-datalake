@@ -211,6 +211,14 @@ Type: list\
 Example: `["gdprcompliant", "presentation"]`\
 Default: `[]`
 
+### `databricks_cosmosdb_spark_version`
+
+Optional version for the `com.microsoft.azure:azure-cosmosdb-spark_2.4.0_2.11` to install on the Databricks cluster.
+
+Type: string\
+Example: `"3.0.5"`\
+Default: `"3.0.5"`
+
 ## Existing Key Vault
 
 You can optionally store all created keys and secrets to use the module components in an existing Azure Key Vault. We will also grant the necessary permissions to the Data Factory and the Service Principal to access the Key Vault. Please make sure that the account executing the Terraform has access to manage the Key Vault. The keys that have been created will be outputted.
