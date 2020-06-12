@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"context"
 	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2016-10-01/keyvault"
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2017-05-10/resources"
 	"github.com/Azure/go-autorest/autorest/to"
@@ -17,7 +18,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/sethvargo/go-password/password"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/net/context"
 )
 
 func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error) {
@@ -172,10 +172,10 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 		Location: to.StringPtr(options.Vars["region"].(string)),
 	})
 	assert.NoError(t, err)
-	defer rgClient.Delete(ctx, *rg.Name)
 
 	defer func() {
-		_, _ = rgClient.Delete(ctx, *rg.Name)
+		_, err = rgClient.Delete(ctx, *rg.Name)
+		assert.NoError(t, err)
 	}()
 
 	kvClient := keyvault.NewVaultsClient(subscriptionID)
