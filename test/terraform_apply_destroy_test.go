@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"context"
+
 	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2016-10-01/keyvault"
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2017-05-10/resources"
+	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/Azure/go-autorest/autorest/to"
 	"github.com/gruntwork-io/terratest/modules/azure"
 	"github.com/gruntwork-io/terratest/modules/logger"
@@ -153,6 +155,12 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	subscriptionID, exists := os.LookupEnv("ARM_SUBSCRIPTION_ID")
 	assert.True(t, exists)
 
+	clientID, exists := os.LookupEnv("ARM_CLIENT_ID")
+	assert.True(t, exists)
+
+	clientSecret, exists := os.LookupEnv("ARM_CLIENT_SECRET")
+	assert.True(t, exists)
+
 	tenantIDStr, exists := os.LookupEnv("ARM_TENANT_ID")
 	assert.True(t, exists)
 
@@ -167,7 +175,11 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	kvName := "kv" + name
 	rgName := "rgkv" + name
 
+	authorizer, err := auth.NewClientCredentialsConfig(clientID, clientSecret, tenantIDStr).Authorizer()
+	assert.NoError(t, err)
+
 	rgClient := resources.NewGroupsClient(subscriptionID)
+	rgClient.Authorizer = authorizer
 	rg, err := rgClient.CreateOrUpdate(ctx, rgName, resources.Group{
 		Location: to.StringPtr(options.Vars["region"].(string)),
 	})
@@ -179,6 +191,7 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	}()
 
 	kvClient := keyvault.NewVaultsClient(subscriptionID)
+	kvClient.Authorizer = authorizer
 	kv, err := kvClient.CreateOrUpdate(ctx, rgName, kvName, keyvault.VaultCreateOrUpdateParameters{
 		Location: to.StringPtr(options.Vars["region"].(string)),
 		Properties: &keyvault.VaultProperties{
