@@ -202,6 +202,7 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 				Name:   keyvault.Standard,
 				Family: to.StringPtr("A"),
 			},
+			AccessPolicies: &[]keyvault.AccessPolicyEntry{},
 		},
 	})
 	assert.NoError(t, err)
