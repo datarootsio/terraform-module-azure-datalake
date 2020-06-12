@@ -6,13 +6,18 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2016-10-01/keyvault"
+	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2017-05-10/resources"
+	"github.com/Azure/go-autorest/autorest/to"
 	"github.com/gruntwork-io/terratest/modules/azure"
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
+	uuid "github.com/satori/go.uuid"
 	"github.com/sethvargo/go-password/password"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/net/context"
 )
 
 func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error) {
@@ -131,6 +136,63 @@ func TestApplyAndDestroyWithoutSynapse(t *testing.T) {
 	delete(options.Vars, "data_warehouse_dtu")
 	delete(options.Vars, "sql_server_admin_username")
 	delete(options.Vars, "sql_server_admin_password")
+
+	defer terraform.Destroy(t, options)
+	_, err = terraform.InitAndApplyE(t, options)
+	assert.NoError(t, err)
+
+	outDataLakeName, err := terraform.OutputE(t, options, "name")
+	assert.NoError(t, err)
+
+	assert.Equal(t, name, outDataLakeName)
+}
+
+func TestApplyAndDestroyWithKeyVault(t *testing.T) {
+	t.Parallel()
+
+	subscriptionID, exists := os.LookupEnv("ARM_SUBSCRIPTION_ID")
+	assert.True(t, exists)
+
+	tenantIDStr, exists := os.LookupEnv("ARM_TENANT_ID")
+	assert.True(t, exists)
+
+	tenantID, err := uuid.FromString(tenantIDStr)
+	assert.NoError(t, err)
+
+	name, options, err := getDefaultTerraformOptions(t)
+	assert.NoError(t, err)
+
+	ctx := context.Background()
+
+	kvName := "kv" + name
+	rgName := "rgkv" + name
+
+	rgClient := resources.NewGroupsClient(subscriptionID)
+	rg, err := rgClient.CreateOrUpdate(ctx, rgName, resources.Group{
+		Location: to.StringPtr(options.Vars["region"].(string)),
+	})
+	assert.NoError(t, err)
+	defer rgClient.Delete(ctx, *rg.Name)
+
+	kvClient := keyvault.NewVaultsClient(subscriptionID)
+	kv, err := kvClient.CreateOrUpdate(ctx, rgName, kvName, keyvault.VaultCreateOrUpdateParameters{
+		Location: to.StringPtr(options.Vars["region"].(string)),
+		Properties: &keyvault.VaultProperties{
+			EnableSoftDelete:      to.BoolPtr(false),
+			EnablePurgeProtection: to.BoolPtr(false),
+			CreateMode:            keyvault.CreateModeDefault,
+			TenantID:              &tenantID,
+			Sku: &keyvault.Sku{
+				Name:   keyvault.Standard,
+				Family: to.StringPtr("A"),
+			},
+		},
+	})
+	assert.NoError(t, err)
+
+	options.Vars["provision_sample_data"] = false
+	options.Vars["use_key_vault"] = true
+	options.Vars["key_vault_id"] = *kv.ID
 
 	defer terraform.Destroy(t, options)
 	_, err = terraform.InitAndApplyE(t, options)
