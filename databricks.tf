@@ -57,16 +57,18 @@ resource "databricks_secret" "client_secret" {
 }
 
 resource "databricks_secret_scope" "temp_storage" {
+  count                    = local.create_synapse
   depends_on               = [azurerm_role_assignment.spdbks]
   name                     = "temp_storage"
   initial_manage_principal = "users"
 }
 
 resource "databricks_secret" "access_key" {
+  count        = local.create_synapse
   depends_on   = [azurerm_role_assignment.spdbks]
   key          = "access_key"
-  string_value = azurerm_storage_account.dbkstemp.primary_access_key
-  scope        = databricks_secret_scope.temp_storage.name
+  string_value = azurerm_storage_account.dbkstemp[count.index].primary_access_key
+  scope        = databricks_secret_scope.temp_storage[count.index].name
 }
 
 resource "databricks_secret_scope" "cosmosdb" {
@@ -150,7 +152,8 @@ resource "databricks_token" "token" {
 }
 
 resource "databricks_notebook" "spark_setup" {
-  content    = base64encode(templatefile("${path.module}/files/spark_setup.scala", { blob_host = azurerm_storage_account.dbkstemp.primary_blob_host }))
+  count      = local.create_synapse
+  content    = base64encode(templatefile("${path.module}/files/spark_setup.scala", { blob_host = azurerm_storage_account.dbkstemp[count.index].primary_blob_host }))
   language   = "SCALA"
   path       = "/Shared/spark_setup.scala"
   overwrite  = false
