@@ -195,10 +195,9 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	kv, err := kvClient.CreateOrUpdate(ctx, rgName, kvName, keyvault.VaultCreateOrUpdateParameters{
 		Location: to.StringPtr(options.Vars["region"].(string)),
 		Properties: &keyvault.VaultProperties{
-			EnableSoftDelete:      to.BoolPtr(false),
-			EnablePurgeProtection: to.BoolPtr(false),
-			CreateMode:            keyvault.CreateModeDefault,
-			TenantID:              &tenantID,
+			EnableSoftDelete: to.BoolPtr(false),
+			CreateMode:       keyvault.CreateModeDefault,
+			TenantID:         &tenantID,
 			Sku: &keyvault.Sku{
 				Name:   keyvault.Standard,
 				Family: to.StringPtr("A"),
