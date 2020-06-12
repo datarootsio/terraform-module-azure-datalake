@@ -8,16 +8,11 @@ import (
 
 	"context"
 
-	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2016-10-01/keyvault"
-	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2017-05-10/resources"
-	"github.com/Azure/go-autorest/autorest/azure/auth"
-	"github.com/Azure/go-autorest/autorest/to"
 	"github.com/gruntwork-io/terratest/modules/azure"
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sethvargo/go-password/password"
 	"github.com/stretchr/testify/assert"
 )
@@ -161,11 +156,8 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	clientSecret, exists := os.LookupEnv("ARM_CLIENT_SECRET")
 	assert.True(t, exists)
 
-	tenantIDStr, exists := os.LookupEnv("ARM_TENANT_ID")
+	tenantID, exists := os.LookupEnv("ARM_TENANT_ID")
 	assert.True(t, exists)
-
-	tenantID, err := uuid.FromString(tenantIDStr)
-	assert.NoError(t, err)
 
 	name, options, err := getDefaultTerraformOptions(t)
 	assert.NoError(t, err)
@@ -175,37 +167,13 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	kvName := "kv" + name
 	rgName := "rgkv" + name
 
-	authorizer, err := auth.NewClientCredentialsConfig(clientID, clientSecret, tenantIDStr).Authorizer()
-	assert.NoError(t, err)
-
-	rgClient := resources.NewGroupsClient(subscriptionID)
-	rgClient.Authorizer = authorizer
-	rg, err := rgClient.CreateOrUpdate(ctx, rgName, resources.Group{
-		Location: to.StringPtr(options.Vars["region"].(string)),
-	})
+	kv, err := setupKeyVault(ctx, kvName, rgName, options.Vars["region"].(string), subscriptionID, clientID, clientSecret, tenantID)
 	assert.NoError(t, err)
 
 	defer func() {
-		_, err = rgClient.Delete(ctx, *rg.Name)
+		_, err = destroyResourceGroup(ctx, rgName, subscriptionID, clientID, clientSecret, tenantID)
 		assert.NoError(t, err)
 	}()
-
-	kvClient := keyvault.NewVaultsClient(subscriptionID)
-	kvClient.Authorizer = authorizer
-	kv, err := kvClient.CreateOrUpdate(ctx, rgName, kvName, keyvault.VaultCreateOrUpdateParameters{
-		Location: to.StringPtr(options.Vars["region"].(string)),
-		Properties: &keyvault.VaultProperties{
-			EnableSoftDelete: to.BoolPtr(false),
-			CreateMode:       keyvault.CreateModeDefault,
-			TenantID:         &tenantID,
-			Sku: &keyvault.Sku{
-				Name:   keyvault.Standard,
-				Family: to.StringPtr("A"),
-			},
-			AccessPolicies: &[]keyvault.AccessPolicyEntry{},
-		},
-	})
-	assert.NoError(t, err)
 
 	options.Vars["provision_sample_data"] = false
 	options.Vars["use_key_vault"] = true
