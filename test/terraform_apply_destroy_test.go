@@ -174,6 +174,10 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 	assert.NoError(t, err)
 	defer rgClient.Delete(ctx, *rg.Name)
 
+	defer func() {
+		_, _ = rgClient.Delete(ctx, *rg.Name)
+	}()
+
 	kvClient := keyvault.NewVaultsClient(subscriptionID)
 	kv, err := kvClient.CreateOrUpdate(ctx, rgName, kvName, keyvault.VaultCreateOrUpdateParameters{
 		Location: to.StringPtr(options.Vars["region"].(string)),
