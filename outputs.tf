@@ -26,10 +26,10 @@ output "powerbi_sql_dw_server_password" {
 output "created_key_vault_secrets" {
   description = "Secrets that have been created inside the optional Key Vault with their versions"
   value = local.use_kv == 1 ? {
-    "${azurerm_key_vault_secret.sp_id[0].name}"            = azurerm_key_vault_secret.sp_id[0].version,
-    "${azurerm_key_vault_secret.sp_secret[0].name}"        = azurerm_key_vault_secret.sp_secret[0].version,
-    "${azurerm_key_vault_secret.databricks_token[0].name}" = azurerm_key_vault_secret.databricks_token[0].version,
-    "${azurerm_key_vault_secret.cosmosdb_connstr[0].name}" = azurerm_key_vault_secret.cosmosdb_connstr[0].version
+    (azurerm_key_vault_secret.sp_id[0].name)            = azurerm_key_vault_secret.sp_id[0].version,
+    (azurerm_key_vault_secret.sp_secret[0].name)        = azurerm_key_vault_secret.sp_secret[0].version,
+    (azurerm_key_vault_secret.databricks_token[0].name) = azurerm_key_vault_secret.databricks_token[0].version,
+    (azurerm_key_vault_secret.cosmosdb_connstr[0].name) = azurerm_key_vault_secret.cosmosdb_connstr[0].version
   } : {}
 }
 
