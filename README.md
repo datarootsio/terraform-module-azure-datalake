@@ -60,10 +60,10 @@ This module works on macOS and Linux.
 
 ### Databricks provider installation
 
-The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/databricks-terraform). This provider is not in the registry yet and would have to be installed manually. This can be done with the command below:
+The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is not in the registry yet and would have to be installed manually. This can be done with the command below:
 
 ```sh
-curl https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
+curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
 ```
 
 ### Azure provider configuration

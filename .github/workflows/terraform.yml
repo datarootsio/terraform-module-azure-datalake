@@ -24,7 +24,7 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Install databricks provider dependency
-        run: curl https://raw.githubusercontent.com/databrickslabs/databricks-terraform/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
+        run: curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
 
       - name: "Checkout"
         uses: actions/checkout@master
