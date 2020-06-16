@@ -69,8 +69,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/files/destroy_resource.sh"
-    when    = destroy
+    command    = "${path.module}/files/destroy_resource.sh"
+    when       = destroy
+    on_failure = continue
 
     environment = {
       RESOURCE_ID = self.outputs["pipelineId"]
@@ -78,8 +79,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/files/destroy_resource.sh"
-    when    = destroy
+    command    = "${path.module}/files/destroy_resource.sh"
+    when       = destroy
+    on_failure = continue
 
     environment = {
       RESOURCE_ID = self.outputs["rawDataSetId"]
@@ -87,8 +89,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/files/destroy_resource.sh"
-    when    = destroy
+    command    = "${path.module}/files/destroy_resource.sh"
+    when       = destroy
+    on_failure = continue
 
     environment = {
       RESOURCE_ID = self.outputs["sampleDataDatasetId"]
@@ -96,8 +99,9 @@ resource "azurerm_template_deployment" "dfpipeline" {
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/files/destroy_resource.sh"
-    when    = destroy
+    command    = "${path.module}/files/destroy_resource.sh"
+    when       = destroy
+    on_failure = continue
 
     environment = {
       RESOURCE_ID = self.outputs["sampleDataLinkedServiceId"]
