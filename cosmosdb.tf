@@ -15,7 +15,7 @@ resource "azurerm_cosmosdb_account" "cmdb" {
 }
 
 resource "azurerm_cosmosdb_sql_database" "cmdb_db" {
-  name                = "db${var.data_lake_name}"
+  name                = "metadatadb"
   resource_group_name = azurerm_resource_group.rg.name
   account_name        = azurerm_cosmosdb_account.cmdb.name
   throughput          = var.cosmosdb_db_throughput
