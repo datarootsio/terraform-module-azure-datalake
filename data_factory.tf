@@ -41,11 +41,11 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
   service_principal_id  = local.application_id
   service_principal_key = local.service_principal_secret
   depends_on            = [azurerm_role_assignment.spsa_sa_adls]
-  count                 = var.create_data_factory_ls
+  count                 = local.create_data_factory_ls
 }
 
 resource "azurerm_template_deployment" "lsdbks" {
-  count               = var.create_data_factory_ls
+  count               = local.create_data_factory_ls
   name                = "lsdbks${var.data_lake_name}"
   resource_group_name = azurerm_resource_group.rg.name
 
