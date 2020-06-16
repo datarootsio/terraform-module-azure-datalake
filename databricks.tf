@@ -41,6 +41,13 @@ resource "databricks_cluster" "cluster" {
   library_maven {
     coordinates = "com.microsoft.azure:azure-cosmosdb-spark_2.4.0_2.11:${var.databricks_cosmosdb_spark_version}"
   }
+
+  dynamic "library_maven" {
+    for_each = var.databricks_libraries
+    content {
+      coordinates = library_maven.value
+    }
+  }
 }
 
 resource "databricks_secret_scope" "adls" {

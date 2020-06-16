@@ -63,6 +63,12 @@ variable "provision_data_factory_links" {
   description = "Set this to false to disable the creation of linked services inside Data Factory. Setting this to false also disables the sample data."
 }
 
+variable "databricks_libraries" {
+  type        = list
+  default     = []
+  description = "Extra libraries to install on the Databricks cluster"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
