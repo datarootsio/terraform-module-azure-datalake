@@ -52,10 +52,10 @@ resource "azurerm_template_deployment" "dfpipeline" {
   parameters = {
     "factoryName"                 = azurerm_data_factory.df.name
     "rawAdlsName"                 = local.data_lake_fs_raw_name
-    "adlsLinkedServiceName"       = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls.name
+    "adlsLinkedServiceName"       = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls[count.index].name
     "cleanNotebookPath"           = databricks_notebook.clean[count.index].path
     "transformNotebookPath"       = databricks_notebook.transform[count.index].path
-    "databricksLinkedServiceName" = azurerm_template_deployment.lsdbks.outputs["databricksLinkedServiceName"]
+    "databricksLinkedServiceName" = azurerm_template_deployment.lsdbks[count.index].outputs["databricksLinkedServiceName"]
   }
 
   deployment_mode = "Incremental"

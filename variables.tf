@@ -57,6 +57,12 @@ variable "extra_tags" {
   default     = {}
 }
 
+variable "provision_data_factory_links" {
+  type        = bool
+  default     = true
+  description = "Set this to false to disable the creation of linked services inside Data Factory. Setting this to false also disables the sample data."
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
