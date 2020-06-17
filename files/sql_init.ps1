@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop";
 
-Install-Module SQLServer -Confirm:$False -Force
+Install-Module SQLServer -Confirm:$False -Force -Scope CurrentUser
 
 $SqlPassword = New-Object -TypeName System.Security.SecureString
 foreach ($c in $env:PASSWORD.ToCharArray()) {
