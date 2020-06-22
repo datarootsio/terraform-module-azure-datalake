@@ -162,8 +162,8 @@ resource "databricks_azure_adls_gen2_mount" "curated" {
 }
 
 resource "databricks_token" "token" {
-  depends_on       = [azurerm_role_assignment.spdbks]
-  comment          = "Terraform Databricks service communication"
+  depends_on = [azurerm_role_assignment.spdbks]
+  comment    = "Terraform Databricks service communication"
 }
 
 resource "databricks_notebook" "spark_setup" {
