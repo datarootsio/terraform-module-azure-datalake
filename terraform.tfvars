@@ -8,6 +8,5 @@ data_warehouse_dtu           = "DW100c"
 cosmosdb_consistency_level   = "Session"
 cosmosdb_db_throughput       = 400
 databricks_sku               = "standard"
-databricks_token_lifetime    = 315360000
 databricks_min_workers       = 1
 databricks_max_workers       = 2

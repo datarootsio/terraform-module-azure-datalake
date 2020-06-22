@@ -164,7 +164,6 @@ resource "databricks_azure_adls_gen2_mount" "curated" {
 resource "databricks_token" "token" {
   depends_on       = [azurerm_role_assignment.spdbks]
   comment          = "Terraform Databricks service communication"
-  lifetime_seconds = var.databricks_token_lifetime
 }
 
 resource "databricks_notebook" "spark_setup" {

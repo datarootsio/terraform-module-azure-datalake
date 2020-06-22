@@ -84,7 +84,6 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	terraformOptions.Vars["cosmosdb_consistency_level"] = "Session"
 	terraformOptions.Vars["cosmosdb_db_throughput"] = 400
 	terraformOptions.Vars["databricks_sku"] = "standard"
-	terraformOptions.Vars["databricks_token_lifetime"] = 60 * 60 * 4
 
 	return dataLakeName, terraformOptions, nil
 }
