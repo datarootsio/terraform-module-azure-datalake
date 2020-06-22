@@ -51,7 +51,7 @@ Version of the Databricks runtime, required for the Databricks cluster.\
 [Supported versions](https://docs.databricks.com/release-notes/runtime/releases.html#supported-list)
 
 Type: string\
-Example: `"6.5.x-scala2.11"`
+Example: `"7.0.x-scala2.12"`
 
 ### `databricks_sku`
 
