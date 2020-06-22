@@ -69,6 +69,12 @@ variable "databricks_libraries" {
   description = "Extra libraries to install on the Databricks cluster"
 }
 
+variable "databricks_log_path" {
+  type        = string
+  default     = ""
+  description = "Optional dbfs path where the Databricks cluster should store logs. The path should start with `dbfs:/`"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {

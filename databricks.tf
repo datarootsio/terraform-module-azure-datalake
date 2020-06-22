@@ -48,6 +48,15 @@ resource "databricks_cluster" "cluster" {
       coordinates = library_maven.value
     }
   }
+
+  dynamic "cluster_log_conf" {
+    for_each = var.databricks_log_path == "" ? [] : [var.databricks_log_path]
+    content {
+      dbfs {
+        destination = cluster_log_conf.value
+      }
+    }
+  }
 }
 
 resource "databricks_secret_scope" "adls" {
