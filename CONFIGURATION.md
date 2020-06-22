@@ -7,7 +7,6 @@
    * [databricks_cluster_version](#databricks_cluster_version)
    * [databricks_sku](#databricks_sku)
    * [databricks_cluster_node_type](#databricks_cluster_node_type)
-   * [databricks_token_lifetime](#databricks_token_lifetime)
    * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
    * [cosmosdb_db_throughput](#cosmosdb_db_throughput)
    * [data_warehouse_dtu](#data_warehouse_dtu)
@@ -68,13 +67,6 @@ The Azure SKU for the Databricks driver and workers.
 
 Type: string\
 Example: `"Standard_DS3_v2"`
-
-### `databricks_token_lifetime`
-
-Lifetime (in seconds) of the Databricks access token that will be created for communication with other services in the data lake.
-
-Type: number\
-Example: `315360000` (10 years)
 
 ### `cosmosdb_consistency_level`
 
