@@ -108,6 +108,18 @@ variable "databricks_cluster_node_type" {
   description = "Node type of the Databricks cluster machines"
 }
 
+variable "databricks_cluster_driver_node_type" {
+  type        = string
+  description = "Node type of the Databricks driver if different from the workers"
+  default     = ""
+}
+
+variable "databricks_cosmosdb_spark_version" {
+  type        = string
+  description = "Version of com.microsoft.azure:azure-cosmosdb-spark_2.4.0_2.11 to install to the Databricks cluster"
+  default     = "3.0.5"
+}
+
 variable "databricks_autotermination_minutes" {
   type        = number
   description = "After this amount of minutes, the cluster will terminate"
