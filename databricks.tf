@@ -36,6 +36,7 @@ resource "databricks_cluster" "cluster" {
   spark_version           = var.databricks_cluster_version
   cluster_name            = "cluster${var.data_lake_name}"
   node_type_id            = var.databricks_cluster_node_type
+  driver_node_type_id     = local.databricks_cluster_driver_node_type
   autotermination_minutes = var.databricks_autotermination_minutes
 
   autoscale {
