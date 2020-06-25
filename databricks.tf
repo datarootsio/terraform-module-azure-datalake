@@ -13,17 +13,30 @@ resource "azurerm_role_assignment" "spdbks" {
   principal_id         = local.service_principal_id
 }
 
-provider "databricks" {
-  azure_auth = {
-    managed_resource_group = azurerm_databricks_workspace.dbks.managed_resource_group_name
-    azure_region           = azurerm_databricks_workspace.dbks.location
-    workspace_name         = azurerm_databricks_workspace.dbks.name
-    resource_group         = azurerm_databricks_workspace.dbks.resource_group_name
-    client_id              = local.application_id
-    client_secret          = local.service_principal_secret
-    tenant_id              = data.azurerm_client_config.current.tenant_id
-    subscription_id        = data.azurerm_client_config.current.subscription_id
+resource "null_resource" "databricks_token" {
+  depends_on = [azurerm_role_assignment.spdbks]
+
+  triggers = {
+    build_number = timestamp()
   }
+
+  provisioner "local-exec" {
+    command = "${path.module}/files/generate_databricks_token.sh > /tmp/databricks_token.txt"
+    environment = {
+      DATABRICKS_WORKSPACE_RESOURCE_ID = azurerm_databricks_workspace.dbks.id
+      DATABRICKS_ENDPOINT              = format("https://%s", azurerm_databricks_workspace.dbks.workspace_url)
+    }
+  }
+}
+
+data "local_file" "databricks_token" {
+  depends_on = [null_resource.databricks_token]
+  filename   = "/tmp/databricks_token.txt"
+}
+
+provider "databricks" {
+  host  = format("https://%s", azurerm_databricks_workspace.dbks.workspace_url)
+  token = trimspace(data.local_file.databricks_token.content)
 }
 
 resource "databricks_cluster" "cluster" {
