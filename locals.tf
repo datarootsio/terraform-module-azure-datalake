@@ -5,7 +5,7 @@ locals {
   }
   common_tags = merge(local.own_tags, var.extra_tags)
 
-  data_lake_fs_merged = distinct(concat([var.data_lake_fs_raw, var.data_lake_fs_cleansed, var.data_lake_fs_curated], var.data_lake_filesystems))
+  data_lake_fs_merged = toset(concat([var.data_lake_fs_raw, var.data_lake_fs_cleansed, var.data_lake_fs_curated], var.data_lake_filesystems))
 
   create_sample                       = var.provision_sample_data && var.provision_synapse && var.provision_data_factory_links ? 1 : 0
   create_synapse                      = var.provision_synapse ? 1 : 0
