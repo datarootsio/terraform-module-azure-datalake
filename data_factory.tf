@@ -33,7 +33,7 @@ resource "azurerm_data_factory" "df" {
 }
 
 resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
-  name                  = "lsadls${var.data_lake_name}"
+  name                  = "lsadls"
   resource_group_name   = azurerm_resource_group.rg.name
   data_factory_name     = azurerm_data_factory.df.name
   tenant                = data.azurerm_client_config.current.tenant_id
@@ -46,7 +46,7 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
 
 resource "azurerm_template_deployment" "lsdbks" {
   count               = local.create_data_factory_ls
-  name                = "lsdbks${var.data_lake_name}"
+  name                = "lsdbks"
   resource_group_name = azurerm_resource_group.rg.name
 
   template_body = file("${path.module}/files/lsdbks.json")

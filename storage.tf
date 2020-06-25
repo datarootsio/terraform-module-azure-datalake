@@ -31,8 +31,8 @@ resource "time_sleep" "adls_ra" {
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
-  count              = length(local.data_lake_fs_names)
-  name               = local.data_lake_fs_names[count.index]
+  for_each           = local.data_lake_fs_merged
+  name               = each.key
   storage_account_id = azurerm_storage_account.adls.id
   depends_on         = [azurerm_role_assignment.current_user_sa_adls, time_sleep.adls_ra]
 }

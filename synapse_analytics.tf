@@ -11,7 +11,7 @@ resource "azurerm_sql_server" "synapse_srv" {
 
 resource "azurerm_sql_database" "synapse" {
   count                            = local.create_synapse
-  name                             = "dw${var.data_lake_name}"
+  name                             = "datawarehouse"
   location                         = var.region
   resource_group_name              = azurerm_resource_group.rg.name
   server_name                      = azurerm_sql_server.synapse_srv[count.index].name
