@@ -29,7 +29,7 @@ provider "databricks" {
 resource "databricks_cluster" "cluster" {
   depends_on              = [azurerm_role_assignment.spdbks]
   spark_version           = var.databricks_cluster_version
-  cluster_name            = "cluster${var.data_lake_name}"
+  cluster_name            = "dlcluster"
   node_type_id            = var.databricks_cluster_node_type
   driver_node_type_id     = local.databricks_cluster_driver_node_type
   autotermination_minutes = var.databricks_autotermination_minutes
@@ -119,37 +119,12 @@ resource "databricks_secret" "synapse_password" {
   scope        = databricks_secret_scope.synapse[count.index].name
 }
 
-resource "databricks_azure_adls_gen2_mount" "raw" {
+resource "databricks_azure_adls_gen2_mount" "fs" {
+  for_each               = local.data_lake_fs_merged
   cluster_id             = databricks_cluster.cluster.id
-  container_name         = local.data_lake_fs_raw_name
+  container_name         = each.key
   storage_account_name   = azurerm_storage_account.adls.name
-  mount_name             = "raw"
-  tenant_id              = data.azurerm_client_config.current.tenant_id
-  client_id              = local.application_id
-  client_secret_scope    = databricks_secret.client_secret.scope
-  client_secret_key      = databricks_secret.client_secret.key
-  initialize_file_system = true
-  depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
-}
-
-resource "databricks_azure_adls_gen2_mount" "clean" {
-  cluster_id             = databricks_cluster.cluster.id
-  container_name         = local.data_lake_fs_clean_name
-  storage_account_name   = azurerm_storage_account.adls.name
-  mount_name             = "clean"
-  tenant_id              = data.azurerm_client_config.current.tenant_id
-  client_id              = local.application_id
-  client_secret_scope    = databricks_secret.client_secret.scope
-  client_secret_key      = databricks_secret.client_secret.key
-  initialize_file_system = true
-  depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
-}
-
-resource "databricks_azure_adls_gen2_mount" "curated" {
-  cluster_id             = databricks_cluster.cluster.id
-  container_name         = local.data_lake_fs_curated_name
-  storage_account_name   = azurerm_storage_account.adls.name
-  mount_name             = "curated"
+  mount_name             = each.key
   tenant_id              = data.azurerm_client_config.current.tenant_id
   client_id              = local.application_id
   client_secret_scope    = databricks_secret.client_secret.scope

@@ -7,7 +7,7 @@ resource "databricks_notebook" "clean" {
   format    = "SOURCE"
   count     = local.create_sample
 
-  depends_on = [databricks_azure_adls_gen2_mount.raw, databricks_azure_adls_gen2_mount.clean, azurerm_role_assignment.spdbks]
+  depends_on = [databricks_azure_adls_gen2_mount.fs, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_notebook" "transform" {
@@ -25,7 +25,7 @@ resource "databricks_notebook" "transform" {
   format    = "SOURCE"
   count     = local.create_sample
 
-  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.clean, databricks_azure_adls_gen2_mount.curated, azurerm_role_assignment.spdbks]
+  depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.fs, azurerm_role_assignment.spdbks]
 }
 
 resource "databricks_notebook" "presentation" {
@@ -37,7 +37,7 @@ resource "databricks_notebook" "presentation" {
   format    = "DBC"
   count     = local.create_sample
 
-  depends_on = [databricks_azure_adls_gen2_mount.curated, azurerm_role_assignment.spdbks]
+  depends_on = [databricks_azure_adls_gen2_mount.fs, azurerm_role_assignment.spdbks]
 }
 
 resource "azurerm_template_deployment" "dfpipeline" {
@@ -51,7 +51,7 @@ resource "azurerm_template_deployment" "dfpipeline" {
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters = {
     "factoryName"                 = azurerm_data_factory.df.name
-    "rawAdlsName"                 = local.data_lake_fs_raw_name
+    "rawAdlsName"                 = var.data_lake_fs_raw
     "adlsLinkedServiceName"       = azurerm_data_factory_linked_service_data_lake_storage_gen2.lsadls[count.index].name
     "cleanNotebookPath"           = databricks_notebook.clean[count.index].path
     "transformNotebookPath"       = databricks_notebook.transform[count.index].path
