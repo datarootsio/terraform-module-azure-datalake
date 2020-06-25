@@ -26,11 +26,6 @@ provider "databricks" {
   }
 }
 
-resource "databricks_dbfs_file" "set_logging" {
-  content = filebase64("${path.module}/files/databricks_logging.sh")
-  path    = "/databricks/scripts/set-logging.sh"
-}
-
 resource "databricks_cluster" "cluster" {
   depends_on              = [azurerm_role_assignment.spdbks]
   spark_version           = var.databricks_cluster_version
@@ -42,12 +37,6 @@ resource "databricks_cluster" "cluster" {
   autoscale {
     min_workers = var.databricks_min_workers
     max_workers = var.databricks_max_workers
-  }
-
-  init_scripts {
-    dbfs {
-      destination = "dbfs:${databricks_dbfs_file.set_logging.path}"
-    }
   }
 
   dynamic "library_maven" {
