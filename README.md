@@ -40,8 +40,6 @@ module "azuredatalake" {
 
   storage_replication          = "ZRS"
   service_principal_end_date   = "2030-01-01T00:00:00Z"
-  databricks_cluster_node_type = "Standard_DS3_v2"
-  databricks_sku               = "standard"
   cosmosdb_consistency_level   = "Session"
   cosmosdb_db_throughput       = 400
 }
