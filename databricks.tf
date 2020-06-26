@@ -142,7 +142,7 @@ resource "databricks_secret" "synapse_password" {
 }
 
 resource "databricks_azure_adls_gen2_mount" "fs" {
-  for_each               = var.provision_databricks ? toset([]) : local.data_lake_fs_merged
+  for_each               = var.provision_databricks ? local.data_lake_fs_merged : toset([])
   cluster_id             = databricks_cluster.cluster[0].id
   container_name         = each.key
   storage_account_name   = azurerm_storage_account.adls.name
