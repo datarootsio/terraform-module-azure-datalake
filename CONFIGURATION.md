@@ -4,8 +4,6 @@
    * [data_lake_name](#data_lake_name)
    * [region](#region)
    * [storage_replication](#storage_replication)
-   * [databricks_sku](#databricks_sku)
-   * [databricks_cluster_node_type](#databricks_cluster_node_type)
    * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
    * [cosmosdb_db_throughput](#cosmosdb_db_throughput)
    * [data_warehouse_dtu](#data_warehouse_dtu)
@@ -42,21 +40,6 @@ Replication strategy to be used for the data lake storage.\
 
 Type: string\
 Example: `"ZRS"`
-
-### `databricks_sku`
-
-The Azure SKU for the Databricks workspace.\
-[Available SKUs](https://azure.microsoft.com/en-us/pricing/details/databricks/) (currently "standard" or "premium")
-
-Type: string\
-Example: `"standard"`
-
-### `databricks_cluster_node_type`
-
-The Azure SKU for the Databricks driver and workers.
-
-Type: string\
-Example: `"Standard_DS3_v2"`
 
 ### `cosmosdb_consistency_level`
 
