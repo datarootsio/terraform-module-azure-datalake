@@ -75,6 +75,12 @@ variable "databricks_log_path" {
   description = "Optional dbfs path where the Databricks cluster should store logs. The path should start with `dbfs:/`"
 }
 
+variable "provision_databricks" {
+  type        = bool
+  default     = true
+  description = "Optionally disable provisioning of all Databricks related resources"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {

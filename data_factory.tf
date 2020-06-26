@@ -45,7 +45,7 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "lsadls" {
 }
 
 resource "azurerm_template_deployment" "lsdbks" {
-  count               = local.create_data_factory_ls
+  count               = var.provision_databricks && var.provision_data_factory_links ? 1 : 0
   name                = "lsdbks"
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -54,10 +54,10 @@ resource "azurerm_template_deployment" "lsdbks" {
   # these key-value pairs are passed into the ARM Template's `parameters` block
   parameters = {
     "factoryName"                 = azurerm_data_factory.df.name
-    "accessToken"                 = databricks_token.token.token_value
-    "domain"                      = format("https://%s", azurerm_databricks_workspace.dbks.workspace_url)
-    "databricksLinkedServiceName" = azurerm_databricks_workspace.dbks.name
-    "clusterId"                   = databricks_cluster.cluster.id
+    "accessToken"                 = databricks_token.token[count.index].token_value
+    "domain"                      = format("https://%s", azurerm_databricks_workspace.dbks[count.index].workspace_url)
+    "databricksLinkedServiceName" = azurerm_databricks_workspace.dbks[count.index].name
+    "clusterId"                   = databricks_cluster.cluster[count.index].id
   }
 
   deployment_mode = "Incremental"

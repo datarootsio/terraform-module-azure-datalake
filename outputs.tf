@@ -25,12 +25,7 @@ output "powerbi_sql_dw_server_password" {
 
 output "created_key_vault_secrets" {
   description = "Secrets that have been created inside the optional Key Vault with their versions"
-  value = local.use_kv == 1 ? {
-    (azurerm_key_vault_secret.sp_id[0].name)            = azurerm_key_vault_secret.sp_id[0].version,
-    (azurerm_key_vault_secret.sp_secret[0].name)        = azurerm_key_vault_secret.sp_secret[0].version,
-    (azurerm_key_vault_secret.databricks_token[0].name) = azurerm_key_vault_secret.databricks_token[0].version,
-    (azurerm_key_vault_secret.cosmosdb_connstr[0].name) = azurerm_key_vault_secret.cosmosdb_connstr[0].version
-  } : {}
+  value       = local.created_secrets_all
 }
 
 output "storage_dfs_endpoint" {
@@ -40,12 +35,12 @@ output "storage_dfs_endpoint" {
 
 output "databricks_host" {
   description = "Databricks workspace hostname of the created workspace"
-  value       = azurerm_databricks_workspace.dbks.workspace_url
+  value       = var.provision_databricks ? azurerm_databricks_workspace.dbks[0].workspace_url : ""
 }
 
 output "databricks_cluster_id" {
   description = "ID of the cluster that is created inside the Databricks workspace"
-  value       = databricks_cluster.cluster.id
+  value       = var.provision_databricks ? databricks_cluster.cluster[0].id : ""
 }
 
 output "service_principal_client_id" {
