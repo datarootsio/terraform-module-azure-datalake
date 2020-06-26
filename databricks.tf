@@ -156,6 +156,7 @@ resource "databricks_azure_adls_gen2_mount" "fs" {
 }
 
 resource "databricks_token" "token" {
+  count      = local.create_databricks
   depends_on = [azurerm_role_assignment.spdbks]
   comment    = "Terraform Databricks service communication"
 }
