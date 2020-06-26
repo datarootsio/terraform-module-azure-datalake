@@ -38,7 +38,7 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
 }
 
 resource "azurerm_storage_account" "dbkstemp" {
-  count                    = local.create_synapse
+  count                    = var.provision_synapse && var.provision_databricks ? 1 : 0
   name                     = "sadbkstemp${var.data_lake_name}"
   location                 = var.region
   resource_group_name      = azurerm_resource_group.rg.name
@@ -49,21 +49,21 @@ resource "azurerm_storage_account" "dbkstemp" {
 }
 
 resource "azurerm_role_assignment" "current_user_sa_dbks" {
-  count                = local.create_synapse
+  count                = var.provision_synapse && var.provision_databricks ? 1 : 0
   scope                = azurerm_storage_account.dbkstemp[count.index].id
   role_definition_name = "Storage Blob Data Owner"
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
 resource "azurerm_role_assignment" "spsa_sa_dbks" {
-  count                = local.create_synapse
+  count                = var.provision_synapse && var.provision_databricks ? 1 : 0
   scope                = azurerm_storage_account.dbkstemp[count.index].id
   role_definition_name = "Storage Blob Data Owner"
   principal_id         = local.service_principal_id
 }
 
 resource "time_sleep" "dbks_ra" {
-  count           = local.create_synapse
+  count           = var.provision_synapse && var.provision_databricks ? 1 : 0
   create_duration = "10s"
 
   triggers = {
@@ -73,7 +73,7 @@ resource "time_sleep" "dbks_ra" {
 }
 
 resource "azurerm_storage_container" "databricks" {
-  count                = local.create_synapse
+  count                = var.provision_synapse && var.provision_databricks ? 1 : 0
   name                 = "databricks"
   storage_account_name = azurerm_storage_account.dbkstemp[count.index].name
   depends_on           = [time_sleep.dbks_ra, azurerm_role_assignment.current_user_sa_dbks]

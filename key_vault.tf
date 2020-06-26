@@ -23,9 +23,9 @@ resource "azurerm_key_vault_secret" "sp_secret" {
 }
 
 resource "azurerm_key_vault_secret" "databricks_token" {
-  count        = local.use_kv
+  count        = var.use_key_vault && var.provision_databricks ? 1 : 0
   name         = "databricks-access-token"
-  value        = databricks_token.token.token_value
+  value        = databricks_token.token[count.index].token_value
   key_vault_id = var.key_vault_id
   tags         = local.common_tags
 }

@@ -187,3 +187,21 @@ func TestApplyAndDestroyWithKeyVault(t *testing.T) {
 
 	assert.Equal(t, name, outDataLakeName)
 }
+
+func TestApplyAndDestroyWithoutDatabricks(t *testing.T) {
+	t.Parallel()
+
+	name, options, err := getDefaultTerraformOptions(t)
+	assert.NoError(t, err)
+
+	options.Vars["provision_databricks"] = false
+
+	defer terraform.Destroy(t, options)
+	_, err = terraform.InitAndApplyE(t, options)
+	assert.NoError(t, err)
+
+	outDataLakeName, err := terraform.OutputE(t, options, "name")
+	assert.NoError(t, err)
+
+	assert.Equal(t, name, outDataLakeName)
+}
