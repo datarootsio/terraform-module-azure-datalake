@@ -33,6 +33,16 @@ output "storage_dfs_endpoint" {
   value       = azurerm_storage_account.adls.primary_dfs_endpoint
 }
 
+output "storage_account_name" {
+  description = "Name of the created storage account for ADLS"
+  value       = azurerm_storage_account.adls.name
+}
+
+output "created_filesystems" {
+  description = "A list of the created filesystems in ADLS"
+  value       = local.data_lake_fs_merged
+}
+
 output "databricks_host" {
   description = "Databricks workspace hostname of the created workspace"
   value       = var.provision_databricks ? azurerm_databricks_workspace.dbks[0].workspace_url : ""
