@@ -79,7 +79,6 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	terraformOptions.Vars["storage_replication"] = "LRS"
 	terraformOptions.Vars["service_principal_end_date"] = time.Now().Add(time.Hour * 4).Format(time.RFC3339)
 	terraformOptions.Vars["databricks_cluster_node_type"] = "Standard_DS3_v2"
-	terraformOptions.Vars["databricks_cluster_version"] = "7.0.x-scala2.12"
 	terraformOptions.Vars["data_warehouse_dtu"] = "DW100c"
 	terraformOptions.Vars["cosmosdb_consistency_level"] = "Session"
 	terraformOptions.Vars["cosmosdb_db_throughput"] = 400

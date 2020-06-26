@@ -43,6 +43,7 @@ variable "data_lake_filesystems" {
 variable "databricks_cluster_version" {
   type        = string
   description = "Runtime version of the Databricks cluster"
+  default     = "7.0.x-scala2.12"
 }
 
 variable "provision_synapse" {
