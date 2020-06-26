@@ -41,13 +41,9 @@ module "azuredatalake" {
   storage_replication          = "ZRS"
   service_principal_end_date   = "2030-01-01T00:00:00Z"
   databricks_cluster_node_type = "Standard_DS3_v2"
-  databricks_cluster_version   = "7.0.x-scala2.12"
   databricks_sku               = "standard"
-  data_warehouse_dtu           = "DW100c"
   cosmosdb_consistency_level   = "Session"
   cosmosdb_db_throughput       = 400
-  sql_server_admin_username    = "theboss"
-  sql_server_admin_password    = "ThisIsA$ecret1"
 }
 ```
 

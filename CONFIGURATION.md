@@ -4,7 +4,6 @@
    * [data_lake_name](#data_lake_name)
    * [region](#region)
    * [storage_replication](#storage_replication)
-   * [databricks_cluster_version](#databricks_cluster_version)
    * [databricks_sku](#databricks_sku)
    * [databricks_cluster_node_type](#databricks_cluster_node_type)
    * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
@@ -43,15 +42,6 @@ Replication strategy to be used for the data lake storage.\
 
 Type: string\
 Example: `"ZRS"`
-
-### `databricks_cluster_version`
-
-Version of the Databricks runtime, required for the Databricks cluster.\
-[Version syntax](https://docs.databricks.com/dev-tools/api/latest/index.html#programmatic-version)\
-[Supported versions](https://docs.databricks.com/release-notes/runtime/releases.html#supported-list)
-
-Type: string\
-Example: `"7.0.x-scala2.12"`
 
 ### `databricks_sku`
 
