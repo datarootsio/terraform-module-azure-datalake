@@ -80,7 +80,6 @@ func getDefaultTerraformOptions(t *testing.T) (string, *terraform.Options, error
 	terraformOptions.Vars["service_principal_end_date"] = time.Now().Add(time.Hour * 4).Format(time.RFC3339)
 	terraformOptions.Vars["data_warehouse_dtu"] = "DW100c"
 	terraformOptions.Vars["cosmosdb_consistency_level"] = "Session"
-	terraformOptions.Vars["cosmosdb_db_throughput"] = 400
 
 	return dataLakeName, terraformOptions, nil
 }

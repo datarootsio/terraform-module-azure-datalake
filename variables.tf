@@ -112,11 +112,6 @@ variable "cosmosdb_consistency_level" {
   type        = string
 }
 
-variable "cosmosdb_db_throughput" {
-  description = "Throughput for the database inside CosmosDB"
-  type        = number
-}
-
 variable "databricks_sku" {
   description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
   type        = string
