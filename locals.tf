@@ -26,7 +26,8 @@ locals {
   created_secrets_1 = var.use_key_vault ? {
     (azurerm_key_vault_secret.sp_id[0].name)            = azurerm_key_vault_secret.sp_id[0].version,
     (azurerm_key_vault_secret.sp_secret[0].name)        = azurerm_key_vault_secret.sp_secret[0].version,
-    (azurerm_key_vault_secret.cosmosdb_connstr[0].name) = azurerm_key_vault_secret.cosmosdb_connstr[0].version
+    (azurerm_key_vault_secret.cosmosdb_connstr[0].name) = azurerm_key_vault_secret.cosmosdb_connstr[0].version,
+    (azurerm_key_vault_secret.storage_key[0].name)      = azurerm_key_vault_secret.storage_key[0].version
   } : {}
   created_secrets_2 = var.use_key_vault && var.provision_databricks ? {
     (azurerm_key_vault_secret.databricks_token[0].name) = azurerm_key_vault_secret.databricks_token[0].version
