@@ -37,3 +37,11 @@ resource "azurerm_key_vault_secret" "cosmosdb_connstr" {
   key_vault_id = var.key_vault_id
   tags         = local.common_tags
 }
+
+resource "azurerm_key_vault_secret" "storage_key" {
+  count        = local.use_kv
+  name         = "dl-storage-key"
+  value        = azurerm_storage_account.adls.primary_access_key
+  key_vault_id = var.key_vault_id
+  tags         = local.common_tags
+}
