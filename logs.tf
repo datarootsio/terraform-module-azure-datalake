@@ -16,7 +16,7 @@ resource "azurerm_monitor_diagnostic_setting" "datafactory" {
   }
 
   log {
-      enabled  = true
+    enabled  = true
     category = "TriggerRuns"
 
     retention_policy {
@@ -26,7 +26,7 @@ resource "azurerm_monitor_diagnostic_setting" "datafactory" {
   }
 
   log {
-      enabled  = true
+    enabled  = true
     category = "ActivityRuns"
 
     retention_policy {
@@ -36,7 +36,7 @@ resource "azurerm_monitor_diagnostic_setting" "datafactory" {
   }
 
   log {
-      enabled  = true
+    enabled  = true
     category = "PipelineRuns"
 
     retention_policy {
