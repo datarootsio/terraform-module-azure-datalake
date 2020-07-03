@@ -94,6 +94,12 @@ variable "log_analytics_workspace_id" {
   description = "Optional Log Analytics Workspace ID where logs are stored"
 }
 
+variable "cosmosdb_partition_key" {
+  type = string
+  default = "/sourceTimestamp"
+  description = "Set the partition key for the Cosmos DB metadata collection"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
