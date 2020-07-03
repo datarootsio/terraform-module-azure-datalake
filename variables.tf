@@ -82,6 +82,18 @@ variable "provision_databricks" {
   description = "Optionally disable provisioning of all Databricks related resources"
 }
 
+variable "use_log_analytics" {
+  type        = bool
+  default     = false
+  description = "Set this to true to store logs in Log Analytics"
+}
+
+variable "log_analytics_workspace_id" {
+  type        = string
+  default     = ""
+  description = "Optional Log Analytics Workspace ID where logs are stored"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
