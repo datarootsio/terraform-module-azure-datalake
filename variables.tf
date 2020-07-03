@@ -95,8 +95,8 @@ variable "log_analytics_workspace_id" {
 }
 
 variable "cosmosdb_partition_key" {
-  type = string
-  default = "/sourceTimestamp"
+  type        = string
+  default     = "/sourceTimestamp"
   description = "Set the partition key for the Cosmos DB metadata collection"
 }
 
