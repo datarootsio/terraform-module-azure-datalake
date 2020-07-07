@@ -21,7 +21,7 @@ function produce_output() {
     -H "Authorization: Bearer $token" \
     -H "X-Databricks-Azure-SP-Management-Token:$azToken" \
     -H "X-Databricks-Azure-Workspace-Resource-Id:$DATABRICKS_WORKSPACE_RESOURCE_ID" \
-    -d '{ "lifetime_seconds": 3600 }')
+    -d '')
   pat_token=$(jq .token_value -r <<< "$api_response")
   echo $pat_token
 }
