@@ -8,7 +8,6 @@ env:
   tests_timeout: "2h"
   golangci_lint_version: "v1.26"
   slack_channel: terraform-data-lake-module
-  DATABRICKS_PROVIDER_VERSION: "v0.2.0"
 jobs:
   terratests:
     name: "Terratests"
@@ -36,8 +35,13 @@ jobs:
           if [[ -z "$branch" ]]; then branch="master"; fi
           echo ::set-output name=branch::$branch
 
-      - name: Install databricks provider dependency
-        run: curl -s "https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/$DATABRICKS_PROVIDER_VERSION/godownloader-databricks-provider.sh" | bash -s -- -b "$HOME/.terraform.d/plugins" $DATABRICKS_PROVIDER_VERSION
+
+      - name: Get databricks provider dependency
+        run: |
+          git clone --depth 1 -b v0.2.0-instance_pool-fix https://github.com/datarootsio/databrickslabs-terraform-provider-databricks.git $GITHUB_WORKSPACE/terraform-provider-databricks
+          cd $GITHUB_WORKSPACE/terraform-provider-databricks
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
+          cd -
 
       - name: Azure Login
         uses: Azure/login@v1.1
