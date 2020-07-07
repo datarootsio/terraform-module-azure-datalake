@@ -44,6 +44,7 @@ provider "databricks" {
 }
 
 resource "databricks_instance_pool" "pool" {
+  count                                 = local.create_databricks
   instance_pool_name                    = "dl-pool"
   min_idle_instances                    = 0
   max_capacity                          = 10
@@ -61,7 +62,7 @@ resource "databricks_cluster" "cluster" {
   node_type_id            = var.databricks_cluster_node_type
   driver_node_type_id     = local.databricks_cluster_driver_node_type
   autotermination_minutes = 20
-  instance_pool_id        = databricks_instance_pool.pool.id
+  instance_pool_id        = databricks_instance_pool.pool[count.index].id
 
   autoscale {
     min_workers = 1
