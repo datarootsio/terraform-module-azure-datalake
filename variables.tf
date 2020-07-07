@@ -136,12 +136,6 @@ variable "databricks_cluster_driver_node_type" {
   default     = ""
 }
 
-variable "databricks_autotermination_minutes" {
-  type        = number
-  description = "After this amount of minutes, the cluster will terminate"
-  default     = 120
-}
-
 variable "databricks_min_workers" {
   type        = number
   description = "Minimum amount of workers in an active cluster"

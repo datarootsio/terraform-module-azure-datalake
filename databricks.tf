@@ -43,18 +43,29 @@ provider "databricks" {
   token = var.provision_databricks ? trimspace(data.local_file.databricks_token[0].content) : ""
 }
 
+resource "databricks_instance_pool" "pool" {
+  instance_pool_name                    = "dl-pool"
+  min_idle_instances                    = 0
+  max_capacity                          = 10
+  node_type_id                          = var.databricks_cluster_node_type
+  idle_instance_autotermination_minutes = 10
+  enable_elastic_disk                   = true
+  preloaded_spark_versions              = [var.databricks_cluster_version]
+}
+
 resource "databricks_cluster" "cluster" {
   count                   = local.create_databricks
   depends_on              = [azurerm_role_assignment.spdbks]
   spark_version           = var.databricks_cluster_version
-  cluster_name            = "dlcluster"
+  cluster_name            = "dl-cluster"
   node_type_id            = var.databricks_cluster_node_type
   driver_node_type_id     = local.databricks_cluster_driver_node_type
-  autotermination_minutes = var.databricks_autotermination_minutes
+  autotermination_minutes = 20
+  instance_pool_id        = databricks_instance_pool.pool.id
 
   autoscale {
-    min_workers = var.databricks_min_workers
-    max_workers = var.databricks_max_workers
+    min_workers = 1
+    max_workers = 4
   }
 
   dynamic "library_maven" {
