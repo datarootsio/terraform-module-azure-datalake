@@ -7,13 +7,13 @@ locals {
 
   data_lake_fs_merged = toset(concat([var.data_lake_fs_raw, var.data_lake_fs_cleansed, var.data_lake_fs_curated], var.data_lake_filesystems))
 
-  create_sample                       = var.provision_sample_data && var.provision_databricks && var.provision_synapse && var.provision_data_factory_links ? 1 : 0
-  create_synapse                      = var.provision_synapse ? 1 : 0
-  create_data_factory_git_vsts        = var.data_factory_vsts_account_name == "" ? [] : ["_"]
-  create_data_factory_git_github      = var.data_factory_github_account_name == "" ? [] : ["_"]
-  create_data_factory_ls              = var.provision_data_factory_links ? 1 : 0
-  create_databricks                   = var.provision_databricks ? 1 : 0
-  use_kv                              = var.use_key_vault ? 1 : 0
+  create_sample                  = var.provision_sample_data && var.provision_databricks && var.provision_synapse && var.provision_data_factory_links ? 1 : 0
+  create_synapse                 = var.provision_synapse ? 1 : 0
+  create_data_factory_git_vsts   = var.data_factory_vsts_account_name == "" ? [] : ["_"]
+  create_data_factory_git_github = var.data_factory_github_account_name == "" ? [] : ["_"]
+  create_data_factory_ls         = var.provision_data_factory_links ? 1 : 0
+  create_databricks              = var.provision_databricks ? 1 : 0
+  use_kv                         = var.use_key_vault ? 1 : 0
 
   databricks_loader_user = "DatabricksLoader"
   powerbi_viewer_user    = "PowerBiViewer"
