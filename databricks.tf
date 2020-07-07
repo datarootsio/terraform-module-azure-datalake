@@ -59,8 +59,6 @@ resource "databricks_cluster" "cluster" {
   depends_on              = [azurerm_role_assignment.spdbks]
   spark_version           = var.databricks_cluster_version
   cluster_name            = "dl-cluster"
-  node_type_id            = var.databricks_cluster_node_type
-  driver_node_type_id     = local.databricks_cluster_driver_node_type
   autotermination_minutes = 20
   instance_pool_id        = databricks_instance_pool.pool[count.index].id
 
