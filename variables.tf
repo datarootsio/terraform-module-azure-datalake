@@ -130,12 +130,6 @@ variable "databricks_cluster_node_type" {
   default     = "Standard_F4s"
 }
 
-variable "databricks_cluster_driver_node_type" {
-  type        = string
-  description = "Node type of the Databricks driver if different from the workers"
-  default     = ""
-}
-
 variable "databricks_min_workers" {
   type        = number
   description = "Minimum amount of workers in an active cluster"

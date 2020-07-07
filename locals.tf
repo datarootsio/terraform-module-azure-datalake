@@ -14,7 +14,6 @@ locals {
   create_data_factory_ls              = var.provision_data_factory_links ? 1 : 0
   create_databricks                   = var.provision_databricks ? 1 : 0
   use_kv                              = var.use_key_vault ? 1 : 0
-  databricks_cluster_driver_node_type = var.databricks_cluster_driver_node_type == "" ? var.databricks_cluster_node_type : var.databricks_cluster_driver_node_type
 
   databricks_loader_user = "DatabricksLoader"
   powerbi_viewer_user    = "PowerBiViewer"
