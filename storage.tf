@@ -21,6 +21,12 @@ resource "azurerm_role_assignment" "current_user_sa_adls" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "df_sa_adls" {
+  scope                = azurerm_storage_account.adls.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = azurerm_data_factory.df.identity[0].principal_id
+}
+
 resource "time_sleep" "adls_ra" {
   create_duration = "10s"
 
