@@ -67,3 +67,8 @@ output "data_factory_identity" {
   description = "Object ID of the managed identity of the created Data Factory"
   value       = azurerm_data_factory.df.identity[0].principal_id
 }
+
+output "resource_group_name" {
+  description = "Name of the created resource group"
+  value       = azurerm_resource_group.rg.name
+}
