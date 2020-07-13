@@ -197,6 +197,11 @@ variable "use_key_vault" {
   description = "Set this to true to enable the usage of your existing Key Vault"
 }
 
+variable "key_vault_depends_on" {
+  default     = null
+  description = "Optionally set to a dependency for the Key Vault secrets (e.g. access policy)"
+}
+
 # Data Factory VSTS
 
 variable "data_factory_vsts_account_name" {
