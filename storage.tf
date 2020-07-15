@@ -109,8 +109,9 @@ resource "null_resource" "sa_set_acl" {
   provisioner "local-exec" {
     command = local_file.sa_set_acl.filename
     environment = {
-      "AZURE_STORAGE_CONNECTION_STRING" = azurerm_storage_account.adls.primary_connection_string
-      "AZURE_STORAGE_AUTH_MODE"         = "key"
+      "AZURE_STORAGE_KEY"       = azurerm_storage_account.adls.primary_access_key
+      "AZURE_STORAGE_ACCOUNT"   = azurerm_storage_account.adls.name
+      "AZURE_STORAGE_AUTH_MODE" = "key"
     }
   }
 }
@@ -132,8 +133,9 @@ resource "null_resource" "sa_create_directories" {
   provisioner "local-exec" {
     command = local_file.sa_create_directories.filename
     environment = {
-      "AZURE_STORAGE_CONNECTION_STRING" = azurerm_storage_account.adls.primary_connection_string
-      "AZURE_STORAGE_AUTH_MODE"         = "key"
+      "AZURE_STORAGE_KEY"       = azurerm_storage_account.adls.primary_access_key
+      "AZURE_STORAGE_ACCOUNT"   = azurerm_storage_account.adls.name
+      "AZURE_STORAGE_AUTH_MODE" = "key"
     }
   }
 }

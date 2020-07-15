@@ -6,6 +6,7 @@
 %{ for dir, acl in fs_dirs_acls[fs] ~}
 # Start of commands for directory ${dir} in filesystem ${fs}
 az storage fs directory create -f "${fs}" -n "${dir}"
+az storage fs access set --group "\$superuser" -p "${dir}" -f "${fs}"
 %{ if acl != "" ~}
 az storage fs access set -p "${dir}" -f "${fs}" --acl "${acl}"
 %{ endif ~}
