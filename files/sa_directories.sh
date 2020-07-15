@@ -6,7 +6,9 @@
 %{ for dir, acl in fs_dirs_acls[fs] ~}
 # Start of commands for directory ${dir} in filesystem ${fs}
 az storage fs directory create -f "${fs}" -n "${dir}"
+%{ if acl != "" ~}
 az storage fs access set -p "${dir}" -f "${fs}" --acl "${acl}"
+%{ endif ~}
 # End of commands for directory ${dir} in filesystem ${fs}
 %{ endfor ~}
 # End creating directories and ACLs for filesystem ${fs}
