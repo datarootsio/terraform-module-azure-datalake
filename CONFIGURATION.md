@@ -5,7 +5,6 @@
    * [region](#region)
    * [storage_replication](#storage_replication)
    * [cosmosdb_consistency_level](#cosmosdb_consistency_level)
-   * [cosmosdb_db_throughput](#cosmosdb_db_throughput)
    * [data_warehouse_dtu](#data_warehouse_dtu)
    * [sql_server_admin_username](#sql_server_admin_username)
    * [sql_server_admin_password](#sql_server_admin_password)
@@ -48,14 +47,6 @@ Default consistency level for the CosmosDB account.\
 
 Type: string\
 Example: `"Session"`
-
-### `cosmosdb_db_throughput`
-
-Provisioned request units for the CosmosDB account.\
-[Request units](https://docs.microsoft.com/en-us/azure/cosmos-db/request-units)
-
-Type: number\
-Example: `400`
 
 ### `data_warehouse_dtu`
 

@@ -82,6 +82,24 @@ variable "provision_databricks" {
   description = "Optionally disable provisioning of all Databricks related resources"
 }
 
+variable "use_log_analytics" {
+  type        = bool
+  default     = false
+  description = "Set this to true to store logs in Log Analytics"
+}
+
+variable "log_analytics_workspace_id" {
+  type        = string
+  default     = ""
+  description = "Optional Log Analytics Workspace ID where logs are stored"
+}
+
+variable "cosmosdb_partition_key" {
+  type        = string
+  default     = "/sourceTimestamp"
+  description = "Set the partition key for the Cosmos DB metadata collection"
+}
+
 # Pricing, performance and replication
 
 variable "storage_replication" {
@@ -100,11 +118,6 @@ variable "cosmosdb_consistency_level" {
   type        = string
 }
 
-variable "cosmosdb_db_throughput" {
-  description = "Throughput for the database inside CosmosDB"
-  type        = number
-}
-
 variable "databricks_sku" {
   description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
   type        = string
@@ -115,18 +128,6 @@ variable "databricks_cluster_node_type" {
   type        = string
   description = "Node type of the Databricks cluster machines"
   default     = "Standard_F4s"
-}
-
-variable "databricks_cluster_driver_node_type" {
-  type        = string
-  description = "Node type of the Databricks driver if different from the workers"
-  default     = ""
-}
-
-variable "databricks_autotermination_minutes" {
-  type        = number
-  description = "After this amount of minutes, the cluster will terminate"
-  default     = 120
 }
 
 variable "databricks_min_workers" {
@@ -194,6 +195,11 @@ variable "use_key_vault" {
   type        = bool
   default     = false
   description = "Set this to true to enable the usage of your existing Key Vault"
+}
+
+variable "key_vault_depends_on" {
+  default     = null
+  description = "Optionally set to a dependency for the Key Vault secrets (e.g. access policy)"
 }
 
 # Data Factory VSTS

@@ -28,6 +28,12 @@ resource "azurerm_role_assignment" "extra_contributor" {
   principal_id         = var.extra_storage_contributor_ids[count.index]
 }
 
+resource "azurerm_role_assignment" "df_sa_adls" {
+  scope                = azurerm_storage_account.adls.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = azurerm_data_factory.df.identity[0].principal_id
+}
+
 resource "time_sleep" "adls_ra" {
   create_duration = "10s"
 

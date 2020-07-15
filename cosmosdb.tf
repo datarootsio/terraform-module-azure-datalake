@@ -18,7 +18,6 @@ resource "azurerm_cosmosdb_sql_database" "cmdb_db" {
   name                = "metadatadb"
   resource_group_name = azurerm_resource_group.rg.name
   account_name        = azurerm_cosmosdb_account.cmdb.name
-  throughput          = var.cosmosdb_db_throughput
 }
 
 resource "azurerm_cosmosdb_sql_container" "metadata" {
@@ -26,6 +25,5 @@ resource "azurerm_cosmosdb_sql_container" "metadata" {
   resource_group_name = azurerm_resource_group.rg.name
   account_name        = azurerm_cosmosdb_account.cmdb.name
   database_name       = azurerm_cosmosdb_sql_database.cmdb_db.name
-  partition_key_path  = "/source"
-  throughput          = 400
+  partition_key_path  = var.cosmosdb_partition_key
 }
