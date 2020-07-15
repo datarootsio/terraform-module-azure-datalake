@@ -91,3 +91,49 @@ resource "azurerm_storage_container" "databricks" {
   storage_account_name = azurerm_storage_account.dbkstemp[count.index].name
   depends_on           = [time_sleep.dbks_ra, azurerm_role_assignment.current_user_sa_dbks]
 }
+
+resource "local_file" "sa_set_acl" {
+  content = templatefile("${path.module}/files/sa_acl.sh", {
+    "filesystems" = keys(var.dl_acl)
+    "fs_acls"     = var.dl_acl
+  })
+  filename = "/tmp/set_acl.sh"
+}
+
+resource "null_resource" "sa_set_acl" {
+  depends_on = [azurerm_role_assignment.current_user_sa_adls, azurerm_storage_data_lake_gen2_filesystem.dlfs, time_sleep.adls_ra]
+  triggers = {
+    "acl" = local_file.sa_set_acl.content
+  }
+
+  provisioner "local-exec" {
+    command = local_file.sa_set_acl.filename
+    environment = {
+      "AZURE_STORAGE_CONNECTION_STRING" = azurerm_storage_account.adls.primary_connection_string
+      "AZURE_STORAGE_AUTH_MODE"         = "key"
+    }
+  }
+}
+
+resource "local_file" "sa_create_directories" {
+  content = templatefile("${path.module}/files/sa_directories.sh", {
+    "filesystems"  = keys(var.dl_directories)
+    "fs_dirs_acls" = var.dl_directories
+  })
+  filename = "/tmp/create_directories.sh"
+}
+
+resource "null_resource" "sa_create_directories" {
+  depends_on = [null_resource.sa_set_acl, azurerm_role_assignment.current_user_sa_adls, azurerm_storage_data_lake_gen2_filesystem.dlfs, time_sleep.adls_ra]
+  triggers = {
+    "directories" = local_file.sa_create_directories.content
+  }
+
+  provisioner "local-exec" {
+    command = local_file.sa_create_directories.filename
+    environment = {
+      "AZURE_STORAGE_CONNECTION_STRING" = azurerm_storage_account.adls.primary_connection_string
+      "AZURE_STORAGE_AUTH_MODE"         = "key"
+    }
+  }
+}

@@ -35,7 +35,7 @@ variable "data_lake_fs_curated" {
 }
 
 variable "data_lake_filesystems" {
-  type        = list
+  type        = list(string)
   description = "A list of filesystems to create inside the storage account besides the 3 default ones (raw, cleansed, curated)"
   default     = []
 }
@@ -54,7 +54,7 @@ variable "provision_synapse" {
 
 variable "extra_tags" {
   description = "Extra tags that you would like to add to all created resources."
-  type        = map
+  type        = map(string)
   default     = {}
 }
 
@@ -65,7 +65,7 @@ variable "provision_data_factory_links" {
 }
 
 variable "databricks_libraries" {
-  type        = list
+  type        = list(string)
   default     = []
   description = "Extra libraries to install on the Databricks cluster"
 }
@@ -275,4 +275,18 @@ variable "extra_storage_contributor_ids" {
   description = "Extra contributors to the storage account"
   type        = list(string)
   default     = []
+}
+
+# Data lake contents
+
+variable "dl_acl" {
+  description = "Optional set of ACL to set on the filesystem roots inside the data lake. This is applied before dl_directories. The value is a map where the key is the name of the filesytem and the value is the ACL to set."
+  type        = map(string)
+  default     = {}
+}
+
+variable "dl_directories" {
+  description = "Optional root directories to be created inside the data lake. The value is a map where the keys are the names of the filesystems. The values are maps as well. In these nested maps, the keys are the names of the directories and the values are the ACL to set. Leave this empty to not set any ACL explicitly."
+  type        = map(map(string))
+  default     = {}
 }
