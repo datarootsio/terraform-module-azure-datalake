@@ -270,3 +270,9 @@ variable "data_factory_github_root_folder" {
   default     = ""
   description = "Optional root folder for the GitHub back-end for the created Azure Data Factory. You need to fill in all other data_factory_github_ variables if you use this one."
 }
+
+variable "extra_storage_contributor_ids" {
+  description = "Extra contributors to the storage account"
+  type        = list(string)
+  default     = []
+}

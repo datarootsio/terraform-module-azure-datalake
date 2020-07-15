@@ -21,6 +21,13 @@ resource "azurerm_role_assignment" "current_user_sa_adls" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "extra_contributor" {
+  count                = length(var.extra_storage_contributor_ids)
+  scope                = azurerm_storage_account.adls.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.extra_storage_contributor_ids[count.index]
+}
+
 resource "azurerm_role_assignment" "df_sa_adls" {
   scope                = azurerm_storage_account.adls.id
   role_definition_name = "Storage Blob Data Owner"
