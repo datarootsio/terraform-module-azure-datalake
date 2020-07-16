@@ -35,7 +35,6 @@ jobs:
           if [[ -z "$branch" ]]; then branch="master"; fi
           echo ::set-output name=branch::$branch
 
-
       - name: Get databricks provider dependency
         run: |
           git clone --depth 1 -b v0.2.0-instance_pool-fix https://github.com/datarootsio/databrickslabs-terraform-provider-databricks.git $GITHUB_WORKSPACE/terraform-provider-databricks

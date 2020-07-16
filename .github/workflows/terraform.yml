@@ -23,8 +23,12 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Install databricks provider dependency
-        run: curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
+      - name: Get databricks provider dependency
+        run: |
+          git clone --depth 1 -b v0.2.0-instance_pool-fix https://github.com/datarootsio/databrickslabs-terraform-provider-databricks.git $GITHUB_WORKSPACE/terraform-provider-databricks
+          cd $GITHUB_WORKSPACE/terraform-provider-databricks
+          go build -o ~/.terraform.d/plugins/terraform-provider-databricks
+          cd -
 
       - name: "Checkout"
         uses: actions/checkout@master
