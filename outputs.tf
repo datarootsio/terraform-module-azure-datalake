@@ -68,6 +68,11 @@ output "data_factory_identity" {
   value       = azurerm_data_factory.df.identity[0].principal_id
 }
 
+output "data_factory_id" {
+  description = "Resource ID of the Data Factory"
+  value       = azurerm_data_factory.df.id
+}
+
 output "resource_group_name" {
   description = "Name of the created resource group"
   value       = azurerm_resource_group.rg.name
