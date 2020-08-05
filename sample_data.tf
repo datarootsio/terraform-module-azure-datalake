@@ -28,18 +28,6 @@ resource "databricks_notebook" "transform" {
   depends_on = [databricks_notebook.spark_setup, databricks_azure_adls_gen2_mount.fs, azurerm_role_assignment.spdbks]
 }
 
-resource "databricks_notebook" "presentation" {
-  content   = filebase64("${path.module}/files/sample_data/presentation.scala.dbc")
-  language  = "SCALA"
-  path      = "/Shared/sample/presentation.scala"
-  overwrite = false
-  mkdirs    = true
-  format    = "DBC"
-  count     = local.create_sample
-
-  depends_on = [databricks_azure_adls_gen2_mount.fs, azurerm_role_assignment.spdbks]
-}
-
 resource "azurerm_template_deployment" "dfpipeline" {
   name                = "armdfpipeline"
   count               = local.create_sample
