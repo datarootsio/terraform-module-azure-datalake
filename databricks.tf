@@ -39,8 +39,8 @@ data "local_file" "databricks_token" {
 }
 
 provider "databricks" {
-  host  = var.provision_databricks ? format("https://%s", azurerm_databricks_workspace.dbks[0].workspace_url) : ""
-  token = var.provision_databricks ? trimspace(data.local_file.databricks_token[0].content) : ""
+  host  = var.provision_databricks ? format("https://%s", azurerm_databricks_workspace.dbks[0].workspace_url) : " "
+  token = var.provision_databricks ? trimspace(data.local_file.databricks_token[0].content) : " "
 }
 
 resource "databricks_instance_pool" "pool" {
