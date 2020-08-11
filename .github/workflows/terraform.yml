@@ -23,11 +23,13 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Install databricks provider dependency
-        run: curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
-
       - name: "Checkout"
         uses: actions/checkout@master
+
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.1.0
+        with:
+          terraform_version: 0.13.0
 
       - name: Terraform Init
         run: terraform init
