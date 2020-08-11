@@ -52,7 +52,7 @@ This module works on macOS and Linux.
 
 ### Databricks provider installation
 
-The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is in available from the Terraform registry.
+The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is available from the Terraform registry.
 
 ### Azure provider configuration
 
