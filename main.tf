@@ -5,7 +5,7 @@ terraform {
     azuread = ">= 0.8.0"
     databricks = {
       source = "databrickslabs/databricks"
-      version = ">=0.2.3"
+      version = ">= 0.2.3"
     }
   }
 }
