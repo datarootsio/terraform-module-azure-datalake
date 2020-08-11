@@ -72,12 +72,8 @@ The module uses some workarounds for features that are not yet available in the 
 The module uses some workarounds for features that are not yet available in the Azure providers. Therefore, you need to have [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) installed.
 
 ### jq
+
 The module uses jq to extract Databricks parameters during the deployment. Therefore, you need to haved [jq](https://stedolan.github.io/jq/download/) installed.
-
-### Setting Admin Username and password
-You need to set these variables from your CI/CD pipeline or manually during development via the cli:
-
-terraform plan -var 'sql_server_admin_username = 'SETME' -var 'sql_server_admin_password = SETME'
 
 ## Sample pipeline
 
