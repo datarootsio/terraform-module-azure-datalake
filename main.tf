@@ -3,6 +3,10 @@ terraform {
   required_providers {
     azurerm = ">= 2.11.0"
     azuread = ">= 0.8.0"
+    databricks = {
+      source = "databrickslabs/databricks"
+      version = ">=0.2.3"
+    }
   }
 }
 
