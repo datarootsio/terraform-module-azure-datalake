@@ -52,11 +52,7 @@ This module works on macOS and Linux.
 
 ### Databricks provider installation
 
-The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is not in the registry yet and would have to be installed manually. This can be done with the command below:
-
-```sh
-curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
-```
+The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is in available from the Terraform registry.
 
 ### Azure provider configuration
 
@@ -74,6 +70,14 @@ The module uses some workarounds for features that are not yet available in the 
 ### PowerShell
 
 The module uses some workarounds for features that are not yet available in the Azure providers. Therefore, you need to have [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) installed.
+
+### jq
+The module uses jq to extract Databricks parameters during the deployment. Therefore, you need to haved [jq](https://stedolan.github.io/jq/download/) installed.
+
+### Setting Admin Username and password
+You need to set these variables from your CI/CD pipeline or manually during development via the cli:
+
+terraform plan -var 'sql_server_admin_username = 'SETME' -var 'sql_server_admin_password = SETME'
 
 ## Sample pipeline
 
