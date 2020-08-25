@@ -52,7 +52,7 @@ This module works on macOS and Linux.
 
 ### Databricks provider installation
 
-The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks). This provider is available from the Terraform registry.
+The module is using the [Databricks Terraform provider](https://github.com/databrickslabs/terraform-provider-databricks) version 0.2.4 or newer. This provider is available from the Terraform Registry.
 
 ### Azure provider configuration
 
@@ -73,7 +73,7 @@ The module uses some workarounds for features that are not yet available in the 
 
 ### jq
 
-The module uses jq to extract Databricks parameters during the deployment. Therefore, you need to haved [jq](https://stedolan.github.io/jq/download/) installed.
+The module uses jq to extract Databricks parameters during the deployment. Therefore, you need to have [jq](https://stedolan.github.io/jq/download/) installed.
 
 ## Sample pipeline
 
