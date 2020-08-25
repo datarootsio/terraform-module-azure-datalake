@@ -16,7 +16,7 @@ resource "azurerm_role_assignment" "spdbks" {
 }
 
 provider "databricks" {
-  azure_workspace_resource_id = var.provision_databricks ? azurerm_databricks_workspace.dbks.id : " "
+  azure_workspace_resource_id = var.provision_databricks ? azurerm_databricks_workspace.dbks[0].id : " "
 }
 
 resource "databricks_instance_pool" "pool" {
@@ -41,13 +41,6 @@ resource "databricks_cluster" "cluster" {
   autoscale {
     min_workers = 1
     max_workers = 4
-  }
-
-  dynamic "library_maven" {
-    for_each = var.databricks_libraries
-    content {
-      coordinates = library_maven.value
-    }
   }
 
   dynamic "cluster_log_conf" {
