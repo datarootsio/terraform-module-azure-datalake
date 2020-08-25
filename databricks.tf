@@ -15,32 +15,8 @@ resource "azurerm_role_assignment" "spdbks" {
   principal_id         = local.service_principal_id
 }
 
-resource "null_resource" "databricks_token" {
-  count      = local.create_databricks
-  depends_on = [azurerm_role_assignment.spdbks]
-
-  triggers = {
-    build_number = timestamp()
-  }
-
-  provisioner "local-exec" {
-    command = "${path.module}/files/generate_databricks_token.sh > /tmp/databricks_token.txt"
-    environment = {
-      DATABRICKS_WORKSPACE_RESOURCE_ID = azurerm_databricks_workspace.dbks[count.index].id
-      DATABRICKS_ENDPOINT              = format("https://%s", azurerm_databricks_workspace.dbks[count.index].workspace_url)
-    }
-  }
-}
-
-data "local_file" "databricks_token" {
-  count      = local.create_databricks
-  depends_on = [null_resource.databricks_token]
-  filename   = "/tmp/databricks_token.txt"
-}
-
 provider "databricks" {
-  host  = var.provision_databricks ? format("https://%s", azurerm_databricks_workspace.dbks[0].workspace_url) : " "
-  token = var.provision_databricks ? trimspace(data.local_file.databricks_token[0].content) : " "
+  azure_workspace_resource_id = var.provision_databricks ? azurerm_databricks_workspace.dbks.id : " "
 }
 
 resource "databricks_instance_pool" "pool" {
