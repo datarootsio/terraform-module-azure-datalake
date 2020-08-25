@@ -1,21 +1,12 @@
 terraform {
-  required_version = "~> 0.12"
-  required_providers {
-    azurerm = ">= 2.11.0"
-    azuread = ">= 0.8.0"
-    databricks = {
-      source  = "databrickslabs/databricks"
-      version = ">= 0.2.3"
-    }
-  }
+  required_version = ">= 0.12.29, < 0.13.0"
 }
 
 provider "azurerm" {
   features {}
 }
 
-data "azurerm_client_config" "current" {
-}
+data "azurerm_client_config" "current" {}
 
 resource "azuread_application" "aadapp" {
   count = var.use_existing_service_principal ? 0 : 1
