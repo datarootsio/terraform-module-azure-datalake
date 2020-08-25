@@ -35,6 +35,11 @@ jobs:
           if [[ -z "$branch" ]]; then branch="master"; fi
           echo ::set-output name=branch::$branch
 
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.1.0
+        with:
+          terraform_version: 0.12.29
+
       - name: Install databricks provider dependency
         run: curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
 
