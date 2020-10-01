@@ -230,6 +230,12 @@ variable "dl_directories" {
   default     = {}
 }
 
+variable "provision_databricks_resources" {
+  type        = bool
+  default     = false
+  description = "Set this to true to provision all Databricks related resources."
+}
+
 variable "databricks_workspace_name" {
   description = "Due to changes in how Terraform modules can use provider configurations, the module is not able to provision a Databricks workspace. Please provide the name of a Databricks workspace here to setup all Databricks related features. Also make sure to correctly configure the Terraform Databricks provider."
   type        = string

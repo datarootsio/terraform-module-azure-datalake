@@ -35,7 +35,7 @@ resource "azurerm_role_assignment" "df_sa_adls" {
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "dlfs" {
-  for_each           = var.data_lake_filesystems
+  for_each           = toset(var.data_lake_filesystems)
   name               = each.key
   storage_account_id = azurerm_storage_account.adls.id
   depends_on         = [azurerm_role_assignment.current_user_sa_adls]
