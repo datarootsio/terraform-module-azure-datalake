@@ -6,12 +6,14 @@ tools:
 
 fmt:
 	terraform fmt
+	terraform fmt test/module_test
 	go mod tidy
 	gofmt -w -s test
 
 lint-tf: tools
 	terraform fmt -check
-	terraform validate
+	terraform fmt -check test/module_test
+	terraform validate test/module_test
 	tflint
 
 lint-go:
