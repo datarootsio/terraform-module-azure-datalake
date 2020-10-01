@@ -27,16 +27,26 @@ jobs:
         uses: actions/checkout@master
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend=false
+        working-directory: ./test/module_test
 
-      - name: Terraform Format
+      - name: Terraform Format (module)
+        run: terraform fmt -check
+        working-directory: ./test/module_test
+
+      - name: Terraform Format (test)
         run: terraform fmt -check
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: ./test/module_test
 
-      - name: tflint
+      - name: tflint (module)
         run: docker run --rm -v $(pwd):/data -t wata727/tflint
+
+      - name: tflint (test)
+        run: docker run --rm -v $(pwd):/data -t wata727/tflint
+        working-directory: ./test/module_test
 
       - id: slack-success
         if: success()
