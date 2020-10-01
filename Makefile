@@ -2,7 +2,7 @@ default: lint
 
 tools:
 	go install gotest.tools/gotestsum
-	terraform init
+	terraform init -backend=false test/module_test
 
 fmt:
 	terraform fmt

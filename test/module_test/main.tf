@@ -9,7 +9,7 @@ resource "random_string" "test_id" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  location = local.region
+  location = var.region
   name     = "rg${local.data_lake_name}"
 }
 
@@ -17,7 +17,7 @@ resource "azurerm_databricks_workspace" "dbks" {
   name                        = "dbks${local.data_lake_name}"
   resource_group_name         = azurerm_resource_group.rg.name
   managed_resource_group_name = "rgdbks${local.data_lake_name}"
-  location                    = local.region
+  location                    = var.region
   sku                         = "standard"
 }
 
@@ -66,7 +66,7 @@ resource "random_password" "sql" {
 module "azure-datalake" {
   source                          = "../../"
   data_lake_name                  = local.data_lake_name
-  region                          = local.region
+  region                          = var.region
   storage_replication             = "LRS"
   resource_group_name             = azurerm_resource_group.rg.name
   service_principal_client_id     = azuread_application.sp.application_id
