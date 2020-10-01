@@ -1,5 +1,3 @@
-# Naming & components
-
 variable "data_lake_name" {
   description = "Name of the data lake (has to be globally unique)"
   type        = string
@@ -10,45 +8,21 @@ variable "region" {
   type        = string
 }
 
-variable "provision_sample_data" {
-  description = "Boolean to indicate if a sample data pipeline should be deployed. Note that enable_synapse also has to be true for this (default: true)."
-  type        = bool
-  default     = true
-}
-
-variable "data_lake_fs_raw" {
-  type        = string
-  description = "Name of the data lake filesystem with raw data"
-  default     = "raw"
-}
-
-variable "data_lake_fs_cleansed" {
-  type        = string
-  description = "Name of the data lake filesystem with cleansed data"
-  default     = "cleansed"
-}
-
-variable "data_lake_fs_curated" {
-  type        = string
-  description = "Name of the data lake filesystem with curated data"
-  default     = "curated"
-}
-
 variable "data_lake_filesystems" {
   type        = list(string)
-  description = "A list of filesystems to create inside the storage account besides the 3 default ones (raw, cleansed, curated)"
-  default     = []
+  description = "A list of filesystems to create inside the storage account"
+  default     = ["raw", "clean", "curated", "integration", "aggregation"]
 }
 
 variable "databricks_cluster_version" {
   type        = string
   description = "Runtime version of the Databricks cluster"
-  default     = "7.0.x-scala2.12"
+  default     = "7.2.x-scala2.12"
 }
 
 variable "provision_synapse" {
   type        = bool
-  description = "Set this to false to disable the creation of the Synapse Analytics instance. Without this, the sample data will not be created."
+  description = "Set this to false to disable the creation of the Synapse Analytics instance."
   default     = true
 }
 
@@ -61,19 +35,13 @@ variable "extra_tags" {
 variable "provision_data_factory_links" {
   type        = bool
   default     = true
-  description = "Set this to false to disable the creation of linked services inside Data Factory. Setting this to false also disables the sample data."
+  description = "Set this to false to disable the creation of linked services inside Data Factory."
 }
 
 variable "databricks_log_path" {
   type        = string
   default     = ""
   description = "Optional dbfs path where the Databricks cluster should store logs. The path should start with `dbfs:/`"
-}
-
-variable "provision_databricks" {
-  type        = bool
-  default     = true
-  description = "Optionally disable provisioning of all Databricks related resources"
 }
 
 variable "use_log_analytics" {
@@ -93,8 +61,6 @@ variable "cosmosdb_partition_key" {
   default     = "/sourceTimestamp"
   description = "Set the partition key for the Cosmos DB metadata collection"
 }
-
-# Pricing, performance and replication
 
 variable "storage_replication" {
   description = "Type of replication for the storage accounts. See https://www.terraform.io/docs/providers/azurerm/r/storage_account.html#account_replication_type"
@@ -136,35 +102,19 @@ variable "databricks_max_workers" {
   default     = 4
 }
 
-# Security
-
-variable "use_existing_service_principal" {
-  type        = bool
-  description = "Should Terraform create the SP or use an existing one, provided by variables ?"
-  default     = false
+variable "service_principal_client_id" {
+  type        = string
+  description = "Client ID of the existing service principal that will be used for communication between services"
 }
 
-variable "application_id" {
+variable "service_principal_object_id" {
   type        = string
-  description = "Existing application ID"
-  default     = ""
+  description = "Object ID of the existing service principal that will be used for communication between services"
 }
 
-variable "service_principal_id" {
+variable "service_principal_client_secret" {
   type        = string
-  description = "Existing service principal ID"
-  default     = ""
-}
-
-variable "service_principal_secret" {
-  type        = string
-  description = "Existing service principal secret"
-  default     = ""
-}
-
-variable "service_principal_end_date" {
-  description = "End date of when the service principal is valid, formatted as a RFC3339 date string (e.g. 2018-01-01T01:02:03Z). Changing this field forces a new resource to be created."
-  type        = string
+  description = "Client secret of the existing service principal that will be used for communication between services"
 }
 
 variable "sql_server_admin_username" {
@@ -195,8 +145,6 @@ variable "key_vault_depends_on" {
   default     = null
   description = "Optionally set to a dependency for the Key Vault secrets (e.g. access policy)"
 }
-
-# Data Factory VSTS
 
 variable "data_factory_vsts_account_name" {
   type        = string
@@ -234,7 +182,6 @@ variable "data_factory_vsts_tenant_id" {
   description = "Optional tenant ID for the VSTS back-end for the created Azure Data Factory. You need to fill in all other data_factory_vsts_ variables if you use this one."
 }
 
-# Data Factory GitHub
 variable "data_factory_github_account_name" {
   type        = string
   default     = ""
@@ -271,8 +218,6 @@ variable "extra_storage_contributor_ids" {
   default     = []
 }
 
-# Data lake contents
-
 variable "dl_acl" {
   description = "Optional set of ACL to set on the filesystem roots inside the data lake. This is applied before dl_directories. The value is a map where the key is the name of the filesytem and the value is the ACL to set."
   type        = map(string)
@@ -283,4 +228,21 @@ variable "dl_directories" {
   description = "Optional root directories to be created inside the data lake. The value is a map where the keys are the names of the filesystems. The values are maps as well. In these nested maps, the keys are the names of the directories and the values are the ACL to set. Leave this empty to not set any ACL explicitly."
   type        = map(map(string))
   default     = {}
+}
+
+variable "databricks_workspace_name" {
+  description = "Due to changes in how Terraform modules can use provider configurations, the module is not able to provision a Databricks workspace. Please provide the name of a Databricks workspace here to setup all Databricks related features. Also make sure to correctly configure the Terraform Databricks provider."
+  type        = string
+  default     = ""
+}
+
+variable "databricks_workspace_resource_group_name" {
+  description = "Due to changes in how Terraform modules can use provider configurations, the module is not able to provision a Databricks workspace. Please provide the name the resource group of a Databricks workspace here to setup all Databricks related features. By default it will use the resource_group_name variable. Also make sure to correctly configure the Terraform Databricks provider."
+  type        = string
+  default     = ""
+}
+
+variable "resource_group_name" {
+  description = "Name of the resource group where the resources should be created"
+  type        = string
 }

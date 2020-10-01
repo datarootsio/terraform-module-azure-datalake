@@ -6,27 +6,9 @@ resource "azurerm_key_vault_access_policy" "df" {
   secret_permissions = ["list", "get"]
 }
 
-resource "azurerm_key_vault_secret" "sp_id" {
-  depends_on   = [var.key_vault_depends_on]
-  count        = local.use_kv
-  name         = "service-principal-client-id"
-  value        = local.application_id
-  key_vault_id = var.key_vault_id
-  tags         = local.common_tags
-}
-
-resource "azurerm_key_vault_secret" "sp_secret" {
-  depends_on   = [var.key_vault_depends_on]
-  count        = local.use_kv
-  name         = "service-principal-client-secret"
-  value        = local.service_principal_secret
-  key_vault_id = var.key_vault_id
-  tags         = local.common_tags
-}
-
 resource "azurerm_key_vault_secret" "databricks_token" {
   depends_on   = [var.key_vault_depends_on]
-  count        = var.use_key_vault && var.provision_databricks ? 1 : 0
+  count        = var.use_key_vault && local.create_databricks_bool ? 1 : 0
   name         = "databricks-access-token"
   value        = databricks_token.token[count.index].token_value
   key_vault_id = var.key_vault_id

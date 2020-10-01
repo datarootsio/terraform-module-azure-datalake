@@ -1,4 +1,4 @@
-resource "azurerm_monitor_diagnostic_setting" "datafactory" {
+resource "azurerm_monitor_diagnostic_setting" "data_factory" {
   count                          = var.use_log_analytics ? 1 : 0
   name                           = "omsdf${var.data_lake_name}"
   target_resource_id             = azurerm_data_factory.df.id
