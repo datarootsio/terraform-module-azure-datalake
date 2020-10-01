@@ -10,7 +10,7 @@ locals {
   create_data_factory_git_github_set = var.data_factory_github_account_name == "" ? toset([]) : toset(["_"])
   create_data_factory_ls_count       = var.provision_data_factory_links ? 1 : 0
   create_databricks_count            = local.create_databricks_bool ? 1 : 0
-  create_databricks_bool             = var.databricks_workspace_name != ""
+  create_databricks_bool             = var.provision_databricks_resources
   use_kv                             = var.use_key_vault ? 1 : 0
 
   created_secrets_1 = var.use_key_vault ? {

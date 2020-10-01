@@ -1,5 +1,5 @@
 data "azurerm_databricks_workspace" "dbks" {
-  count               = var.databricks_workspace_name != "" ? 1 : 0
+  count               = local.create_databricks_count
   name                = var.databricks_workspace_name
   resource_group_name = var.databricks_workspace_resource_group_name != "" ? var.databricks_workspace_resource_group_name : var.resource_group_name
 }
