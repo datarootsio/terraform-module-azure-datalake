@@ -76,6 +76,7 @@ variable "data_warehouse_dtu" {
 variable "cosmosdb_consistency_level" {
   description = "Default consistency level for the CosmosDB account"
   type        = string
+  default     = "Session"
 }
 
 variable "databricks_sku" {

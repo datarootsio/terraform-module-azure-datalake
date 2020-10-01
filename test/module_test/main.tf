@@ -65,7 +65,6 @@ resource "random_password" "sql" {
 
 module "azure-datalake" {
   source                          = "../../"
-  cosmosdb_consistency_level      = "Session"
   data_lake_name                  = local.data_lake_name
   region                          = local.region
   storage_replication             = "LRS"
