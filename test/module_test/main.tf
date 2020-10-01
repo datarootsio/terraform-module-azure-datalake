@@ -11,6 +11,7 @@ resource "random_string" "test_id" {
 resource "azurerm_resource_group" "rg" {
   location = var.region
   name     = "rg${local.data_lake_name}"
+  tags     = local.tags
 }
 
 resource "azurerm_databricks_workspace" "dbks" {
@@ -19,6 +20,7 @@ resource "azurerm_databricks_workspace" "dbks" {
   managed_resource_group_name = "rgdbks${local.data_lake_name}"
   location                    = var.region
   sku                         = "standard"
+  tags                        = local.tags
 }
 
 provider "databricks" {
@@ -76,7 +78,5 @@ module "azure-datalake" {
   sql_server_admin_username       = random_pet.sql.id
   sql_server_admin_password       = random_password.sql.result
   provision_databricks_resources  = true
-  extra_tags = {
-    "test_id" = local.test_id
-  }
+  extra_tags                      = local.tags
 }
