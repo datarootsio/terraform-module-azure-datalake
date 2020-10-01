@@ -35,14 +35,6 @@ jobs:
           if [[ -z "$branch" ]]; then branch="master"; fi
           echo ::set-output name=branch::$branch
 
-      - name: HashiCorp - Setup Terraform
-        uses: hashicorp/setup-terraform@v1.1.0
-        with:
-          terraform_version: 0.12.29
-
-      - name: Install databricks provider dependency
-        run: curl https://raw.githubusercontent.com/databrickslabs/terraform-provider-databricks/master/godownloader-databricks-provider.sh | bash -s -- -b $HOME/.terraform.d/plugins
-
       - name: Azure Login
         uses: Azure/login@v1.1
         with:
@@ -69,8 +61,8 @@ jobs:
       - name: "cleanup Azure resources"
         if: ${{ always() }}
         run: |
-          az group list --subscription $ARM_SUBSCRIPTION_ID --tag "Terratest=$GITHUB_RUN_ID" -o table
-          for group in $(az group list --subscription $ARM_SUBSCRIPTION_ID --tag "Terratest=$GITHUB_RUN_ID" --query "[].name" -o tsv | grep -v dbks); do az group delete -y --no-wait --subscription $ARM_SUBSCRIPTION_ID -n $group; done 
+          az group list --subscription $ARM_SUBSCRIPTION_ID --tag "test_id=$GITHUB_RUN_ID" -o table
+          for group in $(az group list --subscription $ARM_SUBSCRIPTION_ID --tag "test_id=$GITHUB_RUN_ID" --query "[].name" -o tsv | grep -v dbks); do az group delete -y --no-wait --subscription $ARM_SUBSCRIPTION_ID -n $group; done
 
       - id: slack-success
         if: success()
