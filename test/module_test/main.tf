@@ -75,8 +75,6 @@ module "azure-datalake" {
   service_principal_client_secret = azuread_service_principal_password.sp.value
   service_principal_object_id     = azuread_service_principal.sp.object_id
   databricks_workspace_name       = azurerm_databricks_workspace.dbks.name
-  sql_server_admin_username       = random_pet.sql.id
-  sql_server_admin_password       = random_password.sql.result
   provision_databricks_resources  = true
   extra_tags                      = local.tags
 }
