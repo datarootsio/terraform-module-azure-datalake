@@ -16,7 +16,7 @@ import (
 
 func getDefaultTerraformOptions(t *testing.T) (*terraform.Options, error) {
 
-	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "module_test", ".")
+	tempTestFolder := test_structure.CopyTerraformFolderToTemp(t, "..", "test/module_test")
 
 	region, err := azure.GetRandomRegionE(t, []string{
 		"centralus",
