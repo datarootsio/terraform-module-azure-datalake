@@ -66,6 +66,7 @@ resource "random_password" "sql" {
 }
 
 module "azure-datalake" {
+  depends_on                      = [azurerm_databricks_workspace.dbks]
   source                          = "../../"
   data_lake_name                  = local.data_lake_name
   region                          = var.region
