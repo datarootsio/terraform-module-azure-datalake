@@ -84,6 +84,7 @@ resource "databricks_azure_adls_gen2_mount" "fs" {
   client_id              = var.service_principal_client_id
   client_secret_scope    = databricks_secret.client_secret[0].scope
   client_secret_key      = databricks_secret.client_secret[0].key
+  cluster_id             = databricks_cluster.cluster[0].id
   initialize_file_system = true
   depends_on             = [azurerm_storage_data_lake_gen2_filesystem.dlfs, azurerm_role_assignment.spsa_sa_adls, azurerm_role_assignment.spdbks]
 }
