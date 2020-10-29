@@ -79,12 +79,6 @@ variable "cosmosdb_consistency_level" {
   default     = "Session"
 }
 
-variable "databricks_sku" {
-  description = "SKU of the Databricks workspace (e.g. 'standard' or 'premium')"
-  type        = string
-  default     = "standard"
-}
-
 variable "databricks_cluster_node_type" {
   type        = string
   description = "Node type of the Databricks cluster machines"
