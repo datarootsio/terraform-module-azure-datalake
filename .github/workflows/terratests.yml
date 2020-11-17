@@ -36,7 +36,7 @@ jobs:
           echo ::set-output name=branch::$branch
 
       - name: Azure Login
-        uses: Azure/login@v1.1
+        uses: Azure/login@v1
         with:
           enable-AzPSSession: true
           creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
