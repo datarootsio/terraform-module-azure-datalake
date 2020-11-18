@@ -6,7 +6,7 @@ on:
     - cron:  '0 0 * * *'
 env:
   tests_timeout: "2h"
-  golangci_lint_version: "v1.26"
+  golangci_lint_version: "v1.32"
   slack_channel: terraform-data-lake-module
 jobs:
   terratests:
