@@ -10,7 +10,7 @@ terraform {
     }
     databricks = {
       source  = "databrickslabs/databricks"
-      version = ">= 0.2.5"
+      version = ">= 0.2.8"
     }
     http = {
       source = "hashicorp/http"
