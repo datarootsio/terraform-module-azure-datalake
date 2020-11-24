@@ -79,5 +79,6 @@ module "azure-datalake" {
   sql_server_admin_username       = random_pet.sql.id
   sql_server_admin_password       = random_password.sql.result
   provision_databricks_resources  = true
+  provision_synapse               = false
   extra_tags                      = local.tags
 }
