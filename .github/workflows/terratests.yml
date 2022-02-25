@@ -50,7 +50,7 @@ jobs:
         run: go vet ./...
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           args: --timeout=3m0s
           version: ${{ env.golangci_lint_version }}
